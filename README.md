@@ -67,9 +67,10 @@ Cloudflare Web Analytics (gratis, inga cookies, ingen samtyckesruta). Konto: jon
 på dash.cloudflare.com → Analytics → Web analytics → forellenslussfors.se. Skriptet ligger sist i
 `index.html` (token är offentlig). Statistiken visas med några minuters fördröjning.
 
-## Daglig statistik till telefonen
-`tools/daily_stats.py --push` hämtar gårdagens besök från Cloudflare (läsnyckel i
-`private/cloudflare_token`) och skickar en notis till ntfy-ämnet i `private/ntfy_topic`.
-Körs varje dag 08:00 av macOS-jobbet `~/Library/LaunchAgents/se.forellenslussfors.dailystats.plist`
-(logg: `private/daily_stats.log`). Stoppa med:
-`launchctl bootout gui/$(id -u)/se.forellenslussfors.dailystats`
+## Pi:n (EnergyPilot-Pi:n, jonas@energypilot) kör två jobb
+Helt separat från EnergyPilot, i `~/forellen` (klon av repot) med hemligheterna i `~/forellen/private`.
+- Var 30:e minut: `tools/pi_sync.sh` hämtar iCal; bara om bokade datum ändrats görs en tom commit
+  som får GitHub att bygga om sidan (deploy-nyckel `~/.ssh/forellen_deploy`, skrivrätt bara till detta repo).
+- 08:00: `tools/daily_stats.py --push` skickar gårdagens besök till ntfy-ämnet i `private/ntfy_topic`.
+Loggar: `~/forellen/private/pi_sync.log` och `daily_stats.log`. Se `crontab -l` på Pi:n.
+Stoppa: ta bort de två forellen-raderna med `crontab -e` och radera deploy-nyckeln i GitHub.
