@@ -47,3 +47,17 @@ sidan blir aldrig mer aktuell än senaste körningen. Gäster bekräftas ändå 
 ```bash
 cd ~/forellen-slussfors && python3 -m http.server 8093
 ```
+
+## Språk (EN · LV · LT)
+Sidan finns på engelska, lettiska och litauiska. Språket väljs med EN/LV/LT i menyn,
+med `?lang=lv`, via korta adresserna forellenslussfors.se/lv och /lt (för Facebook),
+eller automatiskt efter telefonens språk.
+
+- Texter i HTML är märkta med `data-i18n="nyckel"`. Engelska källan: `i18n/en.json`.
+- Översättningar: `i18n/lv.json` och `i18n/lt.json` (nycklar `js.*` är texter som skapas i
+  JavaScript, t.ex. prisrutan, kalendern och kartan).
+- Ändrar du en engelsk text eller lägger till en ny:
+  `python3 tools/tag_i18n.py` (märker nya element, uppdaterar en.json), översätt i lv/lt.json,
+  sedan `python3 tools/build_i18n.py` (bygger `i18n/strings.js`). Saknade nycklar visas på engelska.
+- Själva förfrågan som mejlas till oss är alltid på engelska.
+- Översättningen är maskinnära, låt gärna en lettisk/litauisk gäst läsa igenom.

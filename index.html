@@ -91,6 +91,9 @@ section{scroll-margin-top:72px}
 .nav-links a:hover{background:rgba(255,255,255,.12)}
 .nav-links a.cta{background:var(--accent);font-weight:600;margin-left:6px}
 .nav-links a.cta:hover{background:var(--accent-hover)}
+.lang{display:flex;gap:2px;margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px}
+.lang a{color:#fff;text-decoration:none;font:600 13px/1 var(--body);padding:9px 10px;border-radius:999px;min-width:38px;text-align:center}
+.lang a[aria-current="true"]{background:#fff;color:var(--ink)}
 .menu-btn{display:none;width:46px;height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;align-items:center;justify-content:center}
 @media (max-width:900px){
   .menu-btn{display:inline-flex}
@@ -378,14 +381,15 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <header class="nav" id="nav">
   <div class="nav-in">
     <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-fish"/></svg>Forellen</a>
+    <div class="lang" role="group" aria-label="Language"><a href="?lang=en" data-lang="en" hreflang="en">EN</a><a href="?lang=lv" data-lang="lv" hreflang="lv">LV</a><a href="?lang=lt" data-lang="lt" hreflang="lt">LT</a></div>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg width="22" height="22" aria-hidden="true"><use href="#i-menu"/></svg></button>
     <nav class="nav-links" id="navLinks" aria-label="Sections">
-      <a href="#fishing">Fishing</a>
-      <a href="#map-sec">Map</a>
-      <a href="#house">The house</a>
-      <a href="#seasons">Seasons</a>
-      <a href="#prices">Prices</a>
-      <a href="#book" class="cta">Book direct</a>
+      <a data-i18n="fishing" href="#fishing">Fishing</a>
+      <a data-i18n="map" href="#map-sec">Map</a>
+      <a data-i18n="the-house" href="#house">The house</a>
+      <a data-i18n="seasons" href="#seasons">Seasons</a>
+      <a data-i18n="prices" href="#prices">Prices</a>
+      <a data-i18n="book-direct" href="#book" class="cta">Book direct</a>
     </nav>
   </div>
 </header>
@@ -396,29 +400,29 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   <div class="hero-bg" role="img" aria-label="Lake view at Slussfors with low sun over the water"></div>
   <div class="hero-in">
     <div class="chips">
-      <span class="chip"><svg aria-hidden="true"><use href="#i-pin"/></svg>Slussfors · Swedish Lapland</span>
-      <span class="chip"><svg aria-hidden="true"><use href="#i-star"/></svg>4.74 · 19 Airbnb reviews · Superhost</span>
+      <span data-i18n="slussfors-swedish-lapland" class="chip"><svg aria-hidden="true"><use href="#i-pin"/></svg>Slussfors · Swedish Lapland</span>
+      <span data-i18n="4-74-19-airbnb-reviews-superhost" class="chip"><svg aria-hidden="true"><use href="#i-star"/></svg>4.74 · 19 Airbnb reviews · Superhost</span>
       <span class="chip" id="wxChip" hidden><svg aria-hidden="true"><use href="#i-sun"/></svg><span id="wxText"></span></span>
     </div>
-    <h1>Forellen</h1>
-    <p class="sub">An angler's guesthouse where the Ume River meets Lake Storuman. Char, trout, grayling and whitefish, five minutes from the door.</p>
+    <h1 data-i18n="forellen">Forellen</h1>
+    <p data-i18n="an-angler-s-guesthouse-where-the-ume-riv" class="sub">An angler's guesthouse where the Ume River meets Lake Storuman. Char, trout, grayling and whitefish, five minutes from the door.</p>
     <div class="hero-actions">
-      <a class="btn btn-accent" href="#book">Check dates &amp; book direct <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <a class="btn btn-ghost" href="#fishing">Explore the fishing</a>
+      <a class="btn btn-accent" href="#book" data-i18n="cta-check-dates">Check dates &amp; book direct <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-ghost" href="#fishing" data-i18n="cta-explore">Explore the fishing</a>
     </div>
   </div>
-  <div class="scroll-cue" aria-hidden="true">Scroll</div>
+  <div data-i18n="scroll" class="scroll-cue" aria-hidden="true">Scroll</div>
 </section>
 
 <!-- FACTS -->
 <div class="facts" aria-label="Key facts">
   <div class="wrap facts-grid">
-    <div class="fact"><b>6 guests</b><span>4 beds, 2 bedrooms</span></div>
-    <div class="fact"><b>80 m²</b><span>whole house, own entrance</span></div>
-    <div class="fact"><b>5 min</b><span>walk to Lake Storuman</span></div>
-    <div class="fact"><b>Smoker</b><span>grill, fire pit, big lawn</span></div>
-    <div class="fact"><b>Pets</b><span>welcome</span></div>
-    <div class="fact"><b>Min 3</b><span>nights · self check-in</span></div>
+    <div data-i18n="6-guests4-beds-2-bedrooms" class="fact"><b>6 guests</b><span>4 beds, 2 bedrooms</span></div>
+    <div data-i18n="80-m-whole-house-own-entrance" class="fact"><b>80 m²</b><span>whole house, own entrance</span></div>
+    <div data-i18n="5-minwalk-to-lake-storuman" class="fact"><b>5 min</b><span>walk to Lake Storuman</span></div>
+    <div data-i18n="smokergrill-fire-pit-big-lawn" class="fact"><b>Smoker</b><span>grill, fire pit, big lawn</span></div>
+    <div data-i18n="petswelcome" class="fact"><b>Pets</b><span>welcome</span></div>
+    <div data-i18n="min-3nights-self-check-in" class="fact"><b>Min 3</b><span>nights · self check-in</span></div>
   </div>
 </div>
 
@@ -427,36 +431,36 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   <div class="wrap">
     <div class="split">
       <div class="stack reveal">
-        <span class="kicker">The fishing</span>
-        <h2>Big char, wild trout and clear northern water</h2>
-        <p class="lead">Slussfors sits where the Ume River runs into Lake Storuman. The Kirjesån stream, known for its trout, joins the river just around the corner from the house, and the lakes Järvsjön, Magasjön and Boksjön are a short drive away.</p>
-        <p class="lead">The secret is the <b style="color:#fff">char farm</b> just below the village (★ on the map). It feeds the water, so many large char and whitefish gather in a small area, summer and winter. It is what brings anglers from far away.</p>
+        <span data-i18n="the-fishing" class="kicker">The fishing</span>
+        <h2 data-i18n="big-char-wild-trout-and-clear-northern-w">Big char, wild trout and clear northern water</h2>
+        <p data-i18n="slussfors-sits-where-the-ume-river-runs" class="lead">Slussfors sits where the Ume River runs into Lake Storuman. The Kirjesån stream, known for its trout, joins the river just around the corner from the house, and the lakes Järvsjön, Magasjön and Boksjön are a short drive away.</p>
+        <p data-i18n="the-secret-is-the-char-farm-just-below-t" class="lead">The secret is the <b style="color:#fff">char farm</b> just below the village (★ on the map). It feeds the water, so many large char and whitefish gather in a small area, summer and winter. It is what brings anglers from far away.</p>
       </div>
       <div class="stack reveal" style="gap:16px">
       <div class="permit">
-        <span class="kicker">Licence 1 · Slussfors KFO</span>
-        <p class="note" style="color:var(--on-deep)">Lake Storuman and part of the Ume River. Char, trout, grayling and whitefish.</p>
+        <span data-i18n="licence-1-slussfors-kfo" class="kicker">Licence 1 · Slussfors KFO</span>
+        <p data-i18n="lake-storuman-and-part-of-the-ume-river" class="note" style="color:var(--on-deep)">Lake Storuman and part of the Ume River. Char, trout, grayling and whitefish.</p>
         <div class="permit-rows">
-          <div><b>100</b><span>SEK · 1 day</span></div>
-          <div><b>250</b><span>SEK · 3 days</span></div>
-          <div><b>700</b><span>SEK · 7 days</span></div>
+          <div data-i18n="100sek-1-day"><b>100</b><span>SEK · 1 day</span></div>
+          <div data-i18n="250sek-3-days"><b>250</b><span>SEK · 3 days</span></div>
+          <div data-i18n="700sek-7-days"><b>700</b><span>SEK · 7 days</span></div>
         </div>
-        <a class="btn btn-line" href="https://www.ifiske.se/en/fishing-slussfors-kfo.htm" target="_blank" rel="noopener">Buy on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a data-i18n="buy-on-ifiske" class="btn btn-line" href="https://www.ifiske.se/en/fishing-slussfors-kfo.htm" target="_blank" rel="noopener">Buy on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
       <div class="permit">
-        <span class="kicker">Licence 2 · Kirjesåns KFO</span>
-        <p class="note" style="color:var(--on-deep)">The Kirjesån stream and Lake Nedre Lumnien. Mostly trout, with grayling and rainbow trout near the river mouth.</p>
+        <span data-i18n="licence-2-kirjes-ns-kfo" class="kicker">Licence 2 · Kirjesåns KFO</span>
+        <p data-i18n="the-kirjes-n-stream-and-lake-nedre-lumni" class="note" style="color:var(--on-deep)">The Kirjesån stream and Lake Nedre Lumnien. Mostly trout, with grayling and rainbow trout near the river mouth.</p>
         <div class="permit-rows">
-          <div><b>150</b><span>SEK · 1 day</span></div>
-          <div><b>400</b><span>SEK · 3 days</span></div>
-          <div><b>700</b><span>SEK · 7 days</span></div>
+          <div data-i18n="150sek-1-day"><b>150</b><span>SEK · 1 day</span></div>
+          <div data-i18n="400sek-3-days"><b>400</b><span>SEK · 3 days</span></div>
+          <div data-i18n="700sek-7-days-2"><b>700</b><span>SEK · 7 days</span></div>
         </div>
-        <a class="btn btn-line" href="https://www.ifiske.se/fiske-kirjesans-kfo.htm" target="_blank" rel="noopener">Buy on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a data-i18n="buy-on-ifiske-2" class="btn btn-line" href="https://www.ifiske.se/fiske-kirjesans-kfo.htm" target="_blank" rel="noopener">Buy on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-      <p class="note">Buy the licence on your phone before you cast, and check rules and size limits on the same page. Prices as listed on iFiske in November 2026.</p>
+      <p data-i18n="buy-the-licence-on-your-phone-before-you" class="note">Buy the licence on your phone before you cast, and check rules and size limits on the same page. Prices as listed on iFiske in November 2026.</p>
       <div class="permit boats" style="gap:10px">
-        <span class="kicker">Boats</span>
-        <p class="note" style="color:var(--on-deep)">We do not rent out a boat ourselves. Boats with or without motor can be rented locally: ask the Slussfors fishing association, contact Daniel Bergfors, <a href="tel:+46730266871" style="color:var(--ice);white-space:nowrap">+46 730 26 68 71</a>, or look for private boats in Storuman municipality on <a href="https://www.hygglo.se/category/9077-roddbat-med-motor/storumans-kommun" target="_blank" rel="noopener" style="color:var(--ice)">Hygglo</a>. You can also ask at the village shop Slussforsboa, <a href="tel:+4695150170" style="color:var(--ice);white-space:nowrap">+46 951 501 70</a>. There is a public boat ramp in the village, and fuel is sold at the village petrol station.</p>
+        <span data-i18n="boats" class="kicker">Boats</span>
+        <p data-i18n="we-do-not-rent-out-a-boat-ourselves-boat" class="note" style="color:var(--on-deep)">We do not rent out a boat ourselves. Boats with or without motor can be rented locally: ask the Slussfors fishing association, contact Daniel Bergfors, <a href="tel:+46730266871" style="color:var(--ice);white-space:nowrap">+46 730 26 68 71</a>, or look for private boats in Storuman municipality on <a href="https://www.hygglo.se/category/9077-roddbat-med-motor/storumans-kommun" target="_blank" rel="noopener" style="color:var(--ice)">Hygglo</a>. You can also ask at the village shop Slussforsboa, <a href="tel:+4695150170" style="color:var(--ice);white-space:nowrap">+46 951 501 70</a>. There is a public boat ramp in the village, and fuel is sold at the village petrol station.</p>
       </div>
       </div>
     </div>
@@ -476,9 +480,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <circle cx="52" cy="78" r="6" fill="#0D1A18"/><circle cx="50" cy="76" r="2" fill="#fff"/>
           <path d="M24 88 q12 4 22 1" stroke="#1D302D" stroke-width="2" fill="none"/>
         </svg>
-        <span class="tag">Signature fish</span>
-        <div><h3>Arctic char</h3><span class="latin">Röding · Salvelinus alpinus</span></div>
-        <p>The star of Slussfors. Troll or jig in summer, and on the ice in late winter when the days are long and bright.</p>
+        <span data-i18n="signature-fish" class="tag">Signature fish</span>
+        <div><h3 data-i18n="arctic-char">Arctic char</h3><span class="latin">Röding · Salvelinus alpinus</span></div>
+        <p data-i18n="the-star-of-slussfors-troll-or-jig-in-su">The star of Slussfors. Troll or jig in summer, and on the ice in late winter when the days are long and bright.</p>
         <div class="months" aria-label="Best months: ice fishing February to April, open water June to September"><i></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -498,9 +502,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <circle cx="52" cy="78" r="6" fill="#151309"/><circle cx="50" cy="76" r="2" fill="#fff"/>
           <path d="M24 88 q14 6 28 0" stroke="#3B3820" stroke-width="2" fill="none"/>
         </svg>
-        <span class="tag">Kirjesån &amp; Ume River</span>
-        <div><h3>Brown trout</h3><span class="latin">Öring · Salmo trutta</span></div>
-        <p>Wild trout in the Kirjesån stream (own licence, see above) and the river. Fly, spinner or a quiet drift at dusk in midsummer.</p>
+        <span data-i18n="kirjes-n-ume-river" class="tag">Kirjesån &amp; Ume River</span>
+        <div><h3 data-i18n="brown-trout">Brown trout</h3><span class="latin">Öring · Salmo trutta</span></div>
+        <p data-i18n="wild-trout-in-the-kirjes-n-stream-own-li">Wild trout in the Kirjesån stream (own licence, see above) and the river. Fly, spinner or a quiet drift at dusk in midsummer.</p>
         <div class="months" aria-label="Best months: June to September"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -524,9 +528,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <circle cx="54" cy="82" r="6.4" fill="#12181D"/><circle cx="52" cy="80" r="2" fill="#fff"/>
           <path d="M28 90 q8 3 14 1" stroke="#28323A" stroke-width="2" fill="none"/>
         </svg>
-        <span class="tag">Fast water</span>
-        <div><h3>Grayling</h3><span class="latin">Harr · Thymallus thymallus</span></div>
-        <p>The "lady of the stream", with her purple sail fin. Rises to small dry flies in the river currents through summer and autumn.</p>
+        <span data-i18n="fast-water" class="tag">Fast water</span>
+        <div><h3 data-i18n="grayling">Grayling</h3><span class="latin">Harr · Thymallus thymallus</span></div>
+        <p data-i18n="the-lady-of-the-stream-with-her-purple-s">The "lady of the stream", with her purple sail fin. Rises to small dry flies in the river currents through summer and autumn.</p>
         <div class="months" aria-label="Best months: June to October"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -545,23 +549,23 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <circle cx="60" cy="80" r="7" fill="#11181E"/><circle cx="58" cy="78" r="2.2" fill="#fff"/>
           <path d="M36 90 q5 2 9 0" stroke="#2D3B47" stroke-width="2" fill="none"/>
         </svg>
-        <span class="tag">Winter jigging</span>
-        <div><h3>Whitefish</h3><span class="latin">Sik · Coregonus lavaretus</span></div>
-        <p>Very large whitefish are caught through the ice. Small jigs, light line and patience on a sunny March day.</p>
+        <span data-i18n="winter-jigging" class="tag">Winter jigging</span>
+        <div><h3 data-i18n="whitefish">Whitefish</h3><span class="latin">Sik · Coregonus lavaretus</span></div>
+        <p data-i18n="very-large-whitefish-are-caught-through">Very large whitefish are caught through the ice. Small jigs, light line and patience on a sunny March day.</p>
         <div class="months" aria-label="Best months: ice fishing January to April, open water June to August"><i class="ice"></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
     </div>
-    <div class="legend"><span><i style="background:var(--ice)"></i>Open water</span><span><i style="background:#D9EEF0"></i>On the ice</span><span class="m-hide">Our rough guide. Ice and seasons vary from year to year, and the licence page has the rules that apply.</span></div>
+    <div class="legend"><span><i style="background:var(--ice)"></i>Open water</span><span><i style="background:#D9EEF0"></i>On the ice</span><span data-i18n="our-rough-guide-ice-and-seasons-vary-fro" class="m-hide">Our rough guide. Ice and seasons vary from year to year, and the licence page has the rules that apply.</span></div>
 
     <div class="catch">
-      <figure class="c1 reveal"><img src="images/brown-trout.jpg" alt="A spotted brown trout held over the boat" loading="lazy"><figcaption>Brown trout</figcaption></figure>
-      <figure class="c2 reveal"><img src="images/boat-fishing.jpg" alt="Angler casting from a boat on open water in sunshine" loading="lazy"><figcaption>From the boat</figcaption></figure>
-      <figure class="c3 reveal"><img src="images/arctic-char.jpg" alt="An Arctic char with a red belly lying on the snow" loading="lazy"><figcaption>Char on the ice</figcaption></figure>
-      <figure class="c4 reveal"><img src="images/ice-fishing.jpg" alt="Ice fishing hole and a red box on the frozen lake" loading="lazy"><figcaption>Ice fishing</figcaption></figure>
-      <figure class="c5 reveal"><img src="images/river-wading.jpg" alt="Anglers wading in a fast-flowing river" loading="lazy"><figcaption>In the rapids</figcaption></figure>
-      <figure class="c6 reveal"><img src="images/rainbow-trout.jpg" alt="A rainbow trout held by an angler in a life jacket" loading="lazy"><figcaption>Rainbow trout</figcaption></figure>
-      <figure class="c7 reveal"><img src="images/ice-catch.jpg" alt="A day's catch from ice fishing, laid out in rows on the snow" loading="lazy"><figcaption>A good day on the ice</figcaption></figure>
+      <figure class="c1 reveal"><img src="images/brown-trout.jpg" alt="A spotted brown trout held over the boat" loading="lazy"><figcaption data-i18n="brown-trout-2">Brown trout</figcaption></figure>
+      <figure class="c2 reveal"><img src="images/boat-fishing.jpg" alt="Angler casting from a boat on open water in sunshine" loading="lazy"><figcaption data-i18n="from-the-boat">From the boat</figcaption></figure>
+      <figure class="c3 reveal"><img src="images/arctic-char.jpg" alt="An Arctic char with a red belly lying on the snow" loading="lazy"><figcaption data-i18n="char-on-the-ice">Char on the ice</figcaption></figure>
+      <figure class="c4 reveal"><img src="images/ice-fishing.jpg" alt="Ice fishing hole and a red box on the frozen lake" loading="lazy"><figcaption data-i18n="ice-fishing">Ice fishing</figcaption></figure>
+      <figure class="c5 reveal"><img src="images/river-wading.jpg" alt="Anglers wading in a fast-flowing river" loading="lazy"><figcaption data-i18n="in-the-rapids">In the rapids</figcaption></figure>
+      <figure class="c6 reveal"><img src="images/rainbow-trout.jpg" alt="A rainbow trout held by an angler in a life jacket" loading="lazy"><figcaption data-i18n="rainbow-trout">Rainbow trout</figcaption></figure>
+      <figure class="c7 reveal"><img src="images/ice-catch.jpg" alt="A day's catch from ice fishing, laid out in rows on the snow" loading="lazy"><figcaption data-i18n="a-good-day-on-the-ice">A good day on the ice</figcaption></figure>
     </div>
   </div>
 </section>
@@ -570,19 +574,19 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <section id="map-sec" class="sec">
   <div class="wrap stack">
     <div class="stack reveal" style="gap:14px">
-      <span class="kicker">Where you'll be</span>
-      <h2>On the Blue Highway, in the middle of the water</h2>
-      <p class="lead m-hide">Slussfors lies on the E12 between Storuman and the mountains. Switch between the nearby fishing waters and the wider region, and tap a place to fly there.</p>
+      <span data-i18n="where-you-ll-be" class="kicker">Where you'll be</span>
+      <h2 data-i18n="on-the-blue-highway-in-the-middle-of-the">On the Blue Highway, in the middle of the water</h2>
+      <p data-i18n="slussfors-lies-on-the-e12-between-storum" class="lead m-hide">Slussfors lies on the E12 between Storuman and the mountains. Switch between the nearby fishing waters and the wider region, and tap a place to fly there.</p>
     </div>
     <div class="map-shell reveal">
       <div class="map-side">
         <div class="seg" role="group" aria-label="Map view">
-          <button type="button" id="segLocal" aria-pressed="true">Fishing waters</button>
-          <button type="button" id="segRegion" aria-pressed="false">Region</button>
+          <button data-i18n="fishing-waters" type="button" id="segLocal" aria-pressed="true">Fishing waters</button>
+          <button data-i18n="region" type="button" id="segRegion" aria-pressed="false">Region</button>
         </div>
         <ul class="places" id="places"></ul>
-        <a class="btn btn-accent" style="min-height:46px" id="routeLink" href="#" target="_blank" rel="noopener">Directions to the house <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <small class="m-hide" style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
+        <a data-i18n="directions-to-the-house" class="btn btn-accent" style="min-height:46px" id="routeLink" href="#" target="_blank" rel="noopener">Directions to the house <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <small data-i18n="distances-are-straight-line-from-the-hou" class="m-hide" style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
       </div>
       <div id="map" role="region" aria-label="Interactive map of Slussfors and surroundings"></div>
     </div>
@@ -594,37 +598,37 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   <div class="wrap">
     <div class="split">
       <div class="stack reveal">
-        <span class="kicker">The house</span>
-        <h2>Warm, simple and made for long days outdoors</h2>
-        <p class="lead m-hide">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
-        <p style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and plenty of parking for cars, boats and trailers. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
+        <span data-i18n="the-house-2" class="kicker">The house</span>
+        <h2 data-i18n="warm-simple-and-made-for-long-days-outdo">Warm, simple and made for long days outdoors</h2>
+        <p data-i18n="80-m-with-a-fully-equipped-kitchen-a-liv" class="lead m-hide">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
+        <p data-i18n="the-house-is-one-half-of-a-semi-detached" style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and plenty of parking for cars, boats and trailers. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
       </div>
       <div class="rooms reveal">
-        <div class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90), wardrobes</span></div>
-        <div class="room"><b>Bedroom 2</b><span>Double bed (2 × 90) and a bunk bed for kids or teens</span></div>
-        <div class="room"><b>Kitchen</b><span>Dishwasher, fridge and freezer, oven, table for six</span></div>
-        <div class="room"><b>Living room</b><span>Open fireplace, sofa, armchairs, smart TV</span></div>
-        <div class="room"><b>Bathroom</b><span>Shower, toilet and washing machine</span></div>
-        <div class="room"><b>Outside</b><span>Large lawn, seating, grill, fire pit, smoker</span></div>
-        <div class="room"><b>Work</b><span>Wi-Fi and a desk for the remote day</span></div>
-        <div class="room"><b>Arrival</b><span>Self check-in with key box, from 14:00</span></div>
+        <div data-i18n="bedroom-1double-bed-180-cm-2-90-wardrobe" class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90), wardrobes</span></div>
+        <div data-i18n="bedroom-2double-bed-2-90-and-a-bunk-bed" class="room"><b>Bedroom 2</b><span>Double bed (2 × 90) and a bunk bed for kids or teens</span></div>
+        <div data-i18n="kitchendishwasher-fridge-and-freezer-ove" class="room"><b>Kitchen</b><span>Dishwasher, fridge and freezer, oven, table for six</span></div>
+        <div data-i18n="living-roomopen-fireplace-sofa-armchairs" class="room"><b>Living room</b><span>Open fireplace, sofa, armchairs, smart TV</span></div>
+        <div data-i18n="bathroomshower-toilet-and-washing-machin" class="room"><b>Bathroom</b><span>Shower, toilet and washing machine</span></div>
+        <div data-i18n="outsidelarge-lawn-seating-grill-fire-pit" class="room"><b>Outside</b><span>Large lawn, seating, grill, fire pit, smoker</span></div>
+        <div data-i18n="workwi-fi-and-a-desk-for-the-remote-day" class="room"><b>Work</b><span>Wi-Fi and a desk for the remote day</span></div>
+        <div data-i18n="arrivalself-check-in-with-key-box-from-1" class="room"><b>Arrival</b><span>Self check-in with key box, from 14:00</span></div>
       </div>
     </div>
 
     <div class="park reveal">
       <div class="stack" style="gap:14px">
-        <span class="kicker">Bring your boat</span>
-        <h3 style="font-size:clamp(26px,3vw,34px)">Room for the car, the boat and the trailer</h3>
+        <span data-i18n="bring-your-boat" class="kicker">Bring your boat</span>
+        <h3 data-i18n="room-for-the-car-the-boat-and-the-traile" style="font-size:clamp(26px,3vw,34px)">Room for the car, the boat and the trailer</h3>
         <ul class="park-list">
-          <li><b>Plenty of parking</b> on the property for several cars, boats and trailers, free of charge.</li>
-          <li><b>Public boat ramp</b> in Slussfors, <span id="rampDist">about 2 km</span> from the house.</li>
-          <li><b>Fuel and groceries</b> in the village, a few minutes away.</li>
+          <li data-i18n="plenty-of-parking-on-the-property-for-se"><b>Plenty of parking</b> on the property for several cars, boats and trailers, free of charge.</li>
+          <li data-i18n="public-boat-ramp-in-slussfors-about-2-km"><b>Public boat ramp</b> in Slussfors, <span id="rampDist">about 2 km</span> from the house.</li>
+          <li data-i18n="fuel-and-groceries-in-the-village-a-few"><b>Fuel and groceries</b> in the village, a few minutes away.</li>
         </ul>
       </div>
       <div class="stack" style="gap:10px">
         <div class="seg" role="group" aria-label="Parking map view">
-          <button type="button" id="pkLot" aria-pressed="true">Parking at the house</button>
-          <button type="button" id="pkRamp" aria-pressed="false">Way to the boat ramp</button>
+          <button data-i18n="parking-at-the-house" type="button" id="pkLot" aria-pressed="true">Parking at the house</button>
+          <button data-i18n="way-to-the-boat-ramp" type="button" id="pkRamp" aria-pressed="false">Way to the boat ramp</button>
         </div>
         <div id="parkMap" role="region" aria-label="Satellite map showing the parking areas at the house and the boat ramp"></div>
       </div>
@@ -647,7 +651,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <button><img src="images/workspace.jpg" alt="Desk with a lamp for remote work" loading="lazy"></button>
       <button class="g-wide"><img src="images/floor-plan.jpg" alt="Floor plan of the house" loading="lazy"></button>
     </div>
-    <button type="button" class="btn btn-line gal-more" id="galMore" style="color:var(--ink);border-color:var(--deep)">See all photos</button>
+    <button data-i18n="see-all-photos" type="button" class="btn btn-line gal-more" id="galMore" style="color:var(--ink);border-color:var(--deep)">See all photos</button>
   </div>
 </section>
 
@@ -655,13 +659,13 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <section id="seasons" class="sec dark">
   <div class="wrap stack" style="gap:clamp(32px,4vw,48px)">
     <div class="stack reveal" style="gap:14px">
-      <span class="kicker">More than fishing</span>
-      <h2>Light all night, then snow and northern lights</h2>
+      <span data-i18n="more-than-fishing" class="kicker">More than fishing</span>
+      <h2 data-i18n="light-all-night-then-snow-and-northern-l">Light all night, then snow and northern lights</h2>
     </div>
     <div class="seasons">
-      <article class="season reveal"><img src="images/cloudberries-cup.jpg" alt="A mug full of cloudberries held over a mire" loading="lazy"><div><span class="kicker" style="color:var(--ice)">Summer &amp; autumn</span><h3>Midnight sun and cloudberries</h3><p>Hike, pick berries and mushrooms, play disc golf, and fish late into the bright night.</p></div></article>
-      <article class="season reveal"><img src="images/snowmobile-sunset.jpg" alt="Snowmobile on a frozen lake under a red sunset sky" loading="lazy"><div><span class="kicker" style="color:var(--ice)">Winter</span><h3>Ice, snow and northern lights</h3><p>Ice fishing for char and whitefish, ski the trail behind the house, and watch for aurora on clear nights.</p></div></article>
-      <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span class="kicker" style="color:var(--ice)">All year</span><h3>Mountains within reach</h3><p>Hemavan, Tärnaby and Kittelfjäll are about an hour away for alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
+      <article class="season reveal"><img src="images/cloudberries-cup.jpg" alt="A mug full of cloudberries held over a mire" loading="lazy"><div><span data-i18n="summer-autumn" class="kicker" style="color:var(--ice)">Summer &amp; autumn</span><h3 data-i18n="midnight-sun-and-cloudberries">Midnight sun and cloudberries</h3><p data-i18n="hike-pick-berries-and-mushrooms-play-dis">Hike, pick berries and mushrooms, play disc golf, and fish late into the bright night.</p></div></article>
+      <article class="season reveal"><img src="images/snowmobile-sunset.jpg" alt="Snowmobile on a frozen lake under a red sunset sky" loading="lazy"><div><span data-i18n="winter" class="kicker" style="color:var(--ice)">Winter</span><h3 data-i18n="ice-snow-and-northern-lights">Ice, snow and northern lights</h3><p data-i18n="ice-fishing-for-char-and-whitefish-ski-t">Ice fishing for char and whitefish, ski the trail behind the house, and watch for aurora on clear nights.</p></div></article>
+      <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span data-i18n="all-year" class="kicker" style="color:var(--ice)">All year</span><h3 data-i18n="mountains-within-reach">Mountains within reach</h3><p data-i18n="hemavan-t-rnaby-and-kittelfj-ll-are-abou">Hemavan, Tärnaby and Kittelfjäll are about an hour away for alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
     </div>
   </div>
 </section>
@@ -669,7 +673,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <!-- REVIEWS -->
 <section class="sec" aria-label="Guest reviews">
   <div class="wrap stack" style="gap:32px">
-    <div class="score reveal"><b>4.74</b><span style="color:var(--muted)">out of 5 from 19 reviews on Airbnb · Superhost · responds within an hour</span></div>
+    <div data-i18n="4-74out-of-5-from-19-reviews-on-airbnb-s" class="score reveal"><b>4.74</b><span style="color:var(--muted)">out of 5 from 19 reviews on Airbnb · Superhost · responds within an hour</span></div>
     <div class="reviews">
       <blockquote class="reveal"><p>"Perfect place for a fishing trip and not only that."</p><footer>Janis · July 2026 · via Airbnb</footer></blockquote>
       <blockquote class="reveal"><p>"This is the second year that we have stayed with Jonas, and the house is truly beautiful and welcoming."</p><footer>Angelo · September 2026 · via Airbnb</footer></blockquote>
@@ -682,18 +686,18 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <section id="prices" class="sec" style="background:#E8EEEC">
   <div class="wrap split">
     <div class="stack reveal">
-      <span class="kicker">Prices 2027</span>
-      <h2>One price for the whole house</h2>
+      <span data-i18n="prices-2027" class="kicker">Prices 2027</span>
+      <h2 data-i18n="one-price-for-the-whole-house">One price for the whole house</h2>
       <div class="price-list" id="priceList"></div>
-      <p style="color:var(--muted);font-size:15px">Self-catering: you clean before you leave, so there is no cleaning fee. Bed linen and towels are not included. Bring your own or add them below.</p>
+      <p data-i18n="self-catering-you-clean-before-you-leave" style="color:var(--muted);font-size:15px">Self-catering: you clean before you leave, so there is no cleaning fee. Bed linen and towels are not included. Bring your own or add them below.</p>
     </div>
     <div class="stack reveal">
-      <h3 style="font-size:28px">How booking direct works</h3>
+      <h3 data-i18n="how-booking-direct-works" style="font-size:28px">How booking direct works</h3>
       <ol class="steps">
-        <li><span>Send your dates with the form. The price estimate updates as you type.</span></li>
-        <li><span>We reply within 24 hours with a confirmation and a secure PayPal payment request.</span></li>
-        <li><span>Pay by credit or debit card, or with your PayPal account. You do not need a PayPal account to pay by card. Your dates are booked when the payment is received. Free cancellation up to 30 days before arrival; later cancellations are not refunded.</span></li>
-        <li><span>Before arrival you get the key box code and our local fishing tips.</span></li>
+        <li data-i18n="send-your-dates-with-the-form-the-price"><span>Send your dates with the form. The price estimate updates as you type.</span></li>
+        <li data-i18n="we-reply-within-24-hours-with-a-confirma"><span>We reply within 24 hours with a confirmation and a secure PayPal payment request.</span></li>
+        <li data-i18n="pay-by-credit-or-debit-card-or-with-your"><span>Pay by credit or debit card, or with your PayPal account. You do not need a PayPal account to pay by card. Your dates are booked when the payment is received. Free cancellation up to 30 days before arrival; later cancellations are not refunded.</span></li>
+        <li data-i18n="before-arrival-you-get-the-key-box-code"><span>Before arrival you get the key box code and our local fishing tips.</span></li>
       </ol>
     </div>
   </div>
@@ -703,19 +707,19 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <section id="book" class="sec">
   <div class="wrap book-grid">
     <div class="stack reveal book-intro">
-      <span class="kicker">Book direct</span>
-      <h2>Request your dates</h2>
-      <p class="lead">No booking platform in between: you talk to us, the owners. Nothing is charged when you send a request.</p>
+      <span data-i18n="book-direct-2" class="kicker">Book direct</span>
+      <h2 data-i18n="request-your-dates">Request your dates</h2>
+      <p data-i18n="no-booking-platform-in-between-you-talk" class="lead">No booking platform in between: you talk to us, the owners. Nothing is charged when you send a request.</p>
     </div>
     <div class="book-faq">
       <div class="faq">
-        <details><summary>What should we bring?</summary><p>Bed linen and towels (or add them to your request, 200 SEK per person), and of course your fishing gear. Duvets and pillows are in the house.</p></details>
-        <details><summary>Can we bring our dog?</summary><p>Yes, pets are welcome. Please keep them off the beds and sofas.</p></details>
-        <details><summary>Where do we buy food?</summary><p>There is a grocery shop, Slussforsboa (<a href="tel:+4695150170" style="white-space:nowrap">+46 951 501 70</a>), and a fuel station in the village. Opening hours are limited, so call or check before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
-        <details><summary>Can we cancel?</summary><p>Yes, free of charge up to 30 days before arrival, and you get the full amount back. If you cancel later than that, the payment is not refunded.</p></details>
-        <details><summary>When can we arrive and leave?</summary><p>Check-in from 14:00 and check-out by 12:00, with self check-in through a key box.</p></details>
-        <details><summary>Is there room for our boat and trailer?</summary><p>Yes. There is plenty of free parking on the property for cars, boats and trailers, and the public boat ramp in Slussfors is about 2 km away.</p></details>
-        <details><summary>Is there a boat?</summary><p>We do not rent out a boat ourselves. Boats can be rented locally, see "Boats" under The fishing for where to ask. There is a public boat ramp in Slussfors if you bring your own.</p></details>
+        <details><summary data-i18n="what-should-we-bring">What should we bring?</summary><p data-i18n="bed-linen-and-towels-or-add-them-to-your">Bed linen and towels (or add them to your request, 200 SEK per person), and of course your fishing gear. Duvets and pillows are in the house.</p></details>
+        <details><summary data-i18n="can-we-bring-our-dog">Can we bring our dog?</summary><p data-i18n="yes-pets-are-welcome-please-keep-them-of">Yes, pets are welcome. Please keep them off the beds and sofas.</p></details>
+        <details><summary data-i18n="where-do-we-buy-food">Where do we buy food?</summary><p data-i18n="there-is-a-grocery-shop-slussforsboa-46">There is a grocery shop, Slussforsboa (<a href="tel:+4695150170" style="white-space:nowrap">+46 951 501 70</a>), and a fuel station in the village. Opening hours are limited, so call or check before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
+        <details><summary data-i18n="can-we-cancel">Can we cancel?</summary><p data-i18n="yes-free-of-charge-up-to-30-days-before">Yes, free of charge up to 30 days before arrival, and you get the full amount back. If you cancel later than that, the payment is not refunded.</p></details>
+        <details><summary data-i18n="when-can-we-arrive-and-leave">When can we arrive and leave?</summary><p data-i18n="check-in-from-14-00-and-check-out-by-12">Check-in from 14:00 and check-out by 12:00, with self check-in through a key box.</p></details>
+        <details><summary data-i18n="is-there-room-for-our-boat-and-trailer">Is there room for our boat and trailer?</summary><p data-i18n="yes-there-is-plenty-of-free-parking-on-t">Yes. There is plenty of free parking on the property for cars, boats and trailers, and the public boat ramp in Slussfors is about 2 km away.</p></details>
+        <details><summary data-i18n="is-there-a-boat">Is there a boat?</summary><p data-i18n="we-do-not-rent-out-a-boat-ourselves-boat-2">We do not rent out a boat ourselves. Boats can be rented locally, see "Boats" under The fishing for where to ask. There is a public boat ramp in Slussfors if you bring your own.</p></details>
       </div>
     </div>
 
@@ -728,36 +732,36 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </div>
         <div class="cal-grid" id="calGrid"></div>
         <div class="cal-foot">
-          <span><i style="background:#fff"></i>Free</span>
-          <span><i style="background:repeating-linear-gradient(135deg,#E3E9E7 0 4px,#D4DDDA 4px 8px);border-color:transparent"></i>Booked</span>
+          <span data-i18n-text="cal-free"><i style="background:#fff"></i>Free</span>
+          <span data-i18n-text="cal-booked"><i style="background:repeating-linear-gradient(135deg,#E3E9E7 0 4px,#D4DDDA 4px 8px);border-color:transparent"></i>Booked</span>
           <span id="calStatus">Loading the calendar…</span>
         </div>
       </div>
       <input id="arrival" name="arrival" type="hidden">
       <input id="departure" name="departure" type="hidden">
-      <div class="field"><label id="guestsLbl">Guests</label>
+      <div class="field"><label data-i18n="guests" id="guestsLbl">Guests</label>
         <div class="stepper" role="group" aria-labelledby="guestsLbl">
           <button type="button" id="gMinus" aria-label="Fewer guests">−</button>
           <output id="guests" aria-live="polite">2</output>
           <button type="button" id="gPlus" aria-label="More guests">+</button>
         </div>
       </div>
-      <label class="check"><input type="checkbox" id="linen" name="linen"><span>Add bed linen and towels <span style="color:var(--muted)">(200 SEK per person)</span></span></label>
-      <div class="quote" id="quote" aria-live="polite"><span class="muted">Tap your arrival day in the calendar.</span></div>
+      <label class="check"><input type="checkbox" id="linen" name="linen"><span data-i18n="add-bed-linen-and-towels-200-sek-per-per">Add bed linen and towels <span style="color:var(--muted)">(200 SEK per person)</span></span></label>
+      <div class="quote" id="quote" aria-live="polite"><span data-i18n="tap-your-arrival-day-in-the-calendar" class="muted">Tap your arrival day in the calendar.</span></div>
       <div class="row2">
-        <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
-        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+        <div class="field"><label data-i18n="name" for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+        <div class="field"><label data-i18n="email" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
       </div>
-      <div class="field"><label for="message">Message <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="message" name="message" rows="2"></textarea></div>
-      <div class="hp" aria-hidden="true"><label for="website">Leave empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+      <div class="field"><label data-i18n="message-optional" for="message">Message <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="message" name="message" rows="2"></textarea></div>
+      <div class="hp" aria-hidden="true"><label data-i18n="leave-empty" for="website">Leave empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="err" id="formErr" role="alert"></div>
-      <button class="btn btn-accent" type="submit" id="sendBtn" style="width:100%">Send booking request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
-      <small style="color:var(--muted)">We reply within 24 hours. Minimum stay 3 nights, up to 6 guests.</small>
+      <button data-i18n="send-booking-request" class="btn btn-accent" type="submit" id="sendBtn" style="width:100%">Send booking request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <small data-i18n="we-reply-within-24-hours-minimum-stay-3" style="color:var(--muted)">We reply within 24 hours. Minimum stay 3 nights, up to 6 guests.</small>
       <div class="done" id="done" role="status">
         <b id="doneTitle">Almost there</b>
         <span id="doneText"></span>
         <pre id="doneBody"></pre>
-        <button type="button" class="btn btn-line" id="copyBtn" style="color:var(--ink);border-color:var(--deep);min-height:44px">Copy request text</button>
+        <button data-i18n="copy-request-text" type="button" class="btn btn-line" id="copyBtn" style="color:var(--ink);border-color:var(--deep);min-height:44px">Copy request text</button>
       </div>
     </form>
   </div>
@@ -769,26 +773,26 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     <div class="foot-grid">
       <div class="stack" style="gap:8px">
         <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-fish"/></svg>Forellen Slussfors</a>
-        <small>Gamlavägen 16, 923 97 Slussfors, Sweden</small>
-        <small>An angler's guesthouse in Swedish Lapland, rented by a Swedish family.</small>
+        <small data-i18n="gamlav-gen-16-923-97-slussfors-sweden">Gamlavägen 16, 923 97 Slussfors, Sweden</small>
+        <small data-i18n="an-angler-s-guesthouse-in-swedish-laplan">An angler's guesthouse in Swedish Lapland, rented by a Swedish family.</small>
       </div>
       <div class="stack" style="gap:6px">
-        <b>Contact</b>
+        <b data-i18n="contact">Contact</b>
         <a id="footMail" href="#">Email us</a>
-        <small>We answer in English and Swedish</small>
+        <small data-i18n="we-answer-in-english-and-swedish">We answer in English and Swedish</small>
       </div>
       <div class="stack" style="gap:6px">
-        <b>Good to know</b>
-        <small>Emergency 112 · Medical advice 1177</small>
-        <small>Right of public access applies. Leave nature as you found it.</small>
-        <small>Map data © OpenStreetMap contributors</small>
+        <b data-i18n="good-to-know">Good to know</b>
+        <small data-i18n="emergency-112-medical-advice-1177">Emergency 112 · Medical advice 1177</small>
+        <small data-i18n="right-of-public-access-applies-leave-nat">Right of public access applies. Leave nature as you found it.</small>
+        <small data-i18n="map-data-openstreetmap-contributors">Map data © OpenStreetMap contributors</small>
       </div>
     </div>
-    <div class="big-word m-hide" aria-hidden="true">Slussfors</div>
+    <div data-i18n="slussfors" class="big-word m-hide" aria-hidden="true">Slussfors</div>
   </div>
 </footer>
 
-<div class="mobile-book hide" id="mobileBook"><div><b>From <span id="mbFrom">1 100</span> SEK</b><small>per night · whole house</small></div><a class="btn btn-accent" href="#book">Book direct</a></div>
+<div class="mobile-book hide" id="mobileBook"><div><b><span id="mbFromLbl">From</span> <span id="mbFrom">1 100</span> SEK</b><small data-i18n="per-night-whole-house">per night · whole house</small></div><a data-i18n="book-direct-3" class="btn btn-accent" href="#book">Book direct</a></div>
 
 <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
   <div class="lb-in">
@@ -799,9 +803,43 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="i18n/strings.js"></script>
 <script>
 (function(){
   var C = window.FORELLEN;
+
+  /* ---------- language ---------- */
+  var LANGS = ['en','lv','lt'], LOC = {en:'en-GB', lv:'lv-LV', lt:'lt-LT'};
+  var LANG = (function(){
+    var q = new URLSearchParams(location.search).get('lang');
+    if (LANGS.indexOf(q) >= 0){ try { localStorage.setItem('lang', q); } catch(e){} return q; }
+    try { var st = localStorage.getItem('lang'); if (LANGS.indexOf(st) >= 0) return st; } catch(e){}
+    var nl = navigator.languages || [navigator.language || ''];
+    for (var i = 0; i < nl.length; i++){ var x = String(nl[i]).slice(0,2).toLowerCase(); if (x === 'lv' || x === 'lt') return x; if (x === 'en' || x === 'sv') return 'en'; }
+    return 'en';
+  })();
+  var D = (window.I18N && window.I18N[LANG]) || {};
+  function T(k, en, v){ var s = D['js.' + k] || en; if (v) for (var n in v) s = s.split('{' + n + '}').join(v[n]); return s; }
+  function plural(n){ if (LANG === 'lt'){ if (n % 10 === 1 && n % 100 !== 11) return 'one'; if (n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20)) return 'few'; return 'many'; }
+    if (LANG === 'lv') return (n % 10 === 1 && n % 100 !== 11) ? 'one' : 'other'; return n === 1 ? 'one' : 'other'; }
+  function W(word, n){ var f = D['js.w.' + word]; var en = {night:{one:'night',other:'nights'}, guest:{one:'guest',other:'guests'}}[word];
+    var forms = f || en, k = plural(n); return n + ' ' + (forms[k] || forms.other || forms.many); }
+  function cap(x){ return x.charAt(0).toUpperCase() + x.slice(1); }
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('.lang a').forEach(function(a){ a.setAttribute('aria-current', a.dataset.lang === LANG); });
+  if (LANG !== 'en'){
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var v = D[el.getAttribute('data-i18n')]; if (!v) return;
+      if (el.querySelector('svg')){ var tn = [].filter.call(el.childNodes, function(n){ return n.nodeType === 3 && n.nodeValue.trim(); })[0]; if (tn) tn.nodeValue = v + ' '; }
+      else el.innerHTML = v;
+    });
+    document.querySelectorAll('[data-i18n-text]').forEach(function(el){
+      var v = D[el.getAttribute('data-i18n-text')]; if (!v) return;
+      var tn = [].filter.call(el.childNodes, function(n){ return n.nodeType === 3 && n.nodeValue.trim(); }).pop(); if (tn) tn.nodeValue = v;
+    });
+    if (D['meta.title']) document.title = D['meta.title'];
+    document.getElementById('mbFromLbl').textContent = T('from', 'From');
+  }
   var $ = function(id){ return document.getElementById(id); };
   var fmt = function(n){ return Math.round(n).toLocaleString('sv-SE').replace(/ /g,' '); };
 
@@ -830,26 +868,26 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){ if (!d || !d.current) return;
       var t = Math.round(d.current.temperature_2m);
-      $('wxText').textContent = 'Now in Slussfors: ' + (t > 0 ? '+' : '') + t + ' °C, ' + (WMO[d.current.weather_code] || '').toLowerCase();
+      $('wxText').textContent = T('wx', 'Now in Slussfors: ') + (t > 0 ? '+' : '') + t + ' °C' + (LANG === 'en' ? ', ' + (WMO[d.current.weather_code] || '').toLowerCase() : '');
       $('wxChip').hidden = false; })
     .catch(function(){});
 
   /* ---------- prices ---------- */
-  var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MN = []; for (var mi = 0; mi < 12; mi++) MN.push(cap(new Date(2027, mi, 1).toLocaleDateString(LOC[LANG], {month:'short'}).replace(/\.$/, '')));
   var groups = {};
   for (var m = 1; m <= 12; m++){ (groups[C.nightly[m]] = groups[C.nightly[m]] || []).push(m); }
   function ranges(ms){ var out = [], s = ms[0], p = ms[0];
     for (var i = 1; i <= ms.length; i++){ if (ms[i] === p + 1){ p = ms[i]; continue; } out.push(s === p ? MN[s-1] : MN[s-1] + '–' + MN[p-1]); s = p = ms[i]; }
     return out.join(', '); }
   var pl = $('priceList'), html = '';
-  if (C.directDiscount > 0) html += '<div class="pl" style="background:var(--deep);color:#fff;border-color:var(--deep)"><span>Book direct and pay less than on Airbnb</span><b>−' + Math.round(C.directDiscount*100) + ' %</b></div>';
+  if (C.directDiscount > 0) html += '<div class="pl" style="background:var(--deep);color:#fff;border-color:var(--deep)"><span>' + T('direct', 'Book direct and pay less than on Airbnb') + '</span><b>−' + Math.round(C.directDiscount*100) + ' %</b></div>';
   Object.keys(groups).sort(function(a,b){return b-a;}).forEach(function(p){
-    html += '<div class="pl"><span>' + ranges(groups[p]) + ', per night</span><b>' + fmt(p) + ' SEK</b></div>'; });
-  html += '<div class="pl"><span>Price is for ' + C.includedGuests + ' guests. Each extra guest, per night</span><b>+' + fmt(C.extraGuest) + ' SEK</b></div>';
-  if (C.weeklyDiscount > 0) html += '<div class="pl"><span>Stay 7 nights or more</span><b>−' + Math.round(C.weeklyDiscount*100) + ' %</b></div>';
-  html += '<div class="pl"><span>Minimum stay</span><b>' + C.minNights + ' nights</b></div>';
-  html += '<div class="pl"><span>Cleaning fee (you clean before you leave)</span><b>0 SEK</b></div>';
-  html += '<div class="pl"><span>Bed linen &amp; towels, per person, on request</span><b>' + fmt(C.linenPerPerson) + ' SEK</b></div>';
+    html += '<div class="pl"><span>' + ranges(groups[p]) + T('per_night', ', per night') + '</span><b>' + fmt(p) + ' SEK</b></div>'; });
+  html += '<div class="pl"><span>' + T('price_for', 'Price is for {n} guests. Each extra guest, per night', {n:C.includedGuests}) + '</span><b>+' + fmt(C.extraGuest) + ' SEK</b></div>';
+  if (C.weeklyDiscount > 0) html += '<div class="pl"><span>' + T('week', 'Stay 7 nights or more') + '</span><b>−' + Math.round(C.weeklyDiscount*100) + ' %</b></div>';
+  html += '<div class="pl"><span>' + T('min_stay', 'Minimum stay') + '</span><b>' + W('night', C.minNights) + '</b></div>';
+  html += '<div class="pl"><span>' + T('cleaning', 'Cleaning fee (you clean before you leave)') + '</span><b>0 SEK</b></div>';
+  html += '<div class="pl"><span>' + T('linen_pp', 'Bed linen &amp; towels, per person, on request') + '</span><b>' + fmt(C.linenPerPerson) + ' SEK</b></div>';
   pl.innerHTML = html;
   $('mbFrom').textContent = fmt(Math.min.apply(null, Object.keys(groups).map(Number)));
 
@@ -860,7 +898,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   function iso(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
   function parse(s){ if (!s) return null; var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2], 12); }
   arr.min = iso(today);
-  function setGuests(n){ guests = Math.max(1, Math.min(C.maxGuests, n)); guestsOut.textContent = guests + (guests === 1 ? ' guest' : ' guests'); calc(); }
+  function setGuests(n){ guests = Math.max(1, Math.min(C.maxGuests, n)); guestsOut.textContent = W('guest', guests); calc(); }
   $('gMinus').addEventListener('click', function(){ setGuests(guests - 1); });
   $('gPlus').addEventListener('click', function(){ setGuests(guests + 1); });
   arr.addEventListener('change', function(){
@@ -874,29 +912,30 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   function calc(){
     var a = parse(arr.value), d = parse(dep.value); lastQuote = null;
     drawCal();
-    if (!a || !d){ quote.innerHTML = '<span class="muted">Tap your arrival day in the calendar.</span>'; return; }
+    if (!a || !d){ quote.innerHTML = '<span class="muted">' + T('tap', 'Tap your arrival day in the calendar.') + '</span>'; return; }
     var nights = Math.round((d - a) / 864e5);
-    if (nights < C.minNights){ quote.innerHTML = '<span class="err">Minimum stay is ' + C.minNights + ' nights.</span>'; return; }
-    if (rangeBlocked(a, d)){ quote.innerHTML = '<span class="err">Some of these nights are already booked. Please pick other dates.</span>'; return; }
+    if (nights < C.minNights){ quote.innerHTML = '<span class="err">' + T('min_err', 'Minimum stay is {n}.', {n:W('night', C.minNights)}) + '</span>'; return; }
+    if (rangeBlocked(a, d)){ quote.innerHTML = '<span class="err">' + T('blocked', 'Some of these nights are already booked. Please pick other dates.') + '</span>'; return; }
     var base = 0, cur = new Date(a);
     for (var i = 0; i < nights; i++){ base += C.nightly[cur.getMonth()+1]; cur.setDate(cur.getDate()+1); }
     var extra = Math.max(0, guests - C.includedGuests) * C.extraGuest * nights;
     var disc = nights >= 7 ? Math.round((base + extra) * C.weeklyDiscount) : 0;
     var lin = linen.checked ? guests * C.linenPerPerson : 0;
     var total = base + extra - disc + lin;
-    var dfmt = function(x){ return x.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}); };
-    var h = '<div class="ln" style="font-weight:600"><span>' + dfmt(a) + ' → ' + dfmt(d) + '</span><span>' + nights + ' nights</span></div>';
-    h += '<div class="ln"><span>House, ' + guests + (guests === 1 ? ' guest' : ' guests') + '</span><span>' + fmt(base) + ' SEK</span></div>';
-    if (extra) h += '<div class="ln"><span>' + (guests - C.includedGuests) + ' extra guest' + (guests - C.includedGuests > 1 ? 's' : '') + ' × ' + nights + ' nights</span><span>' + fmt(extra) + ' SEK</span></div>';
-    if (disc) h += '<div class="ln"><span>Weekly discount</span><span>−' + fmt(disc) + ' SEK</span></div>';
-    if (lin) h += '<div class="ln"><span>Linen &amp; towels × ' + guests + '</span><span>' + fmt(lin) + ' SEK</span></div>';
-    h += '<div class="ln tot"><span>Estimated total</span><span>' + fmt(total) + ' SEK</span></div><span class="muted">We confirm the final price in our reply.</span>';
+    var dfmt = function(x){ return x.toLocaleDateString(LOC[LANG], LANG === 'lt' ? {month:'long', day:'numeric'} : {weekday:'short', day:'numeric', month:'short'}); };
+    var h = '<div class="ln" style="font-weight:600"><span>' + dfmt(a) + ' → ' + dfmt(d) + '</span><span>' + W('night', nights) + '</span></div>';
+    h += '<div class="ln"><span>' + T('house', 'House') + ', ' + W('guest', guests) + '</span><span>' + fmt(base) + ' SEK</span></div>';
+    if (extra) h += '<div class="ln"><span>' + T('extra', 'Extra guests: {c} × {nights}', {c:guests - C.includedGuests, nights:W('night', nights)}) + '</span><span>' + fmt(extra) + ' SEK</span></div>';
+    if (disc) h += '<div class="ln"><span>' + T('weekly', 'Weekly discount') + '</span><span>−' + fmt(disc) + ' SEK</span></div>';
+    if (lin) h += '<div class="ln"><span>' + T('linen', 'Linen &amp; towels') + ' × ' + guests + '</span><span>' + fmt(lin) + ' SEK</span></div>';
+    h += '<div class="ln tot"><span>' + T('total', 'Estimated total') + '</span><span>' + fmt(total) + ' SEK</span></div><span class="muted">' + T('confirm', 'We confirm the final price in our reply.') + '</span>';
     quote.innerHTML = h;
     lastQuote = {nights:nights, total:total};
   }
   /* ---------- availability calendar (reads availability.json) ---------- */
   var booked = {}, calLoaded = false, view = new Date(today.getFullYear(), today.getMonth(), 1, 12), picking = 'arr';
-  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var MONTHS = []; for (var mj = 0; mj < 12; mj++) MONTHS.push(cap(new Date(2027, mj, 1).toLocaleDateString(LOC[LANG], {month:'long'})));
+  var DOW = D['js.dow'] || []; if (!DOW.length) for (var dj = 0; dj < 7; dj++) DOW.push(cap(new Date(2027, 0, 4 + dj).toLocaleDateString(LOC[LANG], {weekday:'short'}).replace(/\.$/, '')));
   function isBooked(d){ return !!booked[iso(d)]; }   // the NIGHT starting on d is taken
   function rangeBlocked(a, d){ var c = new Date(a); while (c < d){ if (isBooked(c)) return true; c.setDate(c.getDate()+1); } return false; }
   function drawCal(){
@@ -904,7 +943,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     $('calTitle').textContent = MONTHS[m] + ' ' + y;
     $('calPrev').disabled = (y === today.getFullYear() && m === today.getMonth());
     var a = parse(arr.value), d = parse(dep.value);
-    var h = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(x){ return '<span class="dow">' + x + '</span>'; }).join('');
+    var h = DOW.map(function(x){ return '<span class="dow">' + x + '</span>'; }).join('');
     var lead = (new Date(y, m, 1).getDay() + 6) % 7;
     for (var i = 0; i < lead; i++) h += '<span aria-hidden="true"></span>';
     var days = new Date(y, m + 1, 0).getDate();
@@ -928,7 +967,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       if (isBooked(dt)) return;
       arr.value = b.dataset.d; dep.value = ''; picking = 'dep';
       var minDep = new Date(dt); minDep.setDate(minDep.getDate() + C.minNights); dep.min = iso(minDep);
-      calc(); quote.innerHTML = '<span class="muted">Now pick your departure day (at least ' + C.minNights + ' nights).</span>';
+      calc(); quote.innerHTML = '<span class="muted">' + T('pick_dep', 'Now pick your departure day (at least {n}).', {n:W('night', C.minNights)}) + '</span>';
     }
   });
   $('calPrev').addEventListener('click', function(){ view.setMonth(view.getMonth() - 1); drawCal(); });
@@ -949,9 +988,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         }
       }
       var up = j.updated ? new Date(j.updated) : null;
-      $('calStatus').textContent = 'Synced with Airbnb and Booking.com' + (up && !isNaN(up) ? ', ' + up.toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
+      $('calStatus').textContent = T('synced', 'Synced with Airbnb and Booking.com') + (up && !isNaN(up) ? ', ' + up.toLocaleString(LOC[LANG], {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
       calc(); })
-    .catch(function(){ $('calStatus').textContent = 'Live calendar unavailable. We confirm availability by email.'; drawCal(); });
+    .catch(function(){ $('calStatus').textContent = T('cal_unavail', 'Live calendar unavailable. We confirm availability by email.'); drawCal(); });
   drawCal();
   setGuests(2);
 
@@ -976,35 +1015,35 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     e.preventDefault(); errBox.textContent = '';
     if ($('website').value) return;  // spam trap
     var problems = [];
-    if (!arr.value || !dep.value) problems.push('choose arrival and departure dates');
-    else if (!lastQuote) problems.push(rangeBlocked(parse(arr.value), parse(dep.value)) ? 'pick dates that are not already booked' : 'note that the minimum stay is ' + C.minNights + ' nights');
-    if (!$('name').value.trim()) problems.push('add your name');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim())) problems.push('add a valid email address');
-    if (problems.length){ errBox.textContent = 'Please ' + problems.join(', ') + '.'; return; }
+    if (!arr.value || !dep.value) problems.push(T('e_dates', 'choose arrival and departure dates'));
+    else if (!lastQuote) problems.push(rangeBlocked(parse(arr.value), parse(dep.value)) ? T('e_booked', 'pick dates that are not already booked') : T('e_min', 'note that the minimum stay is {n}', {n:W('night', C.minNights)}));
+    if (!$('name').value.trim()) problems.push(T('e_name', 'add your name'));
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim())) problems.push(T('e_email', 'add a valid email address'));
+    if (problems.length){ errBox.textContent = T('please', 'Please ') + problems.join(', ') + '.'; return; }
 
     var subject = 'Booking request ' + arr.value + ' to ' + dep.value + ', ' + guests + ' guests';
     var body = buildBody();
     var done = $('done');
     if (C.formspreeId){
-      var btn = $('sendBtn'), btnHtml = btn.innerHTML; btn.disabled = true; btn.textContent = 'Sending…';
+      var btn = $('sendBtn'), btnHtml = btn.innerHTML; btn.disabled = true; btn.textContent = T('sending', 'Sending…');
       fetch('https://formspree.io/f/' + C.formspreeId, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
         body: JSON.stringify({_subject:subject, _replyto:$('email').value.trim(), email:$('email').value.trim(), message:body})})
         .then(function(r){ if (!r.ok) throw new Error();
-          $('doneTitle').textContent = 'Thank you, your request is sent';
-          $('doneText').textContent = 'We will reply to ' + $('email').value.trim() + ' within 24 hours.';
+          $('doneTitle').textContent = T('sent_t', 'Thank you, your request is sent');
+          $('doneText').textContent = T('sent', 'We will reply to {email} within 24 hours.', {email:$('email').value.trim()});
           $('doneBody').textContent = body; done.classList.add('show'); btn.style.display = 'none'; $('copyBtn').style.display = 'none'; })
-        .catch(function(){ btn.disabled = false; btn.innerHTML = btnHtml; errBox.textContent = 'Sending failed. Please try again or email us at ' + C.bookingEmail + '.'; });
+        .catch(function(){ btn.disabled = false; btn.innerHTML = btnHtml; errBox.textContent = T('fail', 'Sending failed. Please try again or email us at {email}.', {email:C.bookingEmail}); });
       return;
     }
     var href = 'mailto:' + C.bookingEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    $('doneTitle').textContent = 'Your email app should open now';
-    $('doneText').innerHTML = 'Press send in your email app to reach us. If nothing opened, copy the text below and email it to <a href="mailto:' + C.bookingEmail + '">' + C.bookingEmail + '</a>.';
+    $('doneTitle').textContent = T('mail_t', 'Your email app should open now');
+    $('doneText').innerHTML = T('mail_txt', 'Press send in your email app to reach us. If nothing opened, copy the text below and email it to {email}.', {email:'<a href="mailto:' + C.bookingEmail + '">' + C.bookingEmail + '</a>'});
     $('doneBody').textContent = body; done.classList.add('show');
     window.location.href = href;
   });
   $('copyBtn').addEventListener('click', function(){
     var t = $('doneBody').textContent, b = this;
-    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent = 'Copied'; }, function(){ b.textContent = 'Select the text above to copy'; });
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent = T('copied', 'Copied'); }, function(){ b.textContent = T('copy_fail', 'Select the text above to copy'); });
   });
   $('footMail').href = 'mailto:' + C.bookingEmail; $('footMail').textContent = C.bookingEmail;
 
@@ -1045,6 +1084,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       {n:'Hemavan Tärnaby Airport', d:'Airport', c:[65.8061,15.0828], col:'#1F7A8C', k:'✈', t:'Regional airport in the mountains.'}
     ]
   };
+  ['local','region'].forEach(function(w){ PLACES[w].forEach(function(p, i){ var pre = 'js.pl.' + w + '.' + i + '.'; if (D[pre+'n']) p.n = D[pre+'n']; if (D[pre+'d']) p.d = D[pre+'d']; if (D[pre+'t']) p.t = D[pre+'t']; }); });
   function km(a, b){ var R = 6371, r = Math.PI/180, dLa = (b[0]-a[0])*r, dLo = (b[1]-a[1])*r;
     var x = Math.sin(dLa/2)*Math.sin(dLa/2) + Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
     return 2*R*Math.asin(Math.sqrt(x)); }
@@ -1087,7 +1127,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 
   /* ---------- parking map: house + boat ramp on satellite ---------- */
   var RAMP = [65.4260, 16.2255];
-  var rk = km(H, RAMP); $('rampDist').textContent = 'about ' + rk.toFixed(1) + ' km';
+  var rk = km(H, RAMP); $('rampDist').textContent = T('about_km', 'about {x} km', {x:rk.toLocaleString(LOC[LANG], {maximumFractionDigits:1})});
   var parkMap = null;
   function initPark(){
     if (parkMap || !window.L) return;
@@ -1103,13 +1143,13 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     PARKING.forEach(function(a){
       L.polygon(a, {color:'#FFFFFF', weight:2, fillColor:'#E06A2C', fillOpacity:.55}).addTo(parkMap)
         .bindTooltip('P', {permanent:true, direction:'center', className:'p-label'})
-        .bindPopup('<b>Parking</b><br>Cars, boats and trailers');
+        .bindPopup('<b>' + T('parking', 'Parking') + '</b><br>' + T('parking_sub', 'Cars, boats and trailers'));
       a.forEach(function(p){ parkBounds.extend(p); });
     });
     L.marker(H, {icon:pinIcon({col:'#E06A2C', k:'H'}), title:'Forellen'}).addTo(parkMap)
-      .bindPopup('<b>Forellen</b><br>Parking for cars, boats and trailers on the property');
+      .bindPopup('<b>Forellen</b><br>' + T('house_pop', 'Parking for cars, boats and trailers on the property'));
     L.marker(RAMP, {icon:pinIcon({col:'#1F7A8C', k:'B'}), title:'Boat ramp'}).addTo(parkMap)
-      .bindPopup('<b>Public boat ramp</b><br>Slussfors, ' + rk.toFixed(1) + ' km from the house');
+      .bindPopup('<b>' + T('ramp_t', 'Public boat ramp') + '</b><br>' + T('ramp', 'Slussfors, {x} km from the house', {x:rk.toLocaleString(LOC[LANG], {maximumFractionDigits:1})}));
     L.polyline([H, RAMP], {color:'#FFFFFF', weight:2, dashArray:'6 8', opacity:.85}).addTo(parkMap);
     var viewLot = function(){ parkMap.flyToBounds(parkBounds.pad(0.6), {maxZoom:19, duration:.8}); };
     var viewRamp = function(){ parkMap.flyToBounds(L.latLngBounds([H, RAMP]).pad(0.25), {duration:.8}); };
