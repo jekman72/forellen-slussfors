@@ -643,31 +643,22 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <span id="calStatus">Loading the calendar…</span>
         </div>
       </div>
-      <div class="row2">
-        <div class="field"><label for="arrival">Arrival</label><input id="arrival" name="arrival" type="date" required></div>
-        <div class="field"><label for="departure">Departure</label><input id="departure" name="departure" type="date" required></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label id="guestsLbl">Guests</label>
-          <div class="stepper" role="group" aria-labelledby="guestsLbl">
-            <button type="button" id="gMinus" aria-label="Fewer guests">−</button>
-            <output id="guests" aria-live="polite">2</output>
-            <button type="button" id="gPlus" aria-label="More guests">+</button>
-          </div>
-        </div>
-        <div class="field"><label for="purpose">Main reason for the trip</label>
-          <select id="purpose" name="purpose"><option>Fishing</option><option>Ice fishing</option><option>Hiking &amp; nature</option><option>Skiing &amp; snowmobile</option><option>Passing through</option><option>Other</option></select>
+      <input id="arrival" name="arrival" type="hidden">
+      <input id="departure" name="departure" type="hidden">
+      <div class="field"><label id="guestsLbl">Guests</label>
+        <div class="stepper" role="group" aria-labelledby="guestsLbl">
+          <button type="button" id="gMinus" aria-label="Fewer guests">−</button>
+          <output id="guests" aria-live="polite">2</output>
+          <button type="button" id="gPlus" aria-label="More guests">+</button>
         </div>
       </div>
-      <label class="check"><input type="checkbox" id="linen" name="linen"><span>Add bed linen and towels for everyone <span style="color:var(--muted)">(200 SEK per person)</span></span></label>
-      <label class="check"><input type="checkbox" id="pet" name="pet"><span>We are bringing a pet</span></label>
-      <div class="quote" id="quote" aria-live="polite"><span class="muted">Pick your dates to see a price estimate.</span></div>
-      <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+      <label class="check"><input type="checkbox" id="linen" name="linen"><span>Add bed linen and towels <span style="color:var(--muted)">(200 SEK per person)</span></span></label>
+      <div class="quote" id="quote" aria-live="polite"><span class="muted">Tap your arrival day in the calendar.</span></div>
       <div class="row2">
+        <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
         <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
-        <div class="field"><label for="phone">Phone <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
       </div>
-      <div class="field"><label for="message">Anything we should know?</label><textarea id="message" name="message" placeholder="Boat rental, late arrival, questions about the fishing"></textarea></div>
+      <div class="field"><label for="message">Message <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="message" name="message" rows="2"></textarea></div>
       <div class="hp" aria-hidden="true"><label for="website">Leave empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="err" id="formErr" role="alert"></div>
       <button class="btn btn-accent" type="submit" id="sendBtn" style="width:100%">Send booking request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
@@ -793,7 +784,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   function calc(){
     var a = parse(arr.value), d = parse(dep.value); lastQuote = null;
     drawCal();
-    if (!a || !d){ quote.innerHTML = '<span class="muted">Pick your dates to see a price estimate.</span>'; return; }
+    if (!a || !d){ quote.innerHTML = '<span class="muted">Tap your arrival day in the calendar.</span>'; return; }
     var nights = Math.round((d - a) / 864e5);
     if (nights < C.minNights){ quote.innerHTML = '<span class="err">Minimum stay is ' + C.minNights + ' nights.</span>'; return; }
     if (rangeBlocked(a, d)){ quote.innerHTML = '<span class="err">Some of these nights are already booked. Please pick other dates.</span>'; return; }
@@ -803,7 +794,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     var disc = nights >= 7 ? Math.round((base + extra) * C.weeklyDiscount) : 0;
     var lin = linen.checked ? guests * C.linenPerPerson : 0;
     var total = base + extra - disc + lin;
-    var h = '<div class="ln"><span>' + nights + ' nights, house</span><span>' + fmt(base) + ' SEK</span></div>';
+    var dfmt = function(x){ return x.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}); };
+    var h = '<div class="ln" style="font-weight:600"><span>' + dfmt(a) + ' → ' + dfmt(d) + '</span><span>' + nights + ' nights</span></div>';
+    h += '<div class="ln"><span>House, ' + guests + (guests === 1 ? ' guest' : ' guests') + '</span><span>' + fmt(base) + ' SEK</span></div>';
     if (extra) h += '<div class="ln"><span>' + (guests - C.includedGuests) + ' extra guest' + (guests - C.includedGuests > 1 ? 's' : '') + ' × ' + nights + ' nights</span><span>' + fmt(extra) + ' SEK</span></div>';
     if (disc) h += '<div class="ln"><span>Weekly discount</span><span>−' + fmt(disc) + ' SEK</span></div>';
     if (lin) h += '<div class="ln"><span>Linen &amp; towels × ' + guests + '</span><span>' + fmt(lin) + ' SEK</span></div>';
@@ -871,18 +864,13 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       'Arrival:    ' + arr.value,
       'Departure:  ' + dep.value + (lastQuote ? '  (' + lastQuote.nights + ' nights)' : ''),
       'Guests:     ' + guests,
-      'Trip:       ' + $('purpose').value,
       'Linen:      ' + (linen.checked ? 'Yes, for ' + guests : 'No, we bring our own'),
-      'Pet:        ' + ($('pet').checked ? 'Yes' : 'No'),
       'Estimate:   ' + (lastQuote ? fmt(lastQuote.total) + ' SEK' : '-'),
       '',
       'Name:       ' + $('name').value.trim(),
-      'Email:      ' + $('email').value.trim(),
-      'Phone:      ' + ($('phone').value.trim() || '-'),
-      '',
-      'Message:',
-      $('message').value.trim() || '-'
+      'Email:      ' + $('email').value.trim()
     ];
+    if ($('message').value.trim()) lines.push('', 'Message:', $('message').value.trim());
     return lines.join('\n');
   }
   form.addEventListener('submit', function(e){
