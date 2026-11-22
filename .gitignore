@@ -5,3 +5,4 @@ availability.json
 _site/
 .DS_Store
 __pycache__/
+social/

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markera parkering</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  html,body{margin:0;height:100%;font:16px/1.4 system-ui,sans-serif;background:#0B1E1D;color:#fff}
+  #bar{position:fixed;left:12px;right:12px;top:12px;z-index:1000;background:rgba(11,30,29,.92);border-radius:14px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+  #bar b{font-size:17px}
+  button{min-height:40px;padding:0 14px;border:0;border-radius:999px;font:600 15px system-ui;cursor:pointer}
+  .go{background:#E06A2C;color:#fff}.ghost{background:#2B3B39;color:#fff}.next{background:#1F7A8C;color:#fff}
+  #map{position:absolute;inset:0}
+  #out{font:14px ui-monospace,Menlo,monospace;color:#8FD3D9}
+</style>
+</head>
+<body>
+<div id="bar">
+  <b id="title">Yta 2: klicka ut hörnen</b>
+  <span>Ett klick per hörn, minst tre. Tryck "Nästa yta" när en yta är klar.</span>
+  <button class="ghost" id="undo">Ångra senaste hörn</button>
+  <button class="ghost" id="clear">Rensa denna yta</button>
+  <button class="next" id="next">Nästa yta</button>
+  <button class="go" id="done">Klar med alla</button>
+  <span id="out"></span>
+</div>
+<div id="map"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  var H=[65.43064,16.26415];
+  var map=L.map('map',{zoomControl:false}).setView(H,19); L.control.zoom({position:'bottomright'}).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:21,maxNativeZoom:18,attribution:'Imagery © Esri'}).addTo(map);
+  L.circleMarker(H,{radius:7,color:'#fff',weight:2,fillColor:'#E06A2C',fillOpacity:1}).addTo(map).bindTooltip('Huset (enligt Airbnb)',{permanent:true,direction:'top'});
+  // Area 1 as marked earlier
+  var areas=[[[65.430659,16.2644],[65.430588,16.264405],[65.430588,16.264454]]];
+  var done=L.layerGroup().addTo(map), cur=[], curPoly=L.polygon([], {color:'#8FD3D9',weight:3,fillOpacity:.35}).addTo(map), dots=L.layerGroup().addTo(map);
+  function drawDone(){ done.clearLayers(); areas.forEach(function(a,i){ L.polygon(a,{color:'#E06A2C',weight:3,fillOpacity:.35}).addTo(done).bindTooltip('Yta '+(i+1),{permanent:true,direction:'center'}); }); }
+  function draw(){ curPoly.setLatLngs(cur); dots.clearLayers(); cur.forEach(function(p){ L.circleMarker(p,{radius:5,color:'#fff',fillColor:'#1F7A8C',fillOpacity:1}).addTo(dots); });
+    document.getElementById('title').textContent='Yta '+(areas.length+1)+': klicka ut hörnen';
+    document.getElementById('out').textContent=areas.length+' klara ytor · '+cur.length+' hörn i pågående';
+    window.AREAS=areas.concat(cur.length>=3?[cur]:[]).map(function(a){ return a.map(function(p){ return [+(+p[0]).toFixed(6), +(+p[1]).toFixed(6)]; }); }); }
+  map.on('click',function(e){ cur.push([e.latlng.lat,e.latlng.lng]); draw(); });
+  document.getElementById('undo').onclick=function(){ cur.pop(); draw(); };
+  document.getElementById('clear').onclick=function(){ cur=[]; draw(); };
+  document.getElementById('next').onclick=function(){ if(cur.length<3){ document.getElementById('out').textContent='Minst tre hörn behövs.'; return; } areas.push(cur); cur=[]; drawDone(); draw(); };
+  document.getElementById('done').onclick=function(){ if(cur.length>=3){ areas.push(cur); cur=[]; drawDone(); } draw(); window.AREAS_DONE=true; document.getElementById('out').textContent=areas.length+' ytor klara. Säg till Claude.'; };
+  drawDone(); draw();
+  map.fitBounds(L.latLngBounds(areas[0]).pad(6));
+</script>
+</body>
+</html>

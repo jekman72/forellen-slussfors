@@ -81,7 +81,7 @@ section{scroll-margin-top:72px}
 :focus-visible{outline:3px solid var(--ice);outline-offset:3px;border-radius:6px}
 
 /* ---------- nav ---------- */
-.nav{position:fixed;inset:0 0 auto 0;z-index:1000;transition:background .25s ease,box-shadow .25s ease}
+.nav{position:fixed;inset:0 0 auto 0;z-index:2000;transition:background .25s ease,box-shadow .25s ease}
 .nav.solid{background:rgba(11,30,29,.86);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
 .nav-in{max-width:var(--wrap);margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
@@ -167,6 +167,18 @@ section{scroll-margin-top:72px}
 .c1{grid-column:span 3;grid-row:span 3}.c2{grid-column:span 3;grid-row:span 2}.c3{grid-column:span 2;grid-row:span 2}.c4{grid-column:span 1;grid-row:span 2}
 .c5{grid-column:span 2;grid-row:span 2}.c6{grid-column:span 2;grid-row:span 2}.c7{grid-column:span 2;grid-row:span 2}
 @media (max-width:800px){.catch{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px}.c1,.c2,.c3,.c4,.c5,.c6,.c7{grid-column:span 1;grid-row:span 2}.c1{grid-column:span 2}}
+
+/* ---------- parking ---------- */
+.park{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(24px,4vw,48px);align-items:center;margin-top:clamp(40px,5vw,64px);background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,3vw,32px);box-shadow:var(--shadow)}
+@media (max-width:900px){.park{grid-template-columns:1fr}}
+.park-list{margin:0;padding:0;list-style:none;display:grid;gap:12px;color:var(--ink-2)}
+.park-list li{padding-left:28px;position:relative}
+.park-list li::before{content:"";position:absolute;left:0;top:.45em;width:14px;height:14px;border-radius:50%;background:var(--accent)}
+.park-list b{color:var(--ink)}
+#parkMap{height:340px;border-radius:16px;overflow:hidden;background:#DDE6E3}
+.p-label{background:transparent;border:0;box-shadow:none;color:#fff;font:800 15px var(--body);text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.p-label::before{display:none}
+@media (max-width:900px){#parkMap{height:280px}}
 
 /* ---------- map ---------- */
 .map-shell{display:grid;grid-template-columns:340px 1fr;gap:0;border-radius:var(--radius);overflow:hidden;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line)}
@@ -302,7 +314,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 .reveal.in{opacity:1;transform:none}
 .mobile-book{display:none}
 @media (max-width:700px){
-  .mobile-book{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:900;justify-content:space-between;align-items:center;gap:12px;padding:10px 10px 10px 18px;border-radius:999px;background:rgba(11,30,29,.92);backdrop-filter:blur(12px);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .3s ease}
+  .mobile-book{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:1500;justify-content:space-between;align-items:center;gap:12px;padding:10px 10px 10px 18px;border-radius:999px;background:rgba(11,30,29,.92);backdrop-filter:blur(12px);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .3s ease}
   .mobile-book.hide{transform:translateY(140%)}
   .mobile-book .btn{min-height:44px;padding:0 18px;font-size:15px}
   .mobile-book small{display:block;color:var(--on-deep-2);font-size:12px}
@@ -547,7 +559,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <span class="kicker">The house</span>
         <h2>Warm, simple and made for long days outdoors</h2>
         <p class="lead">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
-        <p style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and parking for several cars. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
+        <p style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and plenty of parking for cars, boats and trailers. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
       </div>
       <div class="rooms reveal">
         <div class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90), wardrobes</span></div>
@@ -558,6 +570,25 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <div class="room"><b>Outside</b><span>Large lawn, seating, grill, fire pit, smoker</span></div>
         <div class="room"><b>Work</b><span>Wi-Fi and a desk for the remote day</span></div>
         <div class="room"><b>Arrival</b><span>Self check-in with key box, from 14:00</span></div>
+      </div>
+    </div>
+
+    <div class="park reveal">
+      <div class="stack" style="gap:14px">
+        <span class="kicker">Bring your boat</span>
+        <h3 style="font-size:clamp(26px,3vw,34px)">Room for the car, the boat and the trailer</h3>
+        <ul class="park-list">
+          <li><b>Plenty of parking</b> on the property for several cars, boats and trailers, free of charge.</li>
+          <li><b>Public boat ramp</b> in Slussfors, <span id="rampDist">about 2 km</span> from the house.</li>
+          <li><b>Fuel and groceries</b> in the village, a few minutes away.</li>
+        </ul>
+      </div>
+      <div class="stack" style="gap:10px">
+        <div class="seg" role="group" aria-label="Parking map view">
+          <button type="button" id="pkLot" aria-pressed="true">Parking at the house</button>
+          <button type="button" id="pkRamp" aria-pressed="false">Way to the boat ramp</button>
+        </div>
+        <div id="parkMap" role="region" aria-label="Satellite map showing the parking areas at the house and the boat ramp"></div>
       </div>
     </div>
 
@@ -642,6 +673,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <details><summary>Where do we buy food?</summary><p>There is a grocery shop, Slussforsboa (<a href="tel:+4695150170" style="white-space:nowrap">+46 951 501 70</a>), and a fuel station in the village. Opening hours are limited, so call or check before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
         <details><summary>Can we cancel?</summary><p>Yes, free of charge up to 30 days before arrival, and you get the full amount back. If you cancel later than that, the payment is not refunded.</p></details>
         <details><summary>When can we arrive and leave?</summary><p>Check-in from 14:00 and check-out by 12:00, with self check-in through a key box.</p></details>
+        <details><summary>Is there room for our boat and trailer?</summary><p>Yes. There is plenty of free parking on the property for cars, boats and trailers, and the public boat ramp in Slussfors is about 2 km away.</p></details>
         <details><summary>Is there a boat?</summary><p>We do not rent out a boat ourselves. Boats can be rented locally, see "Boats" under The fishing for where to ask. There is a public boat ramp in Slussfors if you bring your own.</p></details>
       </div>
     </div>
@@ -946,8 +978,11 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       {n:'Slussfors village', d:'Shop and fuel', c:[65.4311,16.2397], col:'#0B1E1D', k:'S', t:'Grocery shop and fuel station. Check opening hours.'},
       {n:'Boat ramp', d:'Launch on the Ume River', c:[65.4260,16.2255], col:'#1F7A8C', k:'B', t:'Public slipway in Slussfors.'},
       {n:'Magasjön', d:'Lake', c:[65.5052,16.2988], col:'#1F7A8C', k:'1', t:'Lake north of Slussfors.'},
-      {n:'Järvsjön', d:'Lake', c:[65.5367,15.9996], col:'#1F7A8C', k:'2', t:'Lake north-west of Slussfors.'},
-      {n:'Nedre Boksjön', d:'Lake', c:[65.5808,16.0637], col:'#1F7A8C', k:'3', t:'One of the Boksjön lakes to the north.'}
+      {n:'Skansnässjön', d:'Lake', c:[65.3288,16.0653], col:'#1F7A8C', k:'2', t:'Lake south-west of Slussfors.'},
+      {n:'Järvsjön', d:'Lake', c:[65.5367,15.9996], col:'#1F7A8C', k:'3', t:'Lake north-west of Slussfors.'},
+      {n:'Nedre Boksjön', d:'Lake', c:[65.5808,16.0637], col:'#1F7A8C', k:'4', t:'One of the Boksjön lakes to the north.'},
+      {n:'Biellojaure', d:'Mountain lake area · day trip', c:[65.7981,15.7164], col:'#1F7A8C', k:'5', t:'Mountain lake area to the north.'},
+      {n:'Tärnasjön', d:'Mountain lake · day trip', c:[65.9588,15.4775], col:'#1F7A8C', k:'6', t:'Large mountain lake to the north.'}
     ],
     region: [
       {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Slussfors on the E12, the Blue Highway.'},
@@ -996,6 +1031,44 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     var mio = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ initMap(); mio.disconnect(); } }, {rootMargin:'300px'});
     mio.observe($('map'));
   } else { initMap(); }
+
+  /* ---------- parking map: house + boat ramp on satellite ---------- */
+  var RAMP = [65.4260, 16.2255];
+  var rk = km(H, RAMP); $('rampDist').textContent = 'about ' + rk.toFixed(1) + ' km';
+  var parkMap = null;
+  function initPark(){
+    if (parkMap || !window.L) return;
+    parkMap = L.map('parkMap', {scrollWheelZoom:false, zoomControl:true, attributionControl:true});
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:20, maxNativeZoom:18, attribution:'Imagery © Esri, Maxar, Earthstar Geographics'}).addTo(parkMap);
+    // Parking areas marked by the owners on the satellite image
+    var PARKING = [
+      [[65.430659,16.2644],[65.430588,16.264405],[65.430588,16.264454]],
+      [[65.430595,16.263942],[65.430545,16.26391],[65.430527,16.264317],[65.430577,16.264315]],
+      [[65.430534,16.264518],[65.430517,16.264752],[65.430479,16.264738],[65.430494,16.264516]]
+    ];
+    var parkBounds = L.latLngBounds([H]);
+    PARKING.forEach(function(a){
+      L.polygon(a, {color:'#FFFFFF', weight:2, fillColor:'#E06A2C', fillOpacity:.55}).addTo(parkMap)
+        .bindTooltip('P', {permanent:true, direction:'center', className:'p-label'})
+        .bindPopup('<b>Parking</b><br>Cars, boats and trailers');
+      a.forEach(function(p){ parkBounds.extend(p); });
+    });
+    L.marker(H, {icon:pinIcon({col:'#E06A2C', k:'H'}), title:'Forellen'}).addTo(parkMap)
+      .bindPopup('<b>Forellen</b><br>Parking for cars, boats and trailers on the property');
+    L.marker(RAMP, {icon:pinIcon({col:'#1F7A8C', k:'B'}), title:'Boat ramp'}).addTo(parkMap)
+      .bindPopup('<b>Public boat ramp</b><br>Slussfors, ' + rk.toFixed(1) + ' km from the house');
+    L.polyline([H, RAMP], {color:'#FFFFFF', weight:2, dashArray:'6 8', opacity:.85}).addTo(parkMap);
+    var viewLot = function(){ parkMap.flyToBounds(parkBounds.pad(0.6), {maxZoom:19, duration:.8}); };
+    var viewRamp = function(){ parkMap.flyToBounds(L.latLngBounds([H, RAMP]).pad(0.25), {duration:.8}); };
+    parkMap.fitBounds(parkBounds.pad(0.6), {maxZoom:19});
+    $('pkLot').addEventListener('click', function(){ $('pkLot').setAttribute('aria-pressed', true); $('pkRamp').setAttribute('aria-pressed', false); viewLot(); });
+    $('pkRamp').addEventListener('click', function(){ $('pkRamp').setAttribute('aria-pressed', true); $('pkLot').setAttribute('aria-pressed', false); viewRamp(); });
+    parkMap.on('focus', function(){ parkMap.scrollWheelZoom.enable(); }); parkMap.on('blur', function(){ parkMap.scrollWheelZoom.disable(); });
+  }
+  if ('IntersectionObserver' in window){
+    var pio = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ initPark(); pio.disconnect(); } }, {rootMargin:'300px'});
+    pio.observe($('parkMap'));
+  } else { initPark(); }
 })();
 </script>
 </body>
