@@ -293,6 +293,44 @@ blockquote footer{font-size:14px;color:var(--muted)}
 .cal-foot{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);align-items:center}
 .cal-foot i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid #CFDAD7}
 
+/* ---------- booking layout: calendar before FAQ on phones ---------- */
+.book-grid{display:grid;grid-template-columns:1.1fr .9fr;grid-template-areas:"intro form" "faq form";gap:24px clamp(32px,5vw,72px);align-items:start}
+.book-intro{grid-area:intro}.book-faq{grid-area:faq}.book-form{grid-area:form}
+@media (max-width:900px){.book-grid{grid-template-columns:1fr;grid-template-areas:"intro" "form" "faq"}}
+
+/* ---------- compact phone version ---------- */
+.gal-more{display:none}
+@media (max-width:700px){
+  .m-hide{display:none!important}
+  .sec{padding:56px 0}
+  h2{font-size:32px}
+  .lead{font-size:17px}
+  .fish p{display:none}
+  .fish{padding:16px;gap:8px}
+  .species{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .fish h3{font-size:18px}.fish .latin{font-size:12px}.fish .tag{font-size:10px;padding:4px 8px}
+  .catch .c4,.catch .c5,.catch .c6{display:none}
+  .catch .c7{grid-column:span 2}
+  .places{display:none}
+  #map{min-height:340px}
+  .rooms{grid-template-columns:1fr 1fr;gap:8px}
+  .room{padding:12px}.room b{font-size:15px}.room span{font-size:13px;line-height:1.4}
+  #gallery button:nth-of-type(n+7){display:none}
+  .gal-more{display:flex;margin-top:12px;width:100%}
+  .season{min-height:220px}.season p{display:none}.season h3{font-size:22px}
+  .reviews blockquote:nth-child(n+2){display:none}
+  .score b{font-size:44px}
+  .steps li:nth-child(1),.steps li:nth-child(4){display:none}
+  .book-intro .lead{display:none}
+  .permit{padding:16px;gap:10px}
+  .permit:not(.boats) > .note{display:none}
+  .permit-rows b{font-size:22px}
+  .permit-rows div{padding:10px}
+  .stack > p.note{display:none}
+  .gallery{grid-auto-rows:120px}
+  .book-grid{gap:16px}
+}
+
 /* ---------- faq ---------- */
 .faq{display:grid;gap:10px}
 details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:0 20px}
@@ -392,7 +430,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <span class="kicker">The fishing</span>
         <h2>Big char, wild trout and clear northern water</h2>
         <p class="lead">Slussfors sits where the Ume River runs into Lake Storuman. The Kirjesån stream, known for its trout, joins the river just around the corner from the house, and the lakes Järvsjön, Magasjön and Boksjön are a short drive away.</p>
-        <p class="lead">A char farm in the area feeds the water, so there are many large fish in a fairly small area. The fishing association describes the char fishing as uniquely good in both summer and winter, with very large whitefish on the ice.</p>
+        <p class="lead">The secret is the <b style="color:#fff">char farm</b> just below the village (★ on the map). It feeds the water, so many large char and whitefish gather in a small area, summer and winter. It is what brings anglers from far away.</p>
       </div>
       <div class="stack reveal" style="gap:16px">
       <div class="permit">
@@ -416,7 +454,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <a class="btn btn-line" href="https://www.ifiske.se/fiske-kirjesans-kfo.htm" target="_blank" rel="noopener">Buy on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
       <p class="note">Buy the licence on your phone before you cast, and check rules and size limits on the same page. Prices as listed on iFiske in November 2026.</p>
-      <div class="permit" style="gap:10px">
+      <div class="permit boats" style="gap:10px">
         <span class="kicker">Boats</span>
         <p class="note" style="color:var(--on-deep)">We do not rent out a boat ourselves. Boats with or without motor can be rented locally: ask the Slussfors fishing association, contact Daniel Bergfors, <a href="tel:+46730266871" style="color:var(--ice);white-space:nowrap">+46 730 26 68 71</a>, or look for private boats in Storuman municipality on <a href="https://www.hygglo.se/category/9077-roddbat-med-motor/storumans-kommun" target="_blank" rel="noopener" style="color:var(--ice)">Hygglo</a>. You can also ask at the village shop Slussforsboa, <a href="tel:+4695150170" style="color:var(--ice);white-space:nowrap">+46 951 501 70</a>. There is a public boat ramp in the village, and fuel is sold at the village petrol station.</p>
       </div>
@@ -514,7 +552,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
     </div>
-    <div class="legend"><span><i style="background:var(--ice)"></i>Open water</span><span><i style="background:#D9EEF0"></i>On the ice</span><span>Our rough guide. Ice and seasons vary from year to year, and the licence page has the rules that apply.</span></div>
+    <div class="legend"><span><i style="background:var(--ice)"></i>Open water</span><span><i style="background:#D9EEF0"></i>On the ice</span><span class="m-hide">Our rough guide. Ice and seasons vary from year to year, and the licence page has the rules that apply.</span></div>
 
     <div class="catch">
       <figure class="c1 reveal"><img src="images/brown-trout.jpg" alt="A spotted brown trout held over the boat" loading="lazy"><figcaption>Brown trout</figcaption></figure>
@@ -534,7 +572,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     <div class="stack reveal" style="gap:14px">
       <span class="kicker">Where you'll be</span>
       <h2>On the Blue Highway, in the middle of the water</h2>
-      <p class="lead">Slussfors lies on the E12 between Storuman and the mountains. Switch between the nearby fishing waters and the wider region, and tap a place to fly there.</p>
+      <p class="lead m-hide">Slussfors lies on the E12 between Storuman and the mountains. Switch between the nearby fishing waters and the wider region, and tap a place to fly there.</p>
     </div>
     <div class="map-shell reveal">
       <div class="map-side">
@@ -544,7 +582,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </div>
         <ul class="places" id="places"></ul>
         <a class="btn btn-accent" style="min-height:46px" id="routeLink" href="#" target="_blank" rel="noopener">Directions to the house <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <small style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
+        <small class="m-hide" style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
       </div>
       <div id="map" role="region" aria-label="Interactive map of Slussfors and surroundings"></div>
     </div>
@@ -558,7 +596,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <div class="stack reveal">
         <span class="kicker">The house</span>
         <h2>Warm, simple and made for long days outdoors</h2>
-        <p class="lead">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
+        <p class="lead m-hide">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
         <p style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and plenty of parking for cars, boats and trailers. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
       </div>
       <div class="rooms reveal">
@@ -609,6 +647,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <button><img src="images/workspace.jpg" alt="Desk with a lamp for remote work" loading="lazy"></button>
       <button class="g-wide"><img src="images/floor-plan.jpg" alt="Floor plan of the house" loading="lazy"></button>
     </div>
+    <button type="button" class="btn btn-line gal-more" id="galMore" style="color:var(--ink);border-color:var(--deep)">See all photos</button>
   </div>
 </section>
 
@@ -662,12 +701,14 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 
 <!-- BOOK -->
 <section id="book" class="sec">
-  <div class="wrap split">
-    <div class="stack reveal">
+  <div class="wrap book-grid">
+    <div class="stack reveal book-intro">
       <span class="kicker">Book direct</span>
       <h2>Request your dates</h2>
       <p class="lead">No booking platform in between: you talk to us, the owners. Nothing is charged when you send a request.</p>
-      <div class="faq" style="margin-top:12px">
+    </div>
+    <div class="book-faq">
+      <div class="faq">
         <details><summary>What should we bring?</summary><p>Bed linen and towels (or add them to your request, 200 SEK per person), and of course your fishing gear. Duvets and pillows are in the house.</p></details>
         <details><summary>Can we bring our dog?</summary><p>Yes, pets are welcome. Please keep them off the beds and sofas.</p></details>
         <details><summary>Where do we buy food?</summary><p>There is a grocery shop, Slussforsboa (<a href="tel:+4695150170" style="white-space:nowrap">+46 951 501 70</a>), and a fuel station in the village. Opening hours are limited, so call or check before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
@@ -678,7 +719,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       </div>
     </div>
 
-    <form class="book-card reveal" id="bookForm" novalidate aria-label="Booking request">
+    <form class="book-card reveal book-form" id="bookForm" novalidate aria-label="Booking request">
       <div class="cal" id="cal">
         <div class="cal-head">
           <button type="button" class="icon-btn" id="calPrev" aria-label="Previous month"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
@@ -743,7 +784,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <small>Map data © OpenStreetMap contributors</small>
       </div>
     </div>
-    <div class="big-word" aria-hidden="true">Slussfors</div>
+    <div class="big-word m-hide" aria-hidden="true">Slussfors</div>
   </div>
 </footer>
 
@@ -898,6 +939,15 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     .then(function(j){
       (j.booked || []).forEach(function(rg){ var c = parse(rg[0]), e = parse(rg[1]); while (c < e){ booked[iso(c)] = true; c.setDate(c.getDate()+1); } });
       calLoaded = true;
+      // Open the calendar on the first month that has a free stay of minNights
+      if (!arr.value){
+        var probe = new Date(today);
+        for (var guard = 0; guard < 400; guard++){
+          var end = new Date(probe); end.setDate(end.getDate() + C.minNights);
+          if (!rangeBlocked(probe, end)){ view = new Date(probe.getFullYear(), probe.getMonth(), 1, 12); break; }
+          probe.setDate(probe.getDate() + 1);
+        }
+      }
       var up = j.updated ? new Date(j.updated) : null;
       $('calStatus').textContent = 'Synced with Airbnb and Booking.com' + (up && !isNaN(up) ? ', ' + up.toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
       calc(); })
@@ -961,6 +1011,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   /* ---------- gallery lightbox ---------- */
   var gBtns = Array.prototype.slice.call(document.querySelectorAll('#gallery button')), lb = $('lightbox'), lbImg = $('lbImg'), idx = 0;
   function show(i){ idx = (i + gBtns.length) % gBtns.length; var im = gBtns[idx].querySelector('img'); lbImg.src = im.src; lbImg.alt = im.alt; $('lbCount').textContent = (idx+1) + ' / ' + gBtns.length + ' · ' + im.alt; }
+  $('galMore').addEventListener('click', function(){ show(0); if (lb.showModal) lb.showModal(); });
   gBtns.forEach(function(b, i){ b.setAttribute('aria-label', 'Open photo: ' + b.querySelector('img').alt); b.addEventListener('click', function(){ show(i); if (lb.showModal) lb.showModal(); }); });
   $('lbClose').addEventListener('click', function(){ lb.close(); });
   $('lbPrev').addEventListener('click', function(){ show(idx - 1); });
@@ -977,12 +1028,13 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Gamlavägen 16. Lake Storuman is a 5-minute walk.'},
       {n:'Slussfors village', d:'Shop and fuel', c:[65.4311,16.2397], col:'#0B1E1D', k:'S', t:'Grocery shop and fuel station. Check opening hours.'},
       {n:'Boat ramp', d:'Launch on the Ume River', c:[65.4260,16.2255], col:'#1F7A8C', k:'B', t:'Public slipway in Slussfors.'},
+      {n:'Char farm', d:'Where the big char gather', c:[65.4240,16.2323], col:'#D9543A', k:'★', t:'Slussfors char farm. Nutrients from the farm keep many large char and whitefish in a small area, which is what draws anglers from far away. Fish here with the Slussfors KFO licence.'},
       {n:'Magasjön', d:'Lake', c:[65.5052,16.2988], col:'#1F7A8C', k:'1', t:'Lake north of Slussfors.'},
       {n:'Skansnässjön', d:'Lake', c:[65.3288,16.0653], col:'#1F7A8C', k:'2', t:'Lake south-west of Slussfors.'},
       {n:'Järvsjön', d:'Lake', c:[65.5367,15.9996], col:'#1F7A8C', k:'3', t:'Lake north-west of Slussfors.'},
       {n:'Nedre Boksjön', d:'Lake', c:[65.5808,16.0637], col:'#1F7A8C', k:'4', t:'One of the Boksjön lakes to the north.'},
       {n:'Biellojaure', d:'Mountain lake area · day trip', c:[65.7981,15.7164], col:'#1F7A8C', k:'5', t:'Mountain lake area to the north.'},
-      {n:'Tärnasjön', d:'Mountain lake · day trip', c:[65.9588,15.4775], col:'#1F7A8C', k:'6', t:'Large mountain lake to the north.'}
+      {n:'Tärnasjön', d:'State mountain water · day trip', c:[65.9588,15.4775], col:'#1F7A8C', k:'6', t:'A 20 km mountain lake known for ice fishing for Arctic char. State water above the cultivation limit, with its own licence from the County Administrative Board. Different stretches have different seasons, and one has a summer quota. <a href="https://www.lansstyrelsen.se/vasterbotten/djur/fiske/fiska-i-fjallen.html" target="_blank" rel="noopener">Rules and licences</a>'}
     ],
     region: [
       {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Slussfors on the E12, the Blue Highway.'},
@@ -1010,9 +1062,10 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       li.innerHTML = '<button type="button"><span class="dot" style="background:'+p.col+'">'+p.k+'</span><span><b>'+p.n+'</b><small>'+p.d+dist+'</small></span></button>';
       li.firstChild.addEventListener('click', function(){ if (!map) return; map.flyTo(p.c, which === 'local' ? 13 : 10, {duration:.8}); markers[i].openPopup(); if (window.innerWidth < 900) $('map').scrollIntoView({behavior:'smooth', block:'center'}); });
       ul.appendChild(li);
-      if (map){ var mk = L.marker(p.c, {icon:pinIcon(p), title:p.n}).bindPopup('<b>'+p.n+'</b><br>'+p.t); layer.addLayer(mk); markers.push(mk); }
+      if (map){ var mk = L.marker(p.c, {icon:pinIcon(p), title:p.n, zIndexOffset: p.k === '★' ? 1000 : 0}).bindPopup('<b>'+p.n+'</b><br>'+p.t); layer.addLayer(mk); markers.push(mk); }
     });
-    if (map) map.flyToBounds(L.latLngBounds(list.map(function(p){ return p.c; })).pad(0.15), {duration:.8});
+    var near = list.filter(function(p){ return which !== 'local' || km(H, p.c) < 25; });
+    if (map) map.flyToBounds(L.latLngBounds(near.map(function(p){ return p.c; })).pad(0.15), {duration:.8});
   }
   function initMap(){
     if (map || !window.L) return;
