@@ -38,7 +38,7 @@ Måste köras regelbundet (t.ex. var 30:e minut) där sidan ligger, och kalender
 sidan blir aldrig mer aktuell än senaste körningen. Gäster bekräftas ändå manuellt.
 
 ## Innehåll som bygger på källor (nov 2026)
-- Fiskearter, fiskekortspriser (100/250/700 kr) och rödingodlingen: iFiske, Slussfors KFO.
+- Fiskearter, fiskekortspriser och rödingodlingen: iFiske, Slussfors KFO (100/250/700 kr) och Kirjesåns KFO (150/400/700 kr, Kirjesån + Nedre Lumnien).
 - Husbeskrivning, in-/utcheckning 14/12, betyg 4.74 och recensionscitat: Airbnb-annonsen.
 - Koordinater: hus från Airbnb-kartan, sjöar/båtramp från OpenStreetMap.
 - Säsongsstaplarna per art är en grov egen tumregel, inte iFiskes regler.
