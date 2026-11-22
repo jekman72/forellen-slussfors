@@ -1,0 +1,75 @@
+name: Build and deploy site
+
+# Runs on every push and every 30 minutes, so the availability calendar is
+# refreshed from the Airbnb and Booking.com iCal feeds. The feed URLs are
+# repository secrets (AIRBNB_ICAL, BOOKING_ICAL) and never end up in the site.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "7,37 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write     # only for the keep-alive commit below
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch availability from iCal
+        env:
+          AIRBNB_ICAL: ${{ secrets.AIRBNB_ICAL }}
+          BOOKING_ICAL: ${{ secrets.BOOKING_ICAL }}
+        run: |
+          mkdir -p private
+          python3 - <<'EOF'
+          import json, os
+          src = [{"name": n, "url": os.environ[k]} for n, k in (("airbnb", "AIRBNB_ICAL"), ("booking", "BOOKING_ICAL")) if os.environ.get(k)]
+          json.dump({"sources": src}, open("private/ical_sources.json", "w"))
+          EOF
+          python3 tools/update_availability.py
+
+      - name: Assemble public files
+        run: |
+          mkdir -p _site
+          cp index.html availability.json _site/
+          cp -r images _site/
+          [ -f CNAME ] && cp CNAME _site/ || true
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      # GitHub pauses scheduled workflows after 60 days without repository
+      # activity. An empty commit every ~50 days keeps the calendar updating.
+      - name: Keep schedule alive
+        if: github.event_name == 'schedule'
+        run: |
+          last=$(git log -1 --format=%ct)
+          if [ $(( $(date +%s) - last )) -gt $(( 50 * 86400 )) ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "Keep scheduled calendar sync alive"
+            git push
+          fi
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

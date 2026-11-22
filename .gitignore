@@ -1,0 +1,7 @@
+private/
+_original/
+.availability.*
+availability.json
+_site/
+.DS_Store
+__pycache__/

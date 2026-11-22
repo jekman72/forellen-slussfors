@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forellen Slussfors · Angler's guesthouse in Swedish Lapland</title>
+<meta name="description" content="Book Forellen directly: a whole guesthouse for up to six in Slussfors, Swedish Lapland. Arctic char, trout, grayling and whitefish minutes from the door.">
+<meta property="og:title" content="Forellen Slussfors · Angler's guesthouse in Swedish Lapland">
+<meta property="og:description" content="Whole house for up to six, five minutes on foot from Lake Storuman. Book directly with the owners.">
+<meta property="og:image" content="images/lake-view.jpg">
+<meta name="theme-color" content="#0B1E1D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script>
+/* ============================================================
+   SETTINGS: everything you may want to change lives here
+   ============================================================ */
+window.FORELLEN = {
+  // Booking requests are sent to this address.
+  bookingEmail: "jonasekman72@gmail.com",
+  // Optional: a Formspree form id (formspree.io, free plan). When set, the form
+  // posts directly and the guest's email app is not opened. Leave "" for mailto.
+  formspreeId: "",
+  // Airbnb list prices in SEK per night for the whole house with 2 guests (2027).
+  // Months are 1-12. Each extra guest above 2 adds airbnbExtraGuest per night.
+  airbnbNightly: { 1:1150, 2:1150, 3:1150, 4:1100, 5:1100, 6:1150, 7:1150, 8:1150, 9:1100, 10:1100, 11:1100, 12:1100 },
+  airbnbExtraGuest: 100,
+  // Direct bookings are this much below Airbnb (0.05 = 5 %, 0 = same price).
+  // The page rounds the result to the nearest 5 SEK.
+  directDiscount: 0.05,
+  includedGuests: 2,
+  maxGuests: 6,
+  minNights: 3,
+  weeklyDiscount: 0.15,       // 7 nights or more, 0 to switch off
+  linenPerPerson: 200,
+  house: { lat: 65.43064, lon: 16.26415 }
+};
+(function(C){
+  var r5 = function(x){ return Math.round(x * (1 - C.directDiscount) / 5) * 5; };
+  C.nightly = {}; for (var m = 1; m <= 12; m++) C.nightly[m] = r5(C.airbnbNightly[m]);
+  C.extraGuest = r5(C.airbnbExtraGuest);
+})(window.FORELLEN);
+</script>
+<style>
+:root{
+  --ink:#0E1A19; --ink-2:#2B3B39; --muted:#556664;
+  --paper:#F4F6F3; --card:#FFFFFF; --line:#DCE3E0;
+  --deep:#0B1E1D; --deep-2:#132B29; --deep-3:#1C3835; --on-deep:#E8EFED; --on-deep-2:#A9BDB9;
+  --accent:#E06A2C; --accent-ink:#FFFFFF; --accent-hover:#C85A20;
+  --ice:#8FD3D9; --char:#D9543A;
+  --radius:18px; --radius-sm:12px;
+  --shadow:0 1px 2px rgba(14,26,25,.06),0 8px 24px rgba(14,26,25,.08);
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --wrap:1200px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(34px,5vw,60px);font-weight:800}
+h3{font-size:22px;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.kicker{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--ink-2);max-width:38em}
+section{scroll-margin-top:72px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:600 17px/1 var(--body);text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-accent:hover{background:var(--accent-hover)}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px)}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
+.btn-line{background:transparent;color:var(--on-deep);border:1.5px solid var(--ice)}
+.btn svg{width:18px;height:18px;flex:none}
+:focus-visible{outline:3px solid var(--ice);outline-offset:3px;border-radius:6px}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto 0;z-index:1000;transition:background .25s ease,box-shadow .25s ease}
+.nav.solid{background:rgba(11,30,29,.86);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
+.brand svg{width:30px;height:30px}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{color:#fff;text-decoration:none;font-weight:500;font-size:15px;padding:10px 14px;border-radius:999px}
+.nav-links a:hover{background:rgba(255,255,255,.12)}
+.nav-links a.cta{background:var(--accent);font-weight:600;margin-left:6px}
+.nav-links a.cta:hover{background:var(--accent-hover)}
+.menu-btn{display:none;width:46px;height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;align-items:center;justify-content:center}
+@media (max-width:900px){
+  .menu-btn{display:inline-flex}
+  .nav-links{position:fixed;inset:70px 12px auto 12px;flex-direction:column;align-items:stretch;background:var(--deep);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:10px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:14px 16px;font-size:17px}
+  .nav-links a.cta{margin:6px 0 0;text-align:center}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;color:#fff;isolation:isolate;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:-2;background:url(images/lake-view.jpg) center 60%/cover no-repeat;transform:scale(1.04);animation:drift 24s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.12) translate3d(-1.5%,-1%,0)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,16,15,.55) 0%,rgba(6,16,15,.05) 30%,rgba(6,16,15,.25) 55%,rgba(6,16,15,.88) 100%)}
+.hero-in{max-width:var(--wrap);width:100%;margin:0 auto;padding:120px 20px 56px;display:grid;gap:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;font-weight:500}
+.chip svg{width:16px;height:16px}
+.hero h1{font-size:clamp(64px,13vw,168px);font-weight:800;letter-spacing:-.045em;line-height:.88}
+.hero .sub{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,32px);line-height:1.2;max-width:22em;text-wrap:balance}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.scroll-cue{position:absolute;right:24px;bottom:28px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;writing-mode:vertical-rl;opacity:.7}
+@media (max-width:700px){.scroll-cue{display:none}}
+
+/* ---------- facts ---------- */
+.facts{position:relative;z-index:2;margin-top:-1px;background:var(--deep);color:var(--on-deep)}
+.facts-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.08)}
+.fact{padding:22px 18px;border-right:1px solid rgba(255,255,255,.08)}
+.fact:last-child{border-right:0}
+.fact b{display:block;font-family:var(--display);font-size:26px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.fact span{font-size:14px;color:var(--on-deep-2)}
+@media (max-width:980px){.facts-grid{grid-template-columns:repeat(3,1fr)}.fact:nth-child(3){border-right:0}.fact:nth-child(-n+3){border-bottom:1px solid rgba(255,255,255,.08)}}
+@media (max-width:560px){.facts-grid{grid-template-columns:repeat(2,1fr)}.fact{border-right:1px solid rgba(255,255,255,.08)!important;border-bottom:1px solid rgba(255,255,255,.08)}.fact:nth-child(2n){border-right:0!important}.fact b{font-size:22px}}
+
+/* ---------- fishing ---------- */
+.dark{background:var(--deep);color:var(--on-deep)}
+.dark .lead{color:var(--on-deep-2)}
+.dark .kicker{color:var(--ice)}
+.sec{padding:clamp(72px,10vw,128px) 0}
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,5vw,72px);align-items:start}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.stack{display:grid;gap:20px}
+.permit{background:var(--deep-2);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:24px;display:grid;gap:16px}
+.permit-rows{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.permit-rows div{background:var(--deep-3);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.permit-rows b{display:block;font-family:var(--display);font-size:26px;color:#fff}
+.permit-rows span{font-size:13px;color:var(--on-deep-2)}
+.note{font-size:14px;color:var(--on-deep-2)}
+
+.species{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:clamp(48px,6vw,72px)}
+@media (max-width:1050px){.species{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.species{grid-template-columns:1fr}}
+.fish{background:linear-gradient(180deg,var(--deep-2),var(--deep-3));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:22px;display:grid;gap:12px;align-content:start;transition:transform .2s ease,border-color .2s ease}
+.fish:hover{transform:translateY(-3px);border-color:rgba(143,211,217,.35)}
+.fish svg{width:100%;height:auto;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35))}
+.fish h3{color:#fff}
+.fish .latin{font-size:14px;color:var(--on-deep-2);font-style:italic}
+.fish .tag{justify-self:start;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:rgba(143,211,217,.14);color:var(--ice)}
+.fish p{font-size:15.5px;color:var(--on-deep)}
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:4px}
+.months i{height:8px;border-radius:3px;background:rgba(255,255,255,.08)}
+.months i.on{background:var(--ice)}
+.months i.ice{background:#D9EEF0}
+.mlabels{display:grid;grid-template-columns:repeat(12,1fr);font-size:10px;color:var(--on-deep-2);text-align:center;letter-spacing:.02em}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--on-deep-2);margin-top:18px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:18px;height:8px;border-radius:3px;display:inline-block}
+
+.catch{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:150px;gap:12px;margin-top:clamp(48px,6vw,72px)}
+.catch figure{margin:0;position:relative;border-radius:var(--radius);overflow:hidden;background:var(--deep-3)}
+.catch img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.catch figure:hover img{transform:scale(1.05)}
+.catch figcaption{position:absolute;left:12px;bottom:12px;padding:6px 12px;border-radius:999px;background:rgba(6,16,15,.6);backdrop-filter:blur(8px);font-size:13px;font-weight:500;color:#fff}
+.c1{grid-column:span 3;grid-row:span 3}.c2{grid-column:span 3;grid-row:span 2}.c3{grid-column:span 2;grid-row:span 2}.c4{grid-column:span 1;grid-row:span 2}
+.c5{grid-column:span 2;grid-row:span 2}.c6{grid-column:span 2;grid-row:span 2}.c7{grid-column:span 2;grid-row:span 2}
+@media (max-width:800px){.catch{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px}.c1,.c2,.c3,.c4,.c5,.c6,.c7{grid-column:span 1;grid-row:span 2}.c1{grid-column:span 2}}
+
+/* ---------- map ---------- */
+.map-shell{display:grid;grid-template-columns:340px 1fr;gap:0;border-radius:var(--radius);overflow:hidden;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line)}
+@media (max-width:900px){.map-shell{grid-template-columns:1fr}}
+.map-side{padding:20px;display:grid;gap:14px;align-content:start;max-height:560px;overflow:auto}
+@media (max-width:900px){.map-side{max-height:none;order:2}}
+#map{min-height:560px;background:#DDE6E3}
+@media (max-width:900px){#map{min-height:420px}}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#EEF2F0;border-radius:999px;padding:4px}
+.seg button{min-height:42px;border:0;border-radius:999px;background:transparent;font:600 15px var(--body);color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.places{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.places button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:10px;border:0;background:transparent;border-radius:var(--radius-sm);cursor:pointer;font:inherit;color:inherit}
+.places button:hover{background:#F0F4F2}
+.dot{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700}
+.places b{display:block;font-weight:600;font-size:15.5px;line-height:1.3}
+.places small{color:var(--muted);font-size:13.5px}
+.pin{width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.pin span{transform:rotate(45deg);color:#fff;font:700 13px var(--body)}
+.leaflet-popup-content{font:15px/1.45 var(--body)}
+.leaflet-popup-content b{font-family:var(--display);font-size:17px}
+
+/* ---------- house ---------- */
+.rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.rooms{grid-template-columns:1fr}}
+.room{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px}
+.room b{display:block;font-family:var(--display);font-size:18px}
+.room span{font-size:15px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:12px;margin-top:clamp(40px,5vw,64px)}
+.gallery button{padding:0;border:0;border-radius:var(--radius);overflow:hidden;cursor:zoom-in;background:#DDE6E3;position:relative}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.gallery button:hover img{transform:scale(1.04)}
+.g-wide{grid-column:span 2}.g-tall{grid-row:span 2}
+@media (max-width:800px){.gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}}
+.lightbox{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;width:100vw;height:100vh}
+.lightbox::backdrop{background:rgba(5,12,12,.92)}
+.lb-in{width:100%;height:100%;display:grid;grid-template-rows:auto 1fr auto;color:#fff}
+.lb-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px}
+.lb-img{display:grid;place-items:center;padding:0 12px;min-height:0}
+.lb-img img{max-width:100%;max-height:calc(100svh - 170px);width:auto;height:auto;object-fit:contain;border-radius:10px}
+.lb-nav{display:flex;justify-content:center;gap:12px;padding:16px}
+.icon-btn{width:48px;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:inline-grid;place-items:center}
+.icon-btn svg{width:22px;height:22px}
+
+/* ---------- seasons ---------- */
+.seasons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.seasons{grid-template-columns:1fr}}
+.season{position:relative;border-radius:var(--radius);overflow:hidden;min-height:440px;display:flex;align-items:flex-end;color:#fff;isolation:isolate}
+.season img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.season::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 35%,rgba(6,16,15,.85))}
+.season div{padding:24px;display:grid;gap:8px}
+.season h3{font-size:28px}
+.season p{font-size:15.5px;color:#E3EBE9}
+
+/* ---------- reviews ---------- */
+.reviews{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.reviews{grid-template-columns:1fr}}
+blockquote{margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:grid;gap:16px;align-content:space-between}
+blockquote p{font-family:var(--display);font-size:21px;line-height:1.3;font-weight:500;letter-spacing:-.01em}
+blockquote footer{font-size:14px;color:var(--muted)}
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.score b{font-family:var(--display);font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1}
+
+/* ---------- prices & booking ---------- */
+.price-list{display:grid;gap:8px}
+.pl{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 18px}
+.pl b{font-variant-numeric:tabular-nums}
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);width:36px;height:36px;border-radius:50%;background:var(--deep);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+
+.book-card{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:clamp(20px,3vw,32px);display:grid;gap:18px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:14.5px}
+.field input,.field textarea,.field select{width:100%;min-height:50px;padding:0 14px;border:1.5px solid #B9C6C3;border-radius:12px;font:inherit;font-size:16px;background:#FBFCFB;color:var(--ink)}
+.field textarea{padding:12px 14px;min-height:96px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--deep);box-shadow:0 0 0 4px rgba(143,211,217,.45)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:15.5px}
+.check input{width:22px;height:22px;margin-top:2px;accent-color:var(--deep);flex:none}
+.stepper{display:grid;grid-template-columns:50px 1fr 50px;border:1.5px solid #B9C6C3;border-radius:12px;overflow:hidden;background:#FBFCFB}
+.stepper button{border:0;background:transparent;font-size:22px;cursor:pointer;color:var(--ink)}
+.stepper button:hover{background:#EEF2F0}
+.stepper output{display:grid;place-items:center;font-weight:600;font-size:17px;border-left:1px solid #DCE3E0;border-right:1px solid #DCE3E0;min-height:47px}
+.quote{background:#F0F5F3;border-radius:16px;padding:16px 18px;display:grid;gap:6px;font-size:15px}
+.quote .ln{display:flex;justify-content:space-between;gap:12px}
+.quote .tot{font-weight:700;font-size:18px;border-top:1px solid #D3DDDA;padding-top:8px;margin-top:4px}
+.quote .muted{color:var(--muted)}
+.err{color:#B3261E;font-size:14.5px;font-weight:500;min-height:1em}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.done{display:none;background:#E7F4EE;border:1px solid #B5DCC8;border-radius:16px;padding:18px;gap:10px}
+.done.show{display:grid}
+.done pre{white-space:pre-wrap;font:13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;border-radius:10px;padding:12px;margin:0;max-height:220px;overflow:auto}
+
+/* ---------- availability calendar ---------- */
+.cal{display:grid;gap:10px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cal-head b{font-family:var(--display);font-size:20px}
+.cal-head .icon-btn{width:44px;height:44px;color:var(--ink);border-color:#C9D3D0;background:#fff}
+.cal-head .icon-btn:disabled{opacity:.35;cursor:default}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;font-variant-numeric:tabular-nums}
+.cal-grid .dow{font-size:12px;font-weight:600;color:var(--muted);padding:4px 0}
+.cal-grid button{min-height:42px;border:1px solid #CFDAD7;border-radius:10px;background:#fff;font:600 15px var(--body);color:var(--ink);cursor:pointer;padding:0}
+.cal-grid button:hover:not(:disabled){border-color:var(--deep)}
+.cal-grid button:disabled{cursor:default}
+.cal-grid button.past{background:transparent;border-color:transparent;color:#AAB6B3;font-weight:400}
+.cal-grid button.booked{background:repeating-linear-gradient(135deg,#E3E9E7 0 6px,#D4DDDA 6px 12px);border-color:transparent;color:#8A9895;text-decoration:line-through;font-weight:400}
+.cal-grid button.co{background:linear-gradient(135deg,#fff 50%,#D4DDDA 50%)}
+.cal-grid button.sel{background:var(--deep);border-color:var(--deep);color:#fff}
+.cal-grid button.range{background:#D8EEF0;border-color:#BFE2E5}
+.cal-foot{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);align-items:center}
+.cal-foot i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid #CFDAD7}
+
+/* ---------- faq ---------- */
+.faq{display:grid;gap:10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:0 20px}
+summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:600;font-size:17px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:400 26px/1 var(--body);color:var(--muted);transition:transform .2s ease}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 18px;color:var(--ink-2)}
+
+/* ---------- footer ---------- */
+.foot{background:var(--deep);color:var(--on-deep);padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+@media (max-width:800px){.foot-grid{grid-template-columns:1fr}}
+.foot a{color:var(--ice)}
+.foot small{color:var(--on-deep-2)}
+.big-word{font-family:var(--display);font-weight:800;font-size:clamp(64px,16vw,220px);letter-spacing:-.05em;line-height:.8;color:rgba(255,255,255,.06);margin-top:40px;user-select:none}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+.mobile-book{display:none}
+@media (max-width:700px){
+  .mobile-book{display:flex;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:900;justify-content:space-between;align-items:center;gap:12px;padding:10px 10px 10px 18px;border-radius:999px;background:rgba(11,30,29,.92);backdrop-filter:blur(12px);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .3s ease}
+  .mobile-book.hide{transform:translateY(140%)}
+  .mobile-book .btn{min-height:44px;padding:0 18px;font-size:15px}
+  .mobile-book small{display:block;color:var(--on-deep-2);font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-fish" viewBox="0 0 32 32"><path d="M3 16c5-7 14-7 20 0-6 7-15 7-20 0z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M23 16l6-5v10z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="9" cy="14.5" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-fish"/></svg>Forellen</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg width="22" height="22" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    <nav class="nav-links" id="navLinks" aria-label="Sections">
+      <a href="#fishing">Fishing</a>
+      <a href="#map-sec">Map</a>
+      <a href="#house">The house</a>
+      <a href="#seasons">Seasons</a>
+      <a href="#prices">Prices</a>
+      <a href="#book" class="cta">Book direct</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero" aria-label="Introduction">
+  <div class="hero-bg" role="img" aria-label="Lake view at Slussfors with low sun over the water"></div>
+  <div class="hero-in">
+    <div class="chips">
+      <span class="chip"><svg aria-hidden="true"><use href="#i-pin"/></svg>Slussfors · Swedish Lapland</span>
+      <span class="chip"><svg aria-hidden="true"><use href="#i-star"/></svg>4.74 · 19 Airbnb reviews · Superhost</span>
+      <span class="chip" id="wxChip" hidden><svg aria-hidden="true"><use href="#i-sun"/></svg><span id="wxText"></span></span>
+    </div>
+    <h1>Forellen</h1>
+    <p class="sub">An angler's guesthouse where the Ume River meets Lake Storuman. Char, trout, grayling and whitefish, five minutes from the door.</p>
+    <div class="hero-actions">
+      <a class="btn btn-accent" href="#book">Check dates &amp; book direct <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-ghost" href="#fishing">Explore the fishing</a>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true">Scroll</div>
+</section>
+
+<!-- FACTS -->
+<div class="facts" aria-label="Key facts">
+  <div class="wrap facts-grid">
+    <div class="fact"><b>6 guests</b><span>4 beds, 2 bedrooms</span></div>
+    <div class="fact"><b>80 m²</b><span>whole house, own entrance</span></div>
+    <div class="fact"><b>5 min</b><span>walk to Lake Storuman</span></div>
+    <div class="fact"><b>Smoker</b><span>grill, fire pit, big lawn</span></div>
+    <div class="fact"><b>Pets</b><span>welcome</span></div>
+    <div class="fact"><b>Min 3</b><span>nights · self check-in</span></div>
+  </div>
+</div>
+
+<!-- FISHING -->
+<section id="fishing" class="dark sec">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack reveal">
+        <span class="kicker">The fishing</span>
+        <h2>Big char, wild trout and clear northern water</h2>
+        <p class="lead">Slussfors sits where the Ume River runs into Lake Storuman. The Kirjesån stream, known for its trout, joins the river just around the corner from the house, and the lakes Järvsjön, Magasjön and Boksjön are a short drive away.</p>
+        <p class="lead">A char farm in the area feeds the water, so there are many large fish in a fairly small area. The fishing association describes the char fishing as uniquely good in both summer and winter, with very large whitefish on the ice.</p>
+      </div>
+      <div class="permit reveal">
+        <span class="kicker">Fishing licence · Slussfors KFO</span>
+        <div class="permit-rows">
+          <div><b>100</b><span>SEK · 1 day</span></div>
+          <div><b>250</b><span>SEK · 3 days</span></div>
+          <div><b>700</b><span>SEK · 7 days</span></div>
+        </div>
+        <p class="note">Covers the Slussfors fishing area including part of the Ume River. Buy it on your phone before you cast, and check the rules and size limits on the same page. Prices as listed on iFiske in November 2026.</p>
+        <a class="btn btn-line" href="https://www.ifiske.se/en/fishing-slussfors-kfo.htm" target="_blank" rel="noopener">Buy licence on iFiske <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <p class="note">Boats with or without motor can be rented in the area, and there is a boat ramp in the village.</p>
+      </div>
+    </div>
+
+    <div class="species">
+      <article class="fish reveal">
+        <svg viewBox="0 0 400 170" role="img" aria-label="Illustration of an Arctic char">
+          <defs><linearGradient id="gChar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C4744"/><stop offset=".5" stop-color="#6E8A80"/><stop offset=".72" stop-color="#E0603F"/><stop offset="1" stop-color="#F08A55"/></linearGradient></defs>
+          <path d="M335 78 L392 40 Q376 85 392 130 L335 92 Z" fill="#355550"/>
+          <path d="M168 46 C182 18 214 16 234 48 Z" fill="#35524E"/>
+          <path d="M282 58 q9 -12 18 0 Z" fill="#35524E"/>
+          <path d="M22 86 C40 56 110 40 200 42 C270 44 318 64 340 78 L340 92 C318 106 270 124 200 126 C110 128 40 114 22 86 Z" fill="url(#gChar)"/>
+          <path d="M92 108 q-12 24 24 22 Z" fill="#E86A43" stroke="#fff" stroke-width="3"/>
+          <path d="M200 122 l-10 24 l32 -20 Z" fill="#E86A43" stroke="#fff" stroke-width="3"/>
+          <path d="M268 114 l-2 22 l30 -18 Z" fill="#E86A43" stroke="#fff" stroke-width="3"/>
+          <g fill="#F3E3C8" opacity=".85"><circle cx="120" cy="70" r="3"/><circle cx="150" cy="82" r="3.4"/><circle cx="182" cy="66" r="3"/><circle cx="210" cy="84" r="3.4"/><circle cx="240" cy="70" r="3"/><circle cx="268" cy="86" r="3"/><circle cx="296" cy="74" r="2.6"/><circle cx="135" cy="95" r="2.6"/><circle cx="228" cy="98" r="2.6"/></g>
+          <circle cx="52" cy="78" r="6" fill="#0D1A18"/><circle cx="50" cy="76" r="2" fill="#fff"/>
+          <path d="M24 88 q12 4 22 1" stroke="#1D302D" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="tag">Signature fish</span>
+        <div><h3>Arctic char</h3><span class="latin">Röding · Salvelinus alpinus</span></div>
+        <p>The star of Slussfors. Troll or jig in summer, and on the ice in late winter when the days are long and bright.</p>
+        <div class="months" aria-label="Best months: ice fishing February to April, open water June to September"><i></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </article>
+
+      <article class="fish reveal">
+        <svg viewBox="0 0 400 170" role="img" aria-label="Illustration of a brown trout">
+          <defs><linearGradient id="gTrout" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4F4D2A"/><stop offset=".45" stop-color="#A88E52"/><stop offset=".8" stop-color="#E7D7AE"/><stop offset="1" stop-color="#F4EBD3"/></linearGradient></defs>
+          <path d="M335 78 L390 46 Q382 85 390 124 L335 92 Z" fill="#6E6438"/>
+          <path d="M166 46 C180 20 214 18 232 48 Z" fill="#7A6E40"/>
+          <path d="M282 58 q9 -12 18 0 Z" fill="#C0562F"/>
+          <path d="M22 86 C40 56 110 40 200 42 C270 44 318 64 340 78 L340 92 C318 106 270 124 200 126 C110 128 40 114 22 86 Z" fill="url(#gTrout)"/>
+          <path d="M92 108 q-12 24 24 22 Z" fill="#C9A867"/>
+          <path d="M200 122 l-10 24 l32 -20 Z" fill="#C9A867"/>
+          <path d="M268 114 l-2 22 l30 -18 Z" fill="#C9A867"/>
+          <g fill="#1C1A12"><circle cx="90" cy="64" r="3.4"/><circle cx="118" cy="58" r="3.6"/><circle cx="140" cy="74" r="3.6"/><circle cx="170" cy="60" r="3.8"/><circle cx="196" cy="72" r="3.4"/><circle cx="224" cy="58" r="3.4"/><circle cx="250" cy="70" r="3.2"/><circle cx="110" cy="84" r="3"/><circle cx="160" cy="90" r="3"/><circle cx="190" cy="52" r="3"/></g>
+          <g fill="#D2452C" stroke="#F4E9CF" stroke-width="2"><circle cx="128" cy="96" r="4"/><circle cx="182" cy="96" r="4"/><circle cx="232" cy="90" r="3.6"/><circle cx="276" cy="82" r="3.4"/><circle cx="152" cy="106" r="3"/></g>
+          <circle cx="52" cy="78" r="6" fill="#151309"/><circle cx="50" cy="76" r="2" fill="#fff"/>
+          <path d="M24 88 q14 6 28 0" stroke="#3B3820" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="tag">Kirjesån &amp; Ume River</span>
+        <div><h3>Brown trout</h3><span class="latin">Öring · Salmo trutta</span></div>
+        <p>Wild trout in the Kirjesån stream and the river. Fly, spinner or a quiet drift at dusk in midsummer.</p>
+        <div class="months" aria-label="Best months: June to September"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </article>
+
+      <article class="fish reveal">
+        <svg viewBox="0 0 400 170" role="img" aria-label="Illustration of a grayling with its large sail-like dorsal fin">
+          <defs>
+            <linearGradient id="gGray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36444F"/><stop offset=".5" stop-color="#8A97A3"/><stop offset=".85" stop-color="#D6DCE0"/><stop offset="1" stop-color="#EEF1F3"/></linearGradient>
+            <linearGradient id="gSail" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A4C7A"/><stop offset=".6" stop-color="#7B5E8C"/><stop offset="1" stop-color="#C2504B"/></linearGradient>
+          </defs>
+          <path d="M335 80 L392 44 Q380 86 392 128 L335 94 Z" fill="#4A5864"/>
+          <path d="M112 50 C120 4 236 -2 270 58 Z" fill="url(#gSail)"/>
+          <g fill="#2B2440" opacity=".7"><circle cx="150" cy="34" r="3"/><circle cx="182" cy="26" r="3"/><circle cx="214" cy="30" r="3"/><circle cx="240" cy="42" r="3"/><circle cx="170" cy="44" r="2.6"/><circle cx="204" cy="46" r="2.6"/></g>
+          <path d="M282 62 q9 -12 18 0 Z" fill="#4A5864"/>
+          <path d="M26 88 C44 60 110 46 200 46 C270 46 318 66 340 80 L340 94 C318 108 270 124 200 126 C110 128 44 116 26 88 Z" fill="url(#gGray)"/>
+          <path d="M92 110 q-12 22 22 20 Z" fill="#8E7AA0"/>
+          <path d="M196 122 l-10 24 l32 -20 Z" fill="#8E7AA0"/>
+          <path d="M266 114 l-2 22 l30 -18 Z" fill="#8E7AA0"/>
+          <g stroke="#5C6A76" stroke-width="1.4" opacity=".55"><path d="M80 74 H310"/><path d="M76 86 H320"/><path d="M84 98 H306"/></g>
+          <g fill="#1C2329"><circle cx="86" cy="70" r="2.6"/><circle cx="104" cy="80" r="2.4"/><circle cx="96" cy="92" r="2.2"/><circle cx="120" cy="68" r="2.2"/></g>
+          <circle cx="54" cy="82" r="6.4" fill="#12181D"/><circle cx="52" cy="80" r="2" fill="#fff"/>
+          <path d="M28 90 q8 3 14 1" stroke="#28323A" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="tag">Fast water</span>
+        <div><h3>Grayling</h3><span class="latin">Harr · Thymallus thymallus</span></div>
+        <p>The "lady of the stream", with her purple sail fin. Rises to small dry flies in the river currents through summer and autumn.</p>
+        <div class="months" aria-label="Best months: June to October"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+        <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </article>
+
+      <article class="fish reveal">
+        <svg viewBox="0 0 400 170" role="img" aria-label="Illustration of a silver whitefish">
+          <defs><linearGradient id="gWhite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3E5263"/><stop offset=".4" stop-color="#A9B8C4"/><stop offset=".75" stop-color="#E6ECF0"/><stop offset="1" stop-color="#FAFCFD"/></linearGradient></defs>
+          <path d="M332 80 L394 34 Q372 86 394 138 L332 94 Z" fill="#5A6E7E"/>
+          <path d="M172 48 C186 18 214 18 230 50 Z" fill="#5A6E7E"/>
+          <path d="M284 60 q9 -12 18 0 Z" fill="#5A6E7E"/>
+          <path d="M34 88 C52 60 112 42 200 42 C270 42 316 64 338 80 L338 94 C316 110 270 128 200 128 C112 130 52 116 34 88 Z" fill="url(#gWhite)"/>
+          <path d="M96 110 q-12 22 22 20 Z" fill="#B9C6D0"/>
+          <path d="M198 124 l-10 22 l32 -18 Z" fill="#B9C6D0"/>
+          <path d="M268 116 l-2 22 l30 -18 Z" fill="#B9C6D0"/>
+          <path d="M60 86 C120 82 240 80 330 86" stroke="#8496A5" stroke-width="1.6" fill="none" opacity=".6"/>
+          <circle cx="60" cy="80" r="7" fill="#11181E"/><circle cx="58" cy="78" r="2.2" fill="#fff"/>
+          <path d="M36 90 q5 2 9 0" stroke="#2D3B47" stroke-width="2" fill="none"/>
+        </svg>
+        <span class="tag">Winter jigging</span>
+        <div><h3>Whitefish</h3><span class="latin">Sik · Coregonus lavaretus</span></div>
+        <p>Very large whitefish are caught through the ice. Small jigs, light line and patience on a sunny March day.</p>
+        <div class="months" aria-label="Best months: ice fishing January to April, open water June to August"><i class="ice"></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </article>
+    </div>
+    <div class="legend"><span><i style="background:var(--ice)"></i>Open water</span><span><i style="background:#D9EEF0"></i>On the ice</span><span>Our rough guide. Ice and seasons vary from year to year, and the licence page has the rules that apply.</span></div>
+
+    <div class="catch">
+      <figure class="c1 reveal"><img src="images/brown-trout.jpg" alt="A spotted brown trout held over the boat" loading="lazy"><figcaption>Brown trout</figcaption></figure>
+      <figure class="c2 reveal"><img src="images/boat-fishing.jpg" alt="Angler casting from a boat on open water in sunshine" loading="lazy"><figcaption>From the boat</figcaption></figure>
+      <figure class="c3 reveal"><img src="images/arctic-char.jpg" alt="An Arctic char with a red belly lying on the snow" loading="lazy"><figcaption>Char on the ice</figcaption></figure>
+      <figure class="c4 reveal"><img src="images/ice-fishing.jpg" alt="Ice fishing hole and a red box on the frozen lake" loading="lazy"><figcaption>Ice fishing</figcaption></figure>
+      <figure class="c5 reveal"><img src="images/river-wading.jpg" alt="Anglers wading in a fast-flowing river" loading="lazy"><figcaption>In the rapids</figcaption></figure>
+      <figure class="c6 reveal"><img src="images/rainbow-trout.jpg" alt="A rainbow trout held by an angler in a life jacket" loading="lazy"><figcaption>Rainbow trout</figcaption></figure>
+      <figure class="c7 reveal"><img src="images/lake-view.jpg" alt="Evening sun over the lake seen from the forest" loading="lazy"><figcaption>Evening on the lake</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map-sec" class="sec">
+  <div class="wrap stack">
+    <div class="stack reveal" style="gap:14px">
+      <span class="kicker">Where you'll be</span>
+      <h2>On the Blue Highway, in the middle of the water</h2>
+      <p class="lead">Slussfors lies on the E12 between Storuman and the mountains. Switch between the nearby fishing waters and the wider region, and tap a place to fly there.</p>
+    </div>
+    <div class="map-shell reveal">
+      <div class="map-side">
+        <div class="seg" role="group" aria-label="Map view">
+          <button type="button" id="segLocal" aria-pressed="true">Fishing waters</button>
+          <button type="button" id="segRegion" aria-pressed="false">Region</button>
+        </div>
+        <ul class="places" id="places"></ul>
+        <a class="btn btn-accent" style="min-height:46px" id="routeLink" href="#" target="_blank" rel="noopener">Directions to the house <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <small style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
+      </div>
+      <div id="map" role="region" aria-label="Interactive map of Slussfors and surroundings"></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOUSE -->
+<section id="house" class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack reveal">
+        <span class="kicker">The house</span>
+        <h2>Warm, simple and made for long days outdoors</h2>
+        <p class="lead">80 m² with a fully equipped kitchen, a living room with an open fireplace and a big TV, and two bedrooms. Dry your gear, light the fire, and smoke today's catch in the brick smoker in the yard.</p>
+        <p style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and parking for several cars. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
+      </div>
+      <div class="rooms reveal">
+        <div class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90), wardrobes</span></div>
+        <div class="room"><b>Bedroom 2</b><span>Double bed (2 × 90) and a bunk bed for kids or teens</span></div>
+        <div class="room"><b>Kitchen</b><span>Dishwasher, fridge and freezer, oven, table for six</span></div>
+        <div class="room"><b>Living room</b><span>Open fireplace, sofa, armchairs, smart TV</span></div>
+        <div class="room"><b>Bathroom</b><span>Shower, toilet and washing machine</span></div>
+        <div class="room"><b>Outside</b><span>Large lawn, seating, grill, fire pit, smoker</span></div>
+        <div class="room"><b>Work</b><span>Wi-Fi and a desk for the remote day</span></div>
+        <div class="room"><b>Arrival</b><span>Self check-in with key box, from 14:00</span></div>
+      </div>
+    </div>
+
+    <div class="gallery" id="gallery">
+      <button class="g-wide g-tall" data-i="0"><img src="images/living-room-fireplace.jpg" alt="Living room with fireplace, armchairs and a soft rug" loading="lazy"></button>
+      <button data-i="1"><img src="images/kitchen-dining.jpg" alt="Kitchen with round dining table" loading="lazy"></button>
+      <button data-i="2"><img src="images/bedroom-1.jpg" alt="Bedroom with a large double bed" loading="lazy"></button>
+      <button class="g-wide" data-i="3"><img src="images/lounge.jpg" alt="Sofa corner with forest wallpaper" loading="lazy"></button>
+      <button data-i="4"><img src="images/bedroom-bunk.jpg" alt="Second bedroom with double bed and bunk bed" loading="lazy"></button>
+      <button data-i="5"><img src="images/fireplace.jpg" alt="Fire burning in the open fireplace" loading="lazy"></button>
+      <button class="g-wide" data-i="6"><img src="images/garden.jpg" alt="Garden with lawn, seating and red outbuildings" loading="lazy"></button>
+      <button data-i="7"><img src="images/kitchen.jpg" alt="Kitchen with white cabinets" loading="lazy"></button>
+      <button data-i="8"><img src="images/bathroom.jpg" alt="Bathroom with shower and washing machine" loading="lazy"></button>
+      <button class="g-wide" data-i="9"><img src="images/house-winter-night.jpg" alt="The house on a snowy winter evening" loading="lazy"></button>
+      <button data-i="10"><img src="images/workspace.jpg" alt="Desk with a lamp for remote work" loading="lazy"></button>
+      <button data-i="11"><img src="images/floor-plan.jpg" alt="Floor plan of the house" loading="lazy"></button>
+    </div>
+  </div>
+</section>
+
+<!-- SEASONS -->
+<section id="seasons" class="sec dark">
+  <div class="wrap stack" style="gap:clamp(32px,4vw,48px)">
+    <div class="stack reveal" style="gap:14px">
+      <span class="kicker">More than fishing</span>
+      <h2>Light all night, then snow and northern lights</h2>
+    </div>
+    <div class="seasons">
+      <article class="season reveal"><img src="images/cloudberries-cup.jpg" alt="A mug full of cloudberries held over a mire" loading="lazy"><div><span class="kicker" style="color:var(--ice)">Summer &amp; autumn</span><h3>Midnight sun and cloudberries</h3><p>Hike, pick berries and mushrooms, play disc golf, and fish late into the bright night.</p></div></article>
+      <article class="season reveal"><img src="images/snowmobile-sunset.jpg" alt="Snowmobile on a frozen lake under a red sunset sky" loading="lazy"><div><span class="kicker" style="color:var(--ice)">Winter</span><h3>Ice, snow and northern lights</h3><p>Ice fishing for char and whitefish, ski the trail behind the house, and watch for aurora on clear nights.</p></div></article>
+      <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span class="kicker" style="color:var(--ice)">All year</span><h3>Mountains within reach</h3><p>Hemavan, Tärnaby and Kittelfjäll are about an hour away for alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="sec" aria-label="Guest reviews">
+  <div class="wrap stack" style="gap:32px">
+    <div class="score reveal"><b>4.74</b><span style="color:var(--muted)">out of 5 from 19 reviews on Airbnb · Superhost · responds within an hour</span></div>
+    <div class="reviews">
+      <blockquote class="reveal"><p>"Perfect place for a fishing trip and not only that."</p><footer>Janis · July 2026 · via Airbnb</footer></blockquote>
+      <blockquote class="reveal"><p>"This is the second year that we have stayed with Jonas, and the house is truly beautiful and welcoming."</p><footer>Angelo · September 2026 · via Airbnb</footer></blockquote>
+      <blockquote class="reveal"><p>"Comfortable and peaceful living … close to fishing spots and downtown Slussfors."</p><footer>Dzintars · July 2025 · via Airbnb</footer></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section id="prices" class="sec" style="background:#E8EEEC">
+  <div class="wrap split">
+    <div class="stack reveal">
+      <span class="kicker">Prices 2027</span>
+      <h2>One price for the whole house</h2>
+      <div class="price-list" id="priceList"></div>
+      <p style="color:var(--muted);font-size:15px">Self-catering: you clean before you leave, so there is no cleaning fee. Bed linen and towels are not included. Bring your own or add them below.</p>
+    </div>
+    <div class="stack reveal">
+      <h3 style="font-size:28px">How booking direct works</h3>
+      <ol class="steps">
+        <li><span>Send your dates with the form. The price estimate updates as you type.</span></li>
+        <li><span>We reply within 24 hours with a confirmation and a secure PayPal payment request.</span></li>
+        <li><span>Pay by credit or debit card, or with your PayPal account. You do not need a PayPal account to pay by card. Your dates are booked when the payment is received, and the cancellation terms are in the confirmation.</span></li>
+        <li><span>Before arrival you get the key box code and our local fishing tips.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section id="book" class="sec">
+  <div class="wrap split">
+    <div class="stack reveal">
+      <span class="kicker">Book direct</span>
+      <h2>Request your dates</h2>
+      <p class="lead">No booking platform in between: you talk to us, the owners. Nothing is charged when you send a request.</p>
+      <div class="faq" style="margin-top:12px">
+        <details><summary>What should we bring?</summary><p>Bed linen and towels (or add them to your request, 200 SEK per person), and of course your fishing gear. Duvets and pillows are in the house.</p></details>
+        <details><summary>Can we bring our dog?</summary><p>Yes, pets are welcome. Please keep them off the beds and sofas.</p></details>
+        <details><summary>Where do we buy food?</summary><p>There is a grocery shop and a fuel station in the village. Opening hours are limited, so check them before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
+        <details><summary>When can we arrive and leave?</summary><p>Check-in from 14:00 and check-out by 12:00, with self check-in through a key box.</p></details>
+        <details><summary>Is there a boat?</summary><p>Boats with or without motor can be rented locally and there is a boat ramp in Slussfors. Ask us and we will point you to the right people.</p></details>
+      </div>
+    </div>
+
+    <form class="book-card reveal" id="bookForm" novalidate aria-label="Booking request">
+      <div class="cal" id="cal">
+        <div class="cal-head">
+          <button type="button" class="icon-btn" id="calPrev" aria-label="Previous month"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+          <b id="calTitle" aria-live="polite"></b>
+          <button type="button" class="icon-btn" id="calNext" aria-label="Next month"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-foot">
+          <span><i style="background:#fff"></i>Free</span>
+          <span><i style="background:repeating-linear-gradient(135deg,#E3E9E7 0 4px,#D4DDDA 4px 8px);border-color:transparent"></i>Booked</span>
+          <span id="calStatus">Loading the calendar…</span>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="arrival">Arrival</label><input id="arrival" name="arrival" type="date" required></div>
+        <div class="field"><label for="departure">Departure</label><input id="departure" name="departure" type="date" required></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label id="guestsLbl">Guests</label>
+          <div class="stepper" role="group" aria-labelledby="guestsLbl">
+            <button type="button" id="gMinus" aria-label="Fewer guests">−</button>
+            <output id="guests" aria-live="polite">2</output>
+            <button type="button" id="gPlus" aria-label="More guests">+</button>
+          </div>
+        </div>
+        <div class="field"><label for="purpose">Main reason for the trip</label>
+          <select id="purpose" name="purpose"><option>Fishing</option><option>Ice fishing</option><option>Hiking &amp; nature</option><option>Skiing &amp; snowmobile</option><option>Passing through</option><option>Other</option></select>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="linen" name="linen"><span>Add bed linen and towels for everyone <span style="color:var(--muted)">(200 SEK per person)</span></span></label>
+      <label class="check"><input type="checkbox" id="pet" name="pet"><span>We are bringing a pet</span></label>
+      <div class="quote" id="quote" aria-live="polite"><span class="muted">Pick your dates to see a price estimate.</span></div>
+      <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+      <div class="row2">
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+        <div class="field"><label for="phone">Phone <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+      </div>
+      <div class="field"><label for="message">Anything we should know?</label><textarea id="message" name="message" placeholder="Boat rental, late arrival, questions about the fishing"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="website">Leave empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+      <div class="err" id="formErr" role="alert"></div>
+      <button class="btn btn-accent" type="submit" id="sendBtn" style="width:100%">Send booking request <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <small style="color:var(--muted)">We reply within 24 hours. Minimum stay 3 nights, up to 6 guests.</small>
+      <div class="done" id="done" role="status">
+        <b id="doneTitle">Almost there</b>
+        <span id="doneText"></span>
+        <pre id="doneBody"></pre>
+        <button type="button" class="btn btn-line" id="copyBtn" style="color:var(--ink);border-color:var(--deep);min-height:44px">Copy request text</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="stack" style="gap:8px">
+        <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-fish"/></svg>Forellen Slussfors</a>
+        <small>Gamlavägen 16, 923 97 Slussfors, Sweden</small>
+        <small>An angler's guesthouse in Swedish Lapland, rented by a Swedish family.</small>
+      </div>
+      <div class="stack" style="gap:6px">
+        <b>Contact</b>
+        <a id="footMail" href="#">Email us</a>
+        <small>We answer in English and Swedish</small>
+      </div>
+      <div class="stack" style="gap:6px">
+        <b>Good to know</b>
+        <small>Emergency 112 · Medical advice 1177</small>
+        <small>Right of public access applies. Leave nature as you found it.</small>
+        <small>Map data © OpenStreetMap contributors</small>
+      </div>
+    </div>
+    <div class="big-word" aria-hidden="true">Slussfors</div>
+  </div>
+</footer>
+
+<div class="mobile-book hide" id="mobileBook"><div><b>From <span id="mbFrom">1 100</span> SEK</b><small>per night · whole house</small></div><a class="btn btn-accent" href="#book">Book direct</a></div>
+
+<dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+  <div class="lb-in">
+    <div class="lb-top"><span id="lbCount" style="font-size:14px;opacity:.8"></span><button class="icon-btn" id="lbClose" aria-label="Close photo viewer"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="lb-img"><img id="lbImg" alt=""></div>
+    <div class="lb-nav"><button class="icon-btn" id="lbPrev" aria-label="Previous photo"><svg aria-hidden="true"><use href="#i-left"/></svg></button><button class="icon-btn" id="lbNext" aria-label="Next photo"><svg aria-hidden="true"><use href="#i-right"/></svg></button></div>
+  </div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  var C = window.FORELLEN;
+  var $ = function(id){ return document.getElementById(id); };
+  var fmt = function(n){ return Math.round(n).toLocaleString('sv-SE').replace(/ /g,' '); };
+
+  /* ---------- nav ---------- */
+  var nav = $('nav'), menuBtn = $('menuBtn'), links = $('navLinks'), mb = $('mobileBook');
+  function onScroll(){
+    nav.classList.toggle('solid', window.scrollY > 40);
+    var book = $('book').getBoundingClientRect();
+    mb.classList.toggle('hide', window.scrollY < 400 || (book.top < window.innerHeight && book.bottom > 0));
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  menuBtn.addEventListener('click', function(){
+    var open = links.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', open);
+  });
+  links.addEventListener('click', function(e){ if (e.target.tagName === 'A'){ links.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); } });
+
+  /* ---------- reveal on scroll ---------- */
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else { document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); }); }
+
+  /* ---------- live weather (Open-Meteo, no key) ---------- */
+  var WMO = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Freezing fog',51:'Drizzle',53:'Drizzle',55:'Drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Snow showers',95:'Thunder'};
+  fetch('https://api.open-meteo.com/v1/forecast?latitude='+C.house.lat+'&longitude='+C.house.lon+'&current=temperature_2m,weather_code&timezone=Europe%2FStockholm')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ if (!d || !d.current) return;
+      var t = Math.round(d.current.temperature_2m);
+      $('wxText').textContent = 'Now in Slussfors: ' + (t > 0 ? '+' : '') + t + ' °C, ' + (WMO[d.current.weather_code] || '').toLowerCase();
+      $('wxChip').hidden = false; })
+    .catch(function(){});
+
+  /* ---------- prices ---------- */
+  var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var groups = {};
+  for (var m = 1; m <= 12; m++){ (groups[C.nightly[m]] = groups[C.nightly[m]] || []).push(m); }
+  function ranges(ms){ var out = [], s = ms[0], p = ms[0];
+    for (var i = 1; i <= ms.length; i++){ if (ms[i] === p + 1){ p = ms[i]; continue; } out.push(s === p ? MN[s-1] : MN[s-1] + '–' + MN[p-1]); s = p = ms[i]; }
+    return out.join(', '); }
+  var pl = $('priceList'), html = '';
+  if (C.directDiscount > 0) html += '<div class="pl" style="background:var(--deep);color:#fff;border-color:var(--deep)"><span>Book direct and pay less than on Airbnb</span><b>−' + Math.round(C.directDiscount*100) + ' %</b></div>';
+  Object.keys(groups).sort(function(a,b){return b-a;}).forEach(function(p){
+    html += '<div class="pl"><span>' + ranges(groups[p]) + ', per night</span><b>' + fmt(p) + ' SEK</b></div>'; });
+  html += '<div class="pl"><span>Price is for ' + C.includedGuests + ' guests. Each extra guest, per night</span><b>+' + fmt(C.extraGuest) + ' SEK</b></div>';
+  if (C.weeklyDiscount > 0) html += '<div class="pl"><span>Stay 7 nights or more</span><b>−' + Math.round(C.weeklyDiscount*100) + ' %</b></div>';
+  html += '<div class="pl"><span>Minimum stay</span><b>' + C.minNights + ' nights</b></div>';
+  html += '<div class="pl"><span>Cleaning fee (you clean before you leave)</span><b>0 SEK</b></div>';
+  html += '<div class="pl"><span>Bed linen &amp; towels, per person, on request</span><b>' + fmt(C.linenPerPerson) + ' SEK</b></div>';
+  pl.innerHTML = html;
+  $('mbFrom').textContent = fmt(Math.min.apply(null, Object.keys(groups).map(Number)));
+
+  /* ---------- booking form ---------- */
+  var arr = $('arrival'), dep = $('departure'), guestsOut = $('guests'), linen = $('linen'), quote = $('quote');
+  var guests = 2;
+  var today = new Date(); today.setHours(12,0,0,0);
+  function iso(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+  function parse(s){ if (!s) return null; var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2], 12); }
+  arr.min = iso(today);
+  function setGuests(n){ guests = Math.max(1, Math.min(C.maxGuests, n)); guestsOut.textContent = guests + (guests === 1 ? ' guest' : ' guests'); calc(); }
+  $('gMinus').addEventListener('click', function(){ setGuests(guests - 1); });
+  $('gPlus').addEventListener('click', function(){ setGuests(guests + 1); });
+  arr.addEventListener('change', function(){
+    var a = parse(arr.value); if (!a) return;
+    var minDep = new Date(a); minDep.setDate(minDep.getDate() + C.minNights); dep.min = iso(minDep);
+    var d = parse(dep.value); if (!d || d < minDep) dep.value = iso(minDep);
+    calc(); });
+  dep.addEventListener('change', calc); linen.addEventListener('change', calc);
+
+  var lastQuote = null;
+  function calc(){
+    var a = parse(arr.value), d = parse(dep.value); lastQuote = null;
+    drawCal();
+    if (!a || !d){ quote.innerHTML = '<span class="muted">Pick your dates to see a price estimate.</span>'; return; }
+    var nights = Math.round((d - a) / 864e5);
+    if (nights < C.minNights){ quote.innerHTML = '<span class="err">Minimum stay is ' + C.minNights + ' nights.</span>'; return; }
+    if (rangeBlocked(a, d)){ quote.innerHTML = '<span class="err">Some of these nights are already booked. Please pick other dates.</span>'; return; }
+    var base = 0, cur = new Date(a);
+    for (var i = 0; i < nights; i++){ base += C.nightly[cur.getMonth()+1]; cur.setDate(cur.getDate()+1); }
+    var extra = Math.max(0, guests - C.includedGuests) * C.extraGuest * nights;
+    var disc = nights >= 7 ? Math.round((base + extra) * C.weeklyDiscount) : 0;
+    var lin = linen.checked ? guests * C.linenPerPerson : 0;
+    var total = base + extra - disc + lin;
+    var h = '<div class="ln"><span>' + nights + ' nights, house</span><span>' + fmt(base) + ' SEK</span></div>';
+    if (extra) h += '<div class="ln"><span>' + (guests - C.includedGuests) + ' extra guest' + (guests - C.includedGuests > 1 ? 's' : '') + ' × ' + nights + ' nights</span><span>' + fmt(extra) + ' SEK</span></div>';
+    if (disc) h += '<div class="ln"><span>Weekly discount</span><span>−' + fmt(disc) + ' SEK</span></div>';
+    if (lin) h += '<div class="ln"><span>Linen &amp; towels × ' + guests + '</span><span>' + fmt(lin) + ' SEK</span></div>';
+    h += '<div class="ln tot"><span>Estimated total</span><span>' + fmt(total) + ' SEK</span></div><span class="muted">We confirm the final price in our reply.</span>';
+    quote.innerHTML = h;
+    lastQuote = {nights:nights, total:total};
+  }
+  /* ---------- availability calendar (reads availability.json) ---------- */
+  var booked = {}, calLoaded = false, view = new Date(today.getFullYear(), today.getMonth(), 1, 12), picking = 'arr';
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function isBooked(d){ return !!booked[iso(d)]; }   // the NIGHT starting on d is taken
+  function rangeBlocked(a, d){ var c = new Date(a); while (c < d){ if (isBooked(c)) return true; c.setDate(c.getDate()+1); } return false; }
+  function drawCal(){
+    var grid = $('calGrid'), y = view.getFullYear(), m = view.getMonth();
+    $('calTitle').textContent = MONTHS[m] + ' ' + y;
+    $('calPrev').disabled = (y === today.getFullYear() && m === today.getMonth());
+    var a = parse(arr.value), d = parse(dep.value);
+    var h = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(x){ return '<span class="dow">' + x + '</span>'; }).join('');
+    var lead = (new Date(y, m, 1).getDay() + 6) % 7;
+    for (var i = 0; i < lead; i++) h += '<span aria-hidden="true"></span>';
+    var days = new Date(y, m + 1, 0).getDate();
+    for (var n = 1; n <= days; n++){
+      var dt = new Date(y, m, n, 12), key = iso(dt), cls = [], dis = false, label = dt.toDateString();
+      var prev = new Date(dt); prev.setDate(n - 1);
+      if (dt < today){ cls.push('past'); dis = true; }
+      else if (isBooked(dt)){ cls.push('booked'); label += ', booked'; if (!(picking === 'dep' && a && dt > a && !rangeBlocked(a, dt))) dis = true; }
+      else if (isBooked(prev)) { cls.push('co'); label += ', free from this day'; }
+      if (a && key === iso(a)) cls.push('sel'); else if (d && key === iso(d)) cls.push('sel'); else if (a && d && dt > a && dt < d) cls.push('range');
+      h += '<button type="button" data-d="' + key + '" class="' + cls.join(' ') + '"' + (dis ? ' disabled' : '') + ' aria-label="' + label + '">' + n + '</button>';
+    }
+    grid.innerHTML = h;
+  }
+  $('calGrid').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-d]'); if (!b || b.disabled) return;
+    var dt = parse(b.dataset.d), a = parse(arr.value);
+    if (picking === 'dep' && a && dt > a){
+      dep.value = b.dataset.d; picking = 'arr'; calc();
+    } else {
+      if (isBooked(dt)) return;
+      arr.value = b.dataset.d; dep.value = ''; picking = 'dep';
+      var minDep = new Date(dt); minDep.setDate(minDep.getDate() + C.minNights); dep.min = iso(minDep);
+      calc(); quote.innerHTML = '<span class="muted">Now pick your departure day (at least ' + C.minNights + ' nights).</span>';
+    }
+  });
+  $('calPrev').addEventListener('click', function(){ view.setMonth(view.getMonth() - 1); drawCal(); });
+  $('calNext').addEventListener('click', function(){ view.setMonth(view.getMonth() + 1); drawCal(); });
+  arr.addEventListener('change', function(){ var a = parse(arr.value); if (a){ view = new Date(a.getFullYear(), a.getMonth(), 1, 12); picking = 'arr'; } drawCal(); });
+  fetch('availability.json', {cache:'no-store'})
+    .then(function(r){ if (!r.ok) throw new Error(); return r.json(); })
+    .then(function(j){
+      (j.booked || []).forEach(function(rg){ var c = parse(rg[0]), e = parse(rg[1]); while (c < e){ booked[iso(c)] = true; c.setDate(c.getDate()+1); } });
+      calLoaded = true;
+      var up = j.updated ? new Date(j.updated) : null;
+      $('calStatus').textContent = 'Synced with Airbnb and Booking.com' + (up && !isNaN(up) ? ', ' + up.toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
+      calc(); })
+    .catch(function(){ $('calStatus').textContent = 'Live calendar unavailable. We confirm availability by email.'; drawCal(); });
+  drawCal();
+  setGuests(2);
+
+  var form = $('bookForm'), errBox = $('formErr');
+  function buildBody(){
+    var lines = [
+      'Booking request, Forellen Slussfors',
+      '',
+      'Arrival:    ' + arr.value,
+      'Departure:  ' + dep.value + (lastQuote ? '  (' + lastQuote.nights + ' nights)' : ''),
+      'Guests:     ' + guests,
+      'Trip:       ' + $('purpose').value,
+      'Linen:      ' + (linen.checked ? 'Yes, for ' + guests : 'No, we bring our own'),
+      'Pet:        ' + ($('pet').checked ? 'Yes' : 'No'),
+      'Estimate:   ' + (lastQuote ? fmt(lastQuote.total) + ' SEK' : '-'),
+      '',
+      'Name:       ' + $('name').value.trim(),
+      'Email:      ' + $('email').value.trim(),
+      'Phone:      ' + ($('phone').value.trim() || '-'),
+      '',
+      'Message:',
+      $('message').value.trim() || '-'
+    ];
+    return lines.join('\n');
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault(); errBox.textContent = '';
+    if ($('website').value) return;  // spam trap
+    var problems = [];
+    if (!arr.value || !dep.value) problems.push('choose arrival and departure dates');
+    else if (!lastQuote) problems.push(rangeBlocked(parse(arr.value), parse(dep.value)) ? 'pick dates that are not already booked' : 'note that the minimum stay is ' + C.minNights + ' nights');
+    if (!$('name').value.trim()) problems.push('add your name');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim())) problems.push('add a valid email address');
+    if (problems.length){ errBox.textContent = 'Please ' + problems.join(', ') + '.'; return; }
+
+    var subject = 'Booking request ' + arr.value + ' to ' + dep.value + ', ' + guests + ' guests';
+    var body = buildBody();
+    var done = $('done');
+    if (C.formspreeId){
+      var btn = $('sendBtn'); btn.disabled = true; btn.textContent = 'Sending…';
+      fetch('https://formspree.io/f/' + C.formspreeId, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({_subject:subject, _replyto:$('email').value.trim(), email:$('email').value.trim(), message:body})})
+        .then(function(r){ if (!r.ok) throw new Error();
+          $('doneTitle').textContent = 'Thank you, your request is sent';
+          $('doneText').textContent = 'We will reply to ' + $('email').value.trim() + ' within 24 hours.';
+          $('doneBody').textContent = body; done.classList.add('show'); btn.hidden = true; })
+        .catch(function(){ btn.disabled = false; btn.textContent = 'Send booking request'; errBox.textContent = 'Sending failed. Please try again or email us at ' + C.bookingEmail + '.'; });
+      return;
+    }
+    var href = 'mailto:' + C.bookingEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    $('doneTitle').textContent = 'Your email app should open now';
+    $('doneText').innerHTML = 'Press send in your email app to reach us. If nothing opened, copy the text below and email it to <a href="mailto:' + C.bookingEmail + '">' + C.bookingEmail + '</a>.';
+    $('doneBody').textContent = body; done.classList.add('show');
+    window.location.href = href;
+  });
+  $('copyBtn').addEventListener('click', function(){
+    var t = $('doneBody').textContent, b = this;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent = 'Copied'; }, function(){ b.textContent = 'Select the text above to copy'; });
+  });
+  $('footMail').href = 'mailto:' + C.bookingEmail; $('footMail').textContent = C.bookingEmail;
+
+  /* ---------- gallery lightbox ---------- */
+  var gBtns = Array.prototype.slice.call(document.querySelectorAll('#gallery button')), lb = $('lightbox'), lbImg = $('lbImg'), idx = 0;
+  function show(i){ idx = (i + gBtns.length) % gBtns.length; var im = gBtns[idx].querySelector('img'); lbImg.src = im.src; lbImg.alt = im.alt; $('lbCount').textContent = (idx+1) + ' / ' + gBtns.length + ' · ' + im.alt; }
+  gBtns.forEach(function(b, i){ b.setAttribute('aria-label', 'Open photo: ' + b.querySelector('img').alt); b.addEventListener('click', function(){ show(i); if (lb.showModal) lb.showModal(); }); });
+  $('lbClose').addEventListener('click', function(){ lb.close(); });
+  $('lbPrev').addEventListener('click', function(){ show(idx - 1); });
+  $('lbNext').addEventListener('click', function(){ show(idx + 1); });
+  lb.addEventListener('keydown', function(e){ if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
+  lb.addEventListener('click', function(e){ if (e.target === lb || e.target.classList.contains('lb-img')) lb.close(); });
+  var tx = null; lb.addEventListener('touchstart', function(e){ tx = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', function(e){ if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1)); tx = null; });
+
+  /* ---------- map ---------- */
+  var H = [C.house.lat, C.house.lon];
+  var PLACES = {
+    local: [
+      {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Gamlavägen 16. Lake Storuman is a 5-minute walk.'},
+      {n:'Slussfors village', d:'Shop and fuel', c:[65.4311,16.2397], col:'#0B1E1D', k:'S', t:'Grocery shop and fuel station. Check opening hours.'},
+      {n:'Boat ramp', d:'Launch on the Ume River', c:[65.4260,16.2255], col:'#1F7A8C', k:'B', t:'Public slipway in Slussfors.'},
+      {n:'Magasjön', d:'Lake', c:[65.5052,16.2988], col:'#1F7A8C', k:'1', t:'Lake north of Slussfors.'},
+      {n:'Järvsjön', d:'Lake', c:[65.5367,15.9996], col:'#1F7A8C', k:'2', t:'Lake north-west of Slussfors.'},
+      {n:'Nedre Boksjön', d:'Lake', c:[65.5808,16.0637], col:'#1F7A8C', k:'3', t:'One of the Boksjön lakes to the north.'}
+    ],
+    region: [
+      {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Slussfors on the E12, the Blue Highway.'},
+      {n:'Storuman', d:'Town · about 45 min', c:[65.0951,17.1180], col:'#0B1E1D', k:'S', t:'Larger shops, pharmacy, train station.'},
+      {n:'Kittelfjäll', d:'Ski resort · about 1 h', c:[65.2550,15.5179], col:'#5A4C7A', k:'K', t:'Alpine skiing and fell hiking.'},
+      {n:'Tärnaby', d:'Village · about 1 h', c:[65.7114,15.2765], col:'#5A4C7A', k:'T', t:'Mountain village and ski slopes.'},
+      {n:'Hemavan', d:'Ski resort · about 1 h', c:[65.8153,15.0853], col:'#5A4C7A', k:'Hv', t:'Start of the Kungsleden trail.'},
+      {n:'Hemavan Tärnaby Airport', d:'Airport', c:[65.8061,15.0828], col:'#1F7A8C', k:'✈', t:'Regional airport in the mountains.'}
+    ]
+  };
+  function km(a, b){ var R = 6371, r = Math.PI/180, dLa = (b[0]-a[0])*r, dLo = (b[1]-a[1])*r;
+    var x = Math.sin(dLa/2)*Math.sin(dLa/2) + Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+    return 2*R*Math.asin(Math.sqrt(x)); }
+  $('routeLink').href = 'https://www.google.com/maps/dir/?api=1&destination=' + H[0] + ',' + H[1];
+
+  var map = null, layer = null, markers = [];
+  function pinIcon(p){ return L.divIcon({className:'', html:'<div class="pin" style="background:'+p.col+'"><span>'+p.k+'</span></div>', iconSize:[34,34], iconAnchor:[17,34], popupAnchor:[0,-32]}); }
+  function render(which){
+    $('segLocal').setAttribute('aria-pressed', which === 'local'); $('segRegion').setAttribute('aria-pressed', which === 'region');
+    var list = PLACES[which], ul = $('places'); ul.innerHTML = '';
+    if (layer) layer.clearLayers(); markers = [];
+    list.forEach(function(p, i){
+      var dist = i === 0 ? '' : ' · ' + (km(H, p.c) < 10 ? km(H, p.c).toFixed(1) : Math.round(km(H, p.c))) + ' km';
+      var li = document.createElement('li');
+      li.innerHTML = '<button type="button"><span class="dot" style="background:'+p.col+'">'+p.k+'</span><span><b>'+p.n+'</b><small>'+p.d+dist+'</small></span></button>';
+      li.firstChild.addEventListener('click', function(){ if (!map) return; map.flyTo(p.c, which === 'local' ? 13 : 10, {duration:.8}); markers[i].openPopup(); if (window.innerWidth < 900) $('map').scrollIntoView({behavior:'smooth', block:'center'}); });
+      ul.appendChild(li);
+      if (map){ var mk = L.marker(p.c, {icon:pinIcon(p), title:p.n}).bindPopup('<b>'+p.n+'</b><br>'+p.t); layer.addLayer(mk); markers.push(mk); }
+    });
+    if (map) map.flyToBounds(L.latLngBounds(list.map(function(p){ return p.c; })).pad(0.15), {duration:.8});
+  }
+  function initMap(){
+    if (map || !window.L) return;
+    map = L.map('map', {scrollWheelZoom:false, zoomControl:true}).setView(H, 11);
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+    var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:18, attribution:'Imagery © Esri, Maxar, Earthstar Geographics'});
+    L.control.layers({'Map':osm, 'Satellite':sat}, null, {position:'topright'}).addTo(map);
+    layer = L.layerGroup().addTo(map);
+    map.on('focus', function(){ map.scrollWheelZoom.enable(); }); map.on('blur', function(){ map.scrollWheelZoom.disable(); });
+    render('local');
+  }
+  render('local');
+  $('segLocal').addEventListener('click', function(){ render('local'); });
+  $('segRegion').addEventListener('click', function(){ render('region'); });
+  if ('IntersectionObserver' in window){
+    var mio = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ initMap(); mio.disconnect(); } }, {rootMargin:'300px'});
+    mio.observe($('map'));
+  } else { initMap(); }
+})();
+</script>
+</body>
+</html>
