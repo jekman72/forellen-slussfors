@@ -22,7 +22,7 @@ window.FORELLEN = {
   bookingEmail: "jonasekman72@gmail.com",
   // Optional: a Formspree form id (formspree.io, free plan). When set, the form
   // posts directly and the guest's email app is not opened. Leave "" for mailto.
-  formspreeId: "",
+  formspreeId: "mdegpnkw",
   // Airbnb list prices in SEK per night for the whole house with 2 guests (2027).
   // Months are 1-12. Each extra guest above 2 adds airbnbExtraGuest per night.
   airbnbNightly: { 1:1150, 2:1150, 3:1150, 4:1100, 5:1100, 6:1150, 7:1150, 8:1150, 9:1100, 10:1100, 11:1100, 12:1100 },
@@ -903,14 +903,14 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     var body = buildBody();
     var done = $('done');
     if (C.formspreeId){
-      var btn = $('sendBtn'); btn.disabled = true; btn.textContent = 'Sending…';
+      var btn = $('sendBtn'), btnHtml = btn.innerHTML; btn.disabled = true; btn.textContent = 'Sending…';
       fetch('https://formspree.io/f/' + C.formspreeId, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
         body: JSON.stringify({_subject:subject, _replyto:$('email').value.trim(), email:$('email').value.trim(), message:body})})
         .then(function(r){ if (!r.ok) throw new Error();
           $('doneTitle').textContent = 'Thank you, your request is sent';
           $('doneText').textContent = 'We will reply to ' + $('email').value.trim() + ' within 24 hours.';
-          $('doneBody').textContent = body; done.classList.add('show'); btn.hidden = true; })
-        .catch(function(){ btn.disabled = false; btn.textContent = 'Send booking request'; errBox.textContent = 'Sending failed. Please try again or email us at ' + C.bookingEmail + '.'; });
+          $('doneBody').textContent = body; done.classList.add('show'); btn.style.display = 'none'; $('copyBtn').style.display = 'none'; })
+        .catch(function(){ btn.disabled = false; btn.innerHTML = btnHtml; errBox.textContent = 'Sending failed. Please try again or email us at ' + C.bookingEmail + '.'; });
       return;
     }
     var href = 'mailto:' + C.bookingEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);

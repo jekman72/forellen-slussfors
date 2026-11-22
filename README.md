@@ -15,8 +15,8 @@ _original/     samma foton i 1920 px från Airbnb (ladda inte upp, bara arkiv)
 Allt ändras i blocket `window.FORELLEN` högst upp i `index.html`:
 
 - `bookingEmail` – adressen förfrågningarna går till (jonasekman72@gmail.com).
-- `formspreeId` – valfritt. Tomt = formuläret öppnar gästens e-postprogram med en
-  ifylld förfrågan (mailto). Med ett Formspree-id postas formuläret direkt.
+- `formspreeId` – "mdegpnkw" (formspree.io, Jonas konto). Förfrågan postas direkt till Formspree som
+  mejlar jonasekman72@gmail.com; svara på mejlet så går svaret till gästen. Tomt = mailto.
 - `airbnbNightly`, `airbnbExtraGuest` – Airbnbs listpriser 2027 (1 100/1 150 kr för 2 gäster,
   +100 kr per extra gäst). `directDiscount: 0.05` ger direktpris 5 % under Airbnb
   (avrundat till 5 kr: 1 045/1 095 kr, +95 kr). Sätt 0 för samma pris som Airbnb.
