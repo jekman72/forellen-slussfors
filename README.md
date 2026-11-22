@@ -61,3 +61,8 @@ eller automatiskt efter telefonens språk.
   sedan `python3 tools/build_i18n.py` (bygger `i18n/strings.js`). Saknade nycklar visas på engelska.
 - Själva förfrågan som mejlas till oss är alltid på engelska.
 - Översättningen är maskinnära, låt gärna en lettisk/litauisk gäst läsa igenom.
+
+## Besöksstatistik
+Cloudflare Web Analytics (gratis, inga cookies, ingen samtyckesruta). Konto: jonasekman72@gmail.com
+på dash.cloudflare.com → Analytics → Web analytics → forellenslussfors.se. Skriptet ligger sist i
+`index.html` (token är offentlig). Statistiken visas med några minuters fördröjning.
