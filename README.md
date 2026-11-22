@@ -66,3 +66,10 @@ eller automatiskt efter telefonens språk.
 Cloudflare Web Analytics (gratis, inga cookies, ingen samtyckesruta). Konto: jonasekman72@gmail.com
 på dash.cloudflare.com → Analytics → Web analytics → forellenslussfors.se. Skriptet ligger sist i
 `index.html` (token är offentlig). Statistiken visas med några minuters fördröjning.
+
+## Daglig statistik till telefonen
+`tools/daily_stats.py --push` hämtar gårdagens besök från Cloudflare (läsnyckel i
+`private/cloudflare_token`) och skickar en notis till ntfy-ämnet i `private/ntfy_topic`.
+Körs varje dag 08:00 av macOS-jobbet `~/Library/LaunchAgents/se.forellenslussfors.dailystats.plist`
+(logg: `private/daily_stats.log`). Stoppa med:
+`launchctl bootout gui/$(id -u)/se.forellenslussfors.dailystats`
