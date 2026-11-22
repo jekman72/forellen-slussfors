@@ -1135,9 +1135,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:20, maxNativeZoom:18, attribution:'Imagery © Esri, Maxar, Earthstar Geographics'}).addTo(parkMap);
     // Parking areas marked by the owners on the satellite image
     var PARKING = [
-      [[65.430659,16.2644],[65.430588,16.264405],[65.430588,16.264454]],
-      [[65.430595,16.263942],[65.430545,16.26391],[65.430527,16.264317],[65.430577,16.264315]],
-      [[65.430534,16.264518],[65.430517,16.264752],[65.430479,16.264738],[65.430494,16.264516]]
+      [[65.430595,16.263928],[65.430552,16.263915],[65.43053,16.264312],[65.430579,16.264325]],
+      [[65.430659,16.264399],[65.43059,16.264403],[65.430589,16.264461],[65.430659,16.264463]],
+      [[65.430526,16.264512],[65.430489,16.264529],[65.430495,16.264734],[65.430534,16.264718]]
     ];
     var parkBounds = L.latLngBounds([H]);
     PARKING.forEach(function(a){

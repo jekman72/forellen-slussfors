@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="bar">
-  <b id="title">Yta 2: klicka ut hörnen</b>
+  <b id="title">Yta 1: klicka ut hörnen</b>
   <span>Ett klick per hörn, minst tre. Tryck "Nästa yta" när en yta är klar.</span>
   <button class="ghost" id="undo">Ångra senaste hörn</button>
   <button class="ghost" id="clear">Rensa denna yta</button>
@@ -32,8 +32,10 @@
   var map=L.map('map',{zoomControl:false}).setView(H,19); L.control.zoom({position:'bottomright'}).addTo(map);
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:21,maxNativeZoom:18,attribution:'Imagery © Esri'}).addTo(map);
   L.circleMarker(H,{radius:7,color:'#fff',weight:2,fillColor:'#E06A2C',fillOpacity:1}).addTo(map).bindTooltip('Huset (enligt Airbnb)',{permanent:true,direction:'top'});
-  // Area 1 as marked earlier
-  var areas=[[[65.430659,16.2644],[65.430588,16.264405],[65.430588,16.264454]]];
+  // Current areas on the website, shown dashed for reference only
+  var OLD=[[[65.430595,16.263928],[65.430552,16.263915],[65.43053,16.264312],[65.430579,16.264325]],[[65.430659,16.264399],[65.43059,16.264403],[65.430589,16.264461],[65.430659,16.264463]],[[65.430526,16.264512],[65.430489,16.264529],[65.430495,16.264734],[65.430534,16.264718]]];
+  OLD.forEach(function(a){ L.polygon(a,{color:'#cccccc',weight:1.5,dashArray:'4 4',fillOpacity:0,interactive:false}).addTo(map); });
+  var areas=[];
   var done=L.layerGroup().addTo(map), cur=[], curPoly=L.polygon([], {color:'#8FD3D9',weight:3,fillOpacity:.35}).addTo(map), dots=L.layerGroup().addTo(map);
   function drawDone(){ done.clearLayers(); areas.forEach(function(a,i){ L.polygon(a,{color:'#E06A2C',weight:3,fillOpacity:.35}).addTo(done).bindTooltip('Yta '+(i+1),{permanent:true,direction:'center'}); }); }
   function draw(){ curPoly.setLatLngs(cur); dots.clearLayers(); cur.forEach(function(p){ L.circleMarker(p,{radius:5,color:'#fff',fillColor:'#1F7A8C',fillOpacity:1}).addTo(dots); });
@@ -46,7 +48,7 @@
   document.getElementById('next').onclick=function(){ if(cur.length<3){ document.getElementById('out').textContent='Minst tre hörn behövs.'; return; } areas.push(cur); cur=[]; drawDone(); draw(); };
   document.getElementById('done').onclick=function(){ if(cur.length>=3){ areas.push(cur); cur=[]; drawDone(); } draw(); window.AREAS_DONE=true; document.getElementById('out').textContent=areas.length+' ytor klara. Säg till Claude.'; };
   drawDone(); draw();
-  map.fitBounds(L.latLngBounds(areas[0]).pad(6));
+  map.fitBounds(L.latLngBounds(OLD.flat()).pad(1.5));
 </script>
 </body>
 </html>
