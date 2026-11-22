@@ -100,6 +100,9 @@ def main():
     dry = "--dry-run" in sys.argv
     with open(SOURCES) as f:
         sources = json.load(f)["sources"]
+    if not sources:
+        print("ERROR: no iCal sources configured", file=sys.stderr)
+        return 1
     today = dt.date.today()
     ranges, counts = [], {}
     for src in sources:
