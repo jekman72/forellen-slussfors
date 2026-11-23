@@ -5,7 +5,8 @@
 // (▶︎) och klistra in Cloudflare-nyckeln när den frågar. Nyckeln sparas i iPhonens
 // nyckelring, aldrig i skriptet. Lägg sedan till en Scriptable-widget på hemskärmen,
 // håll in den → Redigera widget → Script: Forellen.
-// Byta nyckel: kör skriptet i appen och välj "Byt nyckel".
+// Ett tryck på widgeten kör skriptet och visar en färsk, större vy direkt.
+// Byta nyckel: tryck på widgeten, stäng vyn och välj "Byt nyckel" i menyn.
 //
 // Cloudflare räknar dagar i UTC och siffrorna släpar några timmar.
 
@@ -13,6 +14,7 @@ const ACCOUNT = "817bbf005400304d46e1f931cf574253";
 const HOST = "forellenslussfors.se";
 const KEY = "forellen_cf_token";
 const DASH = "https://dash.cloudflare.com/" + ACCOUNT + "/web-analytics";
+const RUN = "scriptable:///run/" + encodeURIComponent(Script.name());
 const C = { bg: new Color("#0B1E1D"), card: new Color("#16302E"), text: Color.white(),
             muted: new Color("#9FB8B5"), accent: new Color("#E06A2C"), ice: new Color("#8FD3D9") };
 const NAMES = { SE: "Sverige", LV: "Lettland", LT: "Litauen", EE: "Estland", FI: "Finland", NO: "Norge",
@@ -38,7 +40,7 @@ async function load(tok) {
   const now = new Date(), from = new Date(now.getTime() - 6 * 864e5);
   const q = `query($acc:String!,$from:Date!,$to:Date!,$host:String!){viewer{accounts(filter:{accountTag:$acc}){
     days:rumPageloadEventsAdaptiveGroups(limit:100,filter:{date_geq:$from,date_leq:$to,requestHost:$host}){count sum{visits} dimensions{date}}
-    ctry:rumPageloadEventsAdaptiveGroups(limit:20,orderBy:[count_DESC],filter:{date_geq:$from,date_leq:$to,requestHost:$host}){count dimensions{countryName}}}}}`;
+    ctry:rumPageloadEventsAdaptiveGroups(limit:40,orderBy:[count_DESC],filter:{date_geq:$from,date_leq:$to,requestHost:$host}){count dimensions{countryName}}}}}`;
   const r = new Request("https://api.cloudflare.com/client/v4/graphql");
   r.method = "POST";
   r.headers = { "Authorization": "Bearer " + tok, "Content-Type": "application/json" };
@@ -52,7 +54,7 @@ async function load(tok) {
   for (let i = 6; i >= 0; i--) { const d = iso(new Date(now.getTime() - i * 864e5)); days.push({ date: d, ...(byDay[d] || { views: 0, visits: 0 }) }); }
   const ctry = {};
   a.ctry.forEach(g => { const k = g.dimensions.countryName || "?"; ctry[k] = (ctry[k] || 0) + g.count; });
-  const top = Object.entries(ctry).sort((x, y) => y[1] - x[1]).slice(0, 3);
+  const top = Object.entries(ctry).sort((x, y) => y[1] - x[1]).slice(0, 6);
   return { days, top };
 }
 
@@ -74,9 +76,9 @@ function txt(stack, s, size, color, weight) {
   t.lineLimit = 1; t.minimumScaleFactor = 0.7; return t;
 }
 
-function build(data, err) {
-  const fam = config.widgetFamily || "medium";
-  const w = new ListWidget(); w.backgroundColor = C.bg; w.url = DASH; w.setPadding(12, 14, 12, 14);
+function build(data, err, famIn) {
+  const fam = famIn || config.widgetFamily || "medium";
+  const w = new ListWidget(); w.backgroundColor = C.bg; w.url = RUN; w.setPadding(12, 14, 12, 14);
   w.refreshAfterDate = new Date(Date.now() + 30 * 60e3);
   const head = w.addStack(); head.centerAlignContent();
   txt(head, "🎣 Forellen", 13, C.muted, "b"); head.addSpacer();
@@ -92,8 +94,17 @@ function build(data, err) {
   if (fam !== "small") {
     row.addSpacer();
     const right = row.addStack(); right.layoutVertically();
-    data.top.forEach(([cc, n]) => txt(right, `${flag(cc)} ${NAMES[cc] || cc} ${n}`, 12, C.text));
+    data.top.slice(0, fam === "large" ? 6 : 3).forEach(([cc, n]) => txt(right, `${flag(cc)} ${NAMES[cc] || cc} ${n}`, 12, C.text));
     if (!data.top.length) txt(right, "inga besök än", 12, C.muted);
+  }
+  if (fam === "large") {
+    w.addSpacer(10);
+    const DOW = ["sön", "mån", "tis", "ons", "tor", "fre", "lör"];
+    data.days.slice().reverse().forEach(d => {
+      const dt = new Date(d.date + "T12:00:00Z"), r = w.addStack();
+      txt(r, `${DOW[dt.getUTCDay()]} ${dt.getUTCDate()}/${dt.getUTCMonth() + 1}`, 13, C.muted); r.addSpacer();
+      txt(r, `${d.views} sidvisn. · ${d.visits} besök`, 13, C.text);
+    });
   }
   w.addSpacer();
   const img = w.addImage(bars(data.days, fam === "small" ? 130 : 290, 28)); img.imageSize = new Size(fam === "small" ? 130 : 290, 28);
@@ -103,22 +114,21 @@ function build(data, err) {
 }
 
 async function main() {
-  if (!config.runsInWidget && Keychain.contains(KEY)) {
-    const a = new Alert(); a.title = "Forellen statistik";
-    a.addAction("Visa widget"); a.addAction("Byt nyckel"); a.addAction("Öppna Cloudflare"); a.addCancelAction("Stäng");
-    const c = await a.presentAlert();
-    if (c === -1) return;
-    if (c === 2) { Safari.open(DASH); return; }
-    if (c === 1) await token(true);
-  }
+  const fam = config.runsInWidget ? null : "large";   // tapped or run in the app: large view
   const tok = await token(false);
-  let widget;
-  if (!tok) widget = build(null, "Ingen nyckel. Öppna Scriptable och kör skriptet Forellen.");
+  let widget, authErr = false;
+  if (!tok) widget = build(null, "Ingen nyckel. Tryck på widgeten för att lägga in den.", fam);
   else {
-    try { widget = build(await load(tok)); }
-    catch (e) { widget = build(null, "Kunde inte hämta: " + e.message); }
+    try { widget = build(await load(tok), null, fam); }
+    catch (e) { authErr = /auth|token|permission/i.test(e.message); widget = build(null, "Kunde inte hämta: " + e.message, fam); }
   }
-  if (config.runsInWidget) Script.setWidget(widget); else await widget.presentMedium();
+  if (config.runsInWidget) { Script.setWidget(widget); return; }
+  await widget.presentLarge();
+  const a = new Alert(); a.title = "Forellen statistik";
+  a.addAction("Klar"); a.addAction("Öppna Cloudflare"); a.addAction("Byt nyckel");
+  const c = await a.presentSheet();
+  if (c === 1) Safari.open(DASH);
+  if (c === 2 || authErr) await token(true);
 }
 await main();
 Script.complete();
