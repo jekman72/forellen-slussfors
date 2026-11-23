@@ -6,7 +6,7 @@
 // nyckelring, aldrig i skriptet. Lägg sedan till en Scriptable-widget på hemskärmen,
 // håll in den → Redigera widget → Script: Forellen.
 // Ett tryck på widgeten kör skriptet och visar en färsk, större vy direkt.
-// Byta nyckel: tryck på widgeten, stäng vyn och välj "Byt nyckel" i menyn.
+// Byta nyckel: öppna Scriptable, kör Forellen därifrån, stäng vyn och välj "Byt nyckel".
 //
 // Cloudflare räknar dagar i UTC och siffrorna släpar några timmar.
 
@@ -14,7 +14,7 @@ const ACCOUNT = "817bbf005400304d46e1f931cf574253";
 const HOST = "forellenslussfors.se";
 const KEY = "forellen_cf_token";
 const DASH = "https://dash.cloudflare.com/" + ACCOUNT + "/web-analytics";
-const RUN = "scriptable:///run/" + encodeURIComponent(Script.name());
+const RUN = "scriptable:///run/" + encodeURIComponent(Script.name()) + "?tap=1";
 const C = { bg: new Color("#0B1E1D"), card: new Color("#16302E"), text: Color.white(),
             muted: new Color("#9FB8B5"), accent: new Color("#E06A2C"), ice: new Color("#8FD3D9") };
 const NAMES = { SE: "Sverige", LV: "Lettland", LT: "Litauen", EE: "Estland", FI: "Finland", NO: "Norge",
@@ -124,11 +124,14 @@ async function main() {
   }
   if (config.runsInWidget) { Script.setWidget(widget); return; }
   await widget.presentLarge();
+  const tapped = args.queryParameters && args.queryParameters.tap;
+  if (tapped && !authErr) return;   // from the widget: just the view, no questions
+  if (authErr) { await token(true); return; }
   const a = new Alert(); a.title = "Forellen statistik";
   a.addAction("Klar"); a.addAction("Öppna Cloudflare"); a.addAction("Byt nyckel");
   const c = await a.presentSheet();
   if (c === 1) Safari.open(DASH);
-  if (c === 2 || authErr) await token(true);
+  if (c === 2) await token(true);
 }
 await main();
 Script.complete();
