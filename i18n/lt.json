@@ -249,7 +249,7 @@
  "faq-platform-a": "Taip, mus galima rasti ir platformose [[0]] bei [[1]].",
  "js.hero_price": "Visas namas iki {g} svečių · nuo {p} SEK už naktį · rezervuokite tiesiogiai pas savininkus",
  "shore-or-boat": "Nuo kranto ar iš valties",
- "shore-or-boat-p": "Nuo kranto galima žvejoti kyšulyje prie tilto netoli palijų ūkio, prie upės ištakos netoli namo ir palei Kirjesån upelį. Valtis praverčia prie palijų ūkio, upės viduryje, Rännan ir giliojoje Järvsjön dalyje. Valčių nuleidimo vietos: Slussfors, Ankarsund, Järvsjön, Magasjön, Skansnässjön ir Boksjön. Maži taškai žemėlapyje rodo kiekvieną vietą.",
+ "shore-or-boat-p": "Nuo kranto galima žvejoti kyšulyje prie tilto netoli palijų ūkio, prie upės ištakos netoli namo ir palei Kirjesån upelį. Valtis praverčia prie palijų ūkio, upės viduryje, Rännan ir giliojoje Järvsjön dalyje. Valčių nuleidimo vietos: Slussfors, Ankarsund, Järvsjön, Magasjön, Skansnässjön, Nedre Boksjön, Ajaure ir Biellojaure. Maži taškai žemėlapyje rodo kiekvieną vietą.",
  "js.sp_shore": "Žvejyba nuo kranto",
  "js.sp_boat": "Žvejyba iš valties",
  "js.sp_ice": "Poledinė žvejyba",
@@ -284,6 +284,10 @@
  "js.sp.11.t": "",
  "js.sp.12.n": "Ankarsund valčių nuleidimas",
  "js.sp.12.t": "",
- "js.sp.13.n": "Boksjön valčių nuleidimas",
- "js.sp.13.t": ""
+ "js.sp.13.n": "Nedre Boksjön valčių nuleidimas",
+ "js.sp.13.t": "",
+ "js.sp.14.n": "Ajaure valčių nuleidimas",
+ "js.sp.14.t": "",
+ "js.sp.15.n": "Biellojaure valčių nuleidimas",
+ "js.sp.15.t": ""
 }
