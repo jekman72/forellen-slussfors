@@ -23,11 +23,11 @@ window.FORELLEN = {
   // Optional: a Formspree form id (formspree.io, free plan). When set, the form
   // posts directly and the guest's email app is not opened. Leave "" for mailto.
   formspreeId: "mdegpnkw",
-  // Airbnb list prices in SEK per night for the whole house with 2 guests (2027).
-  // Months are 1-12. Each extra guest above 2 adds airbnbExtraGuest per night.
-  airbnbNightly: { 1:1150, 2:1150, 3:1150, 4:1100, 5:1100, 6:1150, 7:1150, 8:1150, 9:1100, 10:1100, 11:1100, 12:1100 },
-  airbnbExtraGuest: 100,
-  // Direct bookings are this much below Airbnb (0.05 = 5 %, 0 = same price).
+  // List prices in SEK per night for the whole house with 2 guests (2027).
+  // Months are 1-12. Each extra guest above 2 adds listExtraGuest per night.
+  listNightly: { 1:1150, 2:1150, 3:1150, 4:1100, 5:1100, 6:1150, 7:1150, 8:1150, 9:1100, 10:1100, 11:1100, 12:1100 },
+  listExtraGuest: 100,
+  // Direct price is this much below the list price (0.05 = 5 %, 0 = same price).
   // The page rounds the result to the nearest 5 SEK.
   directDiscount: 0.05,
   includedGuests: 2,
@@ -39,8 +39,8 @@ window.FORELLEN = {
 };
 (function(C){
   var r5 = function(x){ return Math.round(x * (1 - C.directDiscount) / 5) * 5; };
-  C.nightly = {}; for (var m = 1; m <= 12; m++) C.nightly[m] = r5(C.airbnbNightly[m]);
-  C.extraGuest = r5(C.airbnbExtraGuest);
+  C.nightly = {}; for (var m = 1; m <= 12; m++) C.nightly[m] = r5(C.listNightly[m]);
+  C.extraGuest = r5(C.listExtraGuest);
 })(window.FORELLEN);
 </script>
 <style>
@@ -409,7 +409,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   <div class="hero-in">
     <div class="chips">
       <span data-i18n="slussfors-swedish-lapland" class="chip"><svg aria-hidden="true"><use href="#i-pin"/></svg>Slussfors · Swedish Lapland</span>
-      <span data-i18n="4-74-19-airbnb-reviews-superhost" class="chip"><svg aria-hidden="true"><use href="#i-star"/></svg>4.74 · 19 Airbnb reviews · Superhost</span>
+      <span data-i18n="rating-chip" class="chip"><svg aria-hidden="true"><use href="#i-star"/></svg>4.74 · 19 guest reviews</span>
       <span class="chip" id="wxChip" hidden><svg aria-hidden="true"><use href="#i-sun"/></svg><span id="wxText"></span></span>
     </div>
     <h1 data-i18n="forellen">Forellen</h1>
@@ -691,11 +691,11 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <!-- REVIEWS -->
 <section class="sec" aria-label="Guest reviews">
   <div class="wrap stack" style="gap:32px">
-    <div data-i18n="4-74out-of-5-from-19-reviews-on-airbnb-s" class="score reveal"><b>4.74</b><span style="color:var(--muted)">out of 5 from 19 reviews on Airbnb · Superhost · responds within an hour</span></div>
+    <div data-i18n="rating-score" class="score reveal"><b>4.74</b><span style="color:var(--muted)">out of 5 from 19 guest reviews · we usually reply within an hour</span></div>
     <div class="reviews">
-      <blockquote class="reveal"><p>"Perfect place for a fishing trip and not only that."</p><footer>Janis · July 2026 · via Airbnb</footer></blockquote>
-      <blockquote class="reveal"><p>"This is the second year that we have stayed with Jonas, and the house is truly beautiful and welcoming."</p><footer>Angelo · September 2026 · via Airbnb</footer></blockquote>
-      <blockquote class="reveal"><p>"Comfortable and peaceful living … close to fishing spots and downtown Slussfors."</p><footer>Dzintars · July 2025 · via Airbnb</footer></blockquote>
+      <blockquote class="reveal"><p>"Perfect place for a fishing trip and not only that."</p><footer>Janis · July 2026</footer></blockquote>
+      <blockquote class="reveal"><p>"This is the second year that we have stayed with Jonas, and the house is truly beautiful and welcoming."</p><footer>Angelo · September 2026</footer></blockquote>
+      <blockquote class="reveal"><p>"Comfortable and peaceful living … close to fishing spots and downtown Slussfors."</p><footer>Dzintars · July 2025</footer></blockquote>
     </div>
   </div>
 </section>
@@ -898,7 +898,6 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     for (var i = 1; i <= ms.length; i++){ if (ms[i] === p + 1){ p = ms[i]; continue; } out.push(s === p ? MN[s-1] : MN[s-1] + '–' + MN[p-1]); s = p = ms[i]; }
     return out.join(', '); }
   var pl = $('priceList'), html = '';
-  if (C.directDiscount > 0) html += '<div class="pl" style="background:var(--deep);color:#fff;border-color:var(--deep)"><span>' + T('direct', 'Book direct and pay less than on Airbnb') + '</span><b>−' + Math.round(C.directDiscount*100) + ' %</b></div>';
   Object.keys(groups).sort(function(a,b){return b-a;}).forEach(function(p){
     html += '<div class="pl"><span>' + ranges(groups[p]) + T('per_night', ', per night') + '</span><b>' + fmt(p) + ' SEK</b></div>'; });
   html += '<div class="pl"><span>' + T('price_for', 'Price is for {n} guests. Each extra guest, per night', {n:C.includedGuests}) + '</span><b>+' + fmt(C.extraGuest) + ' SEK</b></div>';
@@ -1006,7 +1005,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         }
       }
       var up = j.updated ? new Date(j.updated) : null;
-      $('calStatus').textContent = T('synced', 'Synced with Airbnb and Booking.com') + (up && !isNaN(up) ? ', ' + up.toLocaleString(LOC[LANG], {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
+      $('calStatus').textContent = T('synced', 'Calendar updated') + (up && !isNaN(up) ? ', ' + up.toLocaleString(LOC[LANG], {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '') + '.';
       calc(); })
     .catch(function(){ $('calStatus').textContent = T('cal_unavail', 'Live calendar unavailable. We confirm availability by email.'); drawCal(); });
   drawCal();
