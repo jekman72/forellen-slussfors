@@ -249,7 +249,7 @@
  "faq-platform-a": "Tak, znajdziesz nas także na [[0]] i [[1]].",
  "js.hero_price": "Cały dom dla maksymalnie {g} gości · od {p} SEK za noc · rezerwuj bezpośrednio u właścicieli",
  "shore-or-boat": "Z brzegu czy z łodzi",
- "shore-or-boat-p": "Z brzegu można łowić na cyplu przy moście niedaleko hodowli golców, przy wypływie rzeki blisko domu i wzdłuż potoku Kirjesån. Łódź przydaje się przy hodowli golców, na środku rzeki, w Rännan i w głębokiej części jeziora Järvsjön. Slipowiska: Slussfors, Ankarsund, Järvsjön, Magasjön i Skansnässjön. Małe kropki na mapie pokazują każde miejsce.",
+ "shore-or-boat-p": "Z brzegu można łowić na cyplu przy moście niedaleko hodowli golców, przy wypływie rzeki blisko domu i wzdłuż potoku Kirjesån. Łódź przydaje się przy hodowli golców, na środku rzeki, w Rännan i w głębokiej części jeziora Järvsjön. Slipowiska: Slussfors, Ankarsund, Järvsjön, Magasjön, Skansnässjön i Boksjön. Małe kropki na mapie pokazują każde miejsce.",
  "js.sp_shore": "Wędkowanie z brzegu",
  "js.sp_boat": "Wędkowanie z łodzi",
  "js.sp_ice": "Wędkowanie podlodowe",
@@ -283,5 +283,7 @@
  "js.sp.11.n": "Slipowisko Skansnässjön",
  "js.sp.11.t": "",
  "js.sp.12.n": "Slipowisko Ankarsund",
- "js.sp.12.t": ""
+ "js.sp.12.t": "",
+ "js.sp.13.n": "Slipowisko Boksjön",
+ "js.sp.13.t": ""
 }
