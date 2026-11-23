@@ -247,7 +247,7 @@
  "faq-platform-a": "Jā, mūs var atrast arī platformās [[0]] un [[1]].",
  "js.hero_price": "Visa māja līdz {g} viesiem · no {p} SEK naktī · rezervējiet tieši pie īpašniekiem",
  "shore-or-boat": "No krasta vai laivas",
- "shore-or-boat-p": "No krasta var makšķerēt zemesragā pie tilta netālu no paliju audzētavas, pie upes iztekas netālu no mājas un gar Kirjesån strautu. Laiva noder pie paliju audzētavas, upes vidū, Rännan un Järvsjön dziļākajā daļā. Laivu nolaišanas vietas: Slussfors, Järvsjön un Magasjön. Mazie punkti kartē parāda katru vietu.",
+ "shore-or-boat-p": "No krasta var makšķerēt zemesragā pie tilta netālu no paliju audzētavas, pie upes iztekas netālu no mājas un gar Kirjesån strautu. Laiva noder pie paliju audzētavas, upes vidū, Rännan un Järvsjön dziļākajā daļā. Laivu nolaišanas vietas: Slussfors, Järvsjön, Magasjön un Skansnässjön. Mazie punkti kartē parāda katru vietu.",
  "js.sp_shore": "Makšķerēšana no krasta",
  "js.sp_boat": "Makšķerēšana no laivas",
  "js.sp_ice": "Zemledus makšķerēšana",
@@ -277,5 +277,7 @@
  "smoker-freezer": "Kūpinātava, saldētava un žāvēšana",
  "smoker-freezer-p": "Mūrētā kūpinātava pagalmā ir brīvi lietojama, tikai ņemiet līdzi savu malku. Lomam iekštelpās ir saldētava, bet ziemā zivis labi saglabājas ārā kastēs, jo ir krietni zem nulles. Atsevišķas žāvētavas nav, taču peldošos kombinezonus un citu ekipējumu var izžāvēt priekšnamā pie radiatoriem un vannas istabā.",
  "js.ex_lbl": "Piemērs",
- "js.ex_box": "{guests} · {nights} · maks. {sek} SEK (≈ {eur} €)"
+ "js.ex_box": "{guests} · {nights} · maks. {sek} SEK (≈ {eur} €)",
+ "js.sp.11.n": "Skansnässjön laivu nolaišana",
+ "js.sp.11.t": ""
 }

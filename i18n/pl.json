@@ -249,7 +249,7 @@
  "faq-platform-a": "Tak, znajdziesz nas także na [[0]] i [[1]].",
  "js.hero_price": "Cały dom dla maksymalnie {g} gości · od {p} SEK za noc · rezerwuj bezpośrednio u właścicieli",
  "shore-or-boat": "Z brzegu czy z łodzi",
- "shore-or-boat-p": "Z brzegu można łowić na cyplu przy moście niedaleko hodowli golców, przy wypływie rzeki blisko domu i wzdłuż potoku Kirjesån. Łódź przydaje się przy hodowli golców, na środku rzeki, w Rännan i w głębokiej części jeziora Järvsjön. Slipowiska: Slussfors, Järvsjön i Magasjön. Małe kropki na mapie pokazują każde miejsce.",
+ "shore-or-boat-p": "Z brzegu można łowić na cyplu przy moście niedaleko hodowli golców, przy wypływie rzeki blisko domu i wzdłuż potoku Kirjesån. Łódź przydaje się przy hodowli golców, na środku rzeki, w Rännan i w głębokiej części jeziora Järvsjön. Slipowiska: Slussfors, Järvsjön, Magasjön i Skansnässjön. Małe kropki na mapie pokazują każde miejsce.",
  "js.sp_shore": "Wędkowanie z brzegu",
  "js.sp_boat": "Wędkowanie z łodzi",
  "js.sp_ice": "Wędkowanie podlodowe",
@@ -279,5 +279,7 @@
  "smoker-freezer": "Wędzarnia, zamrażarka i suszenie",
  "smoker-freezer-p": "Murowana wędzarnia na podwórzu jest do swobodnego użytku, wystarczy przywieźć własne drewno. Na połów jest zamrażarka w domu, a zimą ryby dobrze przechowują się na zewnątrz w skrzynkach, bo jest wyraźnie poniżej zera. Nie ma osobnej suszarni, ale kombinezony wypornościowe i inny sprzęt można wysuszyć w przedpokoju przy grzejnikach i w łazience.",
  "js.ex_lbl": "Przykład",
- "js.ex_box": "{guests} · {nights} · maks. {sek} SEK (≈ {eur} €)"
+ "js.ex_box": "{guests} · {nights} · maks. {sek} SEK (≈ {eur} €)",
+ "js.sp.11.n": "Slipowisko Skansnässjön",
+ "js.sp.11.t": ""
 }

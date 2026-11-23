@@ -249,7 +249,7 @@
  "faq-platform-a": "Taip, mus galima rasti ir platformose [[0]] bei [[1]].",
  "js.hero_price": "Visas namas iki {g} svečių · nuo {p} SEK už naktį · rezervuokite tiesiogiai pas savininkus",
  "shore-or-boat": "Nuo kranto ar iš valties",
- "shore-or-boat-p": "Nuo kranto galima žvejoti kyšulyje prie tilto netoli palijų ūkio, prie upės ištakos netoli namo ir palei Kirjesån upelį. Valtis praverčia prie palijų ūkio, upės viduryje, Rännan ir giliojoje Järvsjön dalyje. Valčių nuleidimo vietos: Slussfors, Järvsjön ir Magasjön. Maži taškai žemėlapyje rodo kiekvieną vietą.",
+ "shore-or-boat-p": "Nuo kranto galima žvejoti kyšulyje prie tilto netoli palijų ūkio, prie upės ištakos netoli namo ir palei Kirjesån upelį. Valtis praverčia prie palijų ūkio, upės viduryje, Rännan ir giliojoje Järvsjön dalyje. Valčių nuleidimo vietos: Slussfors, Järvsjön, Magasjön ir Skansnässjön. Maži taškai žemėlapyje rodo kiekvieną vietą.",
  "js.sp_shore": "Žvejyba nuo kranto",
  "js.sp_boat": "Žvejyba iš valties",
  "js.sp_ice": "Poledinė žvejyba",
@@ -279,5 +279,7 @@
  "smoker-freezer": "Rūkykla, šaldiklis ir džiovinimas",
  "smoker-freezer-p": "Mūrinę rūkyklą kieme galima naudoti laisvai, tik atsiveskite savo malkų. Laimikiui viduje yra šaldiklis, o žiemą žuvys puikiai išsilaiko lauke dėžėse, nes būna gerokai žemiau nulio. Atskiros džiovyklos nėra, tačiau plūdrumo kombinezonus ir kitą įrangą galima išdžiovinti prieškambaryje prie radiatorių ir vonios kambaryje.",
  "js.ex_lbl": "Pavyzdys",
- "js.ex_box": "{guests} · {nights} · daugiausia {sek} SEK (≈ {eur} €)"
+ "js.ex_box": "{guests} · {nights} · daugiausia {sek} SEK (≈ {eur} €)",
+ "js.sp.11.n": "Skansnässjön valčių nuleidimas",
+ "js.sp.11.t": ""
 }
