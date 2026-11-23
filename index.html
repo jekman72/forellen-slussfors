@@ -170,6 +170,14 @@ section{scroll-margin-top:72px}
 .c1{grid-column:span 3;grid-row:span 3}.c2{grid-column:span 3;grid-row:span 2}.c3{grid-column:span 2;grid-row:span 2}.c4{grid-column:span 1;grid-row:span 2}
 .c5{grid-column:span 2;grid-row:span 2}.c6{grid-column:span 2;grid-row:span 2}.c7{grid-column:span 2;grid-row:span 2}
 @media (max-width:800px){.catch{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px}.c1,.c2,.c3,.c4,.c5,.c6,.c7{grid-column:span 1;grid-row:span 2}.c1{grid-column:span 2}}
+.real-head{margin-top:clamp(40px,5vw,64px);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px}
+.real-head h3{margin:0;font-size:clamp(20px,2.2vw,26px)}.real-head p{margin:0;color:var(--on-deep-2);font-size:15px}
+.real{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}
+.real figure{margin:0;position:relative;aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;background:var(--deep-3)}
+.real img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.real figure:hover img{transform:scale(1.05)}
+.real figcaption{position:absolute;left:10px;right:10px;bottom:10px;width:fit-content;padding:6px 12px;border-radius:999px;background:rgba(6,16,15,.6);backdrop-filter:blur(8px);font-size:13px;font-weight:500;color:#fff;line-height:1.3}
+@media (max-width:800px){.real{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:18px -20px 0;padding:0 20px 4px;scroll-padding:0 20px;scrollbar-width:none}.real::-webkit-scrollbar{display:none}.real figure{flex:0 0 62%;scroll-snap-align:start}}
 
 /* ---------- parking ---------- */
 .park{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(24px,4vw,48px);align-items:center;margin-top:clamp(40px,5vw,64px);background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,3vw,32px);box-shadow:var(--shadow)}
@@ -566,6 +574,14 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <figure class="c5 reveal"><img src="images/river-wading.jpg" alt="Anglers wading in a fast-flowing river" loading="lazy"><figcaption data-i18n="in-the-rapids">In the rapids</figcaption></figure>
       <figure class="c6 reveal"><img src="images/rainbow-trout.jpg" alt="A rainbow trout held by an angler in a life jacket" loading="lazy"><figcaption data-i18n="rainbow-trout">Rainbow trout</figcaption></figure>
       <figure class="c7 reveal"><img src="images/ice-catch.jpg" alt="A day's catch from ice fishing, laid out in rows on the snow" loading="lazy"><figcaption data-i18n="a-good-day-on-the-ice">A good day on the ice</figcaption></figure>
+    </div>
+    <div class="real-head reveal"><h3 data-i18n="real-catches-h">Real catches from our waters</h3><p data-i18n="real-catches-p">Summer 2025 and 2026, all a short drive from the house.</p></div>
+    <div class="real">
+      <figure class="reveal"><img src="images/catch-char-river-2.jpg" alt="A large Arctic char held up in a boat on the Ume River near the char farm" loading="lazy"><figcaption data-i18n="real-big-char">Big char · Ume River by the char farm</figcaption></figure>
+      <figure class="reveal"><img src="images/catch-char-skansnas.jpg" alt="A red-bellied Arctic char lifted from the landing net on Skansnässjön" loading="lazy"><figcaption data-i18n="real-char-skansnas">Char · Skansnässjön</figcaption></figure>
+      <figure class="reveal"><img src="images/catch-brown-trout-jarvsjon.jpg" alt="A heavily spotted brown trout held over the boat on Järvsjön" loading="lazy"><figcaption data-i18n="real-trout-jarvsjon">Brown trout · Järvsjön</figcaption></figure>
+      <figure class="reveal"><img src="images/catch-rainbow-river.jpg" alt="A large rainbow trout held by an angler in a life jacket on Sparmansel" loading="lazy"><figcaption data-i18n="real-rainbow-sparmansel">Rainbow trout · Sparmansel</figcaption></figure>
+      <figure class="reveal"><img src="images/catch-char-river-1.jpg" alt="An Arctic char held by an angler sitting in the boat on the Ume River" loading="lazy"><figcaption data-i18n="real-char-river">Char · Ume River</figcaption></figure>
     </div>
   </div>
 </section>
