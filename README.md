@@ -73,4 +73,7 @@ Helt separat från EnergyPilot, i `~/forellen` (klon av repot) med hemligheterna
   som får GitHub att bygga om sidan (deploy-nyckel `~/.ssh/forellen_deploy`, skrivrätt bara till detta repo).
 - 10:00: `tools/daily_stats.py --push` skickar gårdagens besök till ntfy-ämnet i `private/ntfy_topic`.
 Loggar: `~/forellen/private/pi_sync.log` och `daily_stats.log`. Se `crontab -l` på Pi:n.
+
+iPhone-widget: `tools/scriptable_widget.js` för appen Scriptable (kopia i iCloud-mappen
+Scriptable/Forellen.js). Nyckeln klistras in vid första körningen och ligger bara i iPhonens nyckelring.
 Stoppa: ta bort de två forellen-raderna med `crontab -e` och radera deploy-nyckeln i GitHub.
