@@ -95,6 +95,7 @@ def main():
         p = d["requestPath"] or "/"
         if p.startswith("/lv"): c_path["lettiska"] += v
         elif p.startswith("/lt"): c_path["litauiska"] += v
+        elif p.startswith("/pl"): c_path["polska"] += v
         c_dev["mobil" if (d["deviceType"] or "").lower() == "mobile" else "dator"] += v
 
     def top(c, n=3): return ", ".join(f"{k} {v}" for k, v in c.most_common(n)) or "-"

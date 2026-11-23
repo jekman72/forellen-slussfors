@@ -94,6 +94,7 @@ section{scroll-margin-top:72px}
 .lang{display:flex;gap:2px;margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:3px}
 .lang a{color:#fff;text-decoration:none;font:600 13px/1 var(--body);padding:9px 10px;border-radius:999px;min-width:38px;text-align:center}
 .lang a[aria-current="true"]{background:#fff;color:var(--ink)}
+@media (max-width:420px){.lang a{padding:9px 7px;min-width:32px}}
 .menu-btn{display:none;width:46px;height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;align-items:center;justify-content:center}
 @media (max-width:900px){
   .menu-btn{display:inline-flex}
@@ -389,7 +390,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <header class="nav" id="nav">
   <div class="nav-in">
     <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-fish"/></svg>Forellen</a>
-    <div class="lang" role="group" aria-label="Language"><a href="?lang=en" data-lang="en" hreflang="en">EN</a><a href="?lang=lv" data-lang="lv" hreflang="lv">LV</a><a href="?lang=lt" data-lang="lt" hreflang="lt">LT</a></div>
+    <div class="lang" role="group" aria-label="Language"><a href="?lang=en" data-lang="en" hreflang="en">EN</a><a href="?lang=lv" data-lang="lv" hreflang="lv">LV</a><a href="?lang=lt" data-lang="lt" hreflang="lt">LT</a><a href="?lang=pl" data-lang="pl" hreflang="pl">PL</a></div>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg width="22" height="22" aria-hidden="true"><use href="#i-menu"/></svg></button>
     <nav class="nav-links" id="navLinks" aria-label="Sections">
       <a data-i18n="fishing" href="#fishing">Fishing</a>
@@ -828,18 +829,19 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   var C = window.FORELLEN;
 
   /* ---------- language ---------- */
-  var LANGS = ['en','lv','lt'], LOC = {en:'en-GB', lv:'lv-LV', lt:'lt-LT'};
+  var LANGS = ['en','lv','lt','pl'], LOC = {en:'en-GB', lv:'lv-LV', lt:'lt-LT', pl:'pl-PL'};
   var LANG = (function(){
     var q = new URLSearchParams(location.search).get('lang');
     if (LANGS.indexOf(q) >= 0){ try { localStorage.setItem('lang', q); } catch(e){} return q; }
     try { var st = localStorage.getItem('lang'); if (LANGS.indexOf(st) >= 0) return st; } catch(e){}
     var nl = navigator.languages || [navigator.language || ''];
-    for (var i = 0; i < nl.length; i++){ var x = String(nl[i]).slice(0,2).toLowerCase(); if (x === 'lv' || x === 'lt') return x; if (x === 'en' || x === 'sv') return 'en'; }
+    for (var i = 0; i < nl.length; i++){ var x = String(nl[i]).slice(0,2).toLowerCase(); if (x === 'lv' || x === 'lt' || x === 'pl') return x; if (x === 'en' || x === 'sv') return 'en'; }
     return 'en';
   })();
   var D = (window.I18N && window.I18N[LANG]) || {};
   function T(k, en, v){ var s = D['js.' + k] || en; if (v) for (var n in v) s = s.split('{' + n + '}').join(v[n]); return s; }
   function plural(n){ if (LANG === 'lt'){ if (n % 10 === 1 && n % 100 !== 11) return 'one'; if (n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20)) return 'few'; return 'many'; }
+    if (LANG === 'pl'){ if (n === 1) return 'one'; if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) return 'few'; return 'many'; }
     if (LANG === 'lv') return (n % 10 === 1 && n % 100 !== 11) ? 'one' : 'other'; return n === 1 ? 'one' : 'other'; }
   function W(word, n){ var f = D['js.w.' + word]; var en = {night:{one:'night',other:'nights'}, guest:{one:'guest',other:'guests'}}[word];
     var forms = f || en, k = plural(n); return n + ' ' + (forms[k] || forms.other || forms.many); }
@@ -1083,7 +1085,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       arr = iso(d); dep = iso(e2); }
     var u = new URL(a.href.split('?')[0]);
     if (u.hostname.indexOf('booking.com') >= 0){
-      u.pathname = u.pathname.replace(/(\.[a-z]{2}(-[a-z]{2})?)?\.html$/, '.' + ({en:'en-gb', lv:'lv', lt:'lt'}[LANG] || 'en-gb') + '.html');
+      u.pathname = u.pathname.replace(/(\.[a-z]{2}(-[a-z]{2})?)?\.html$/, '.' + ({en:'en-gb', lv:'lv', lt:'lt', pl:'pl'}[LANG] || 'en-gb') + '.html');
       u.search = new URLSearchParams({checkin:arr, checkout:dep, group_adults:'2', group_children:'0', no_rooms:'1'}).toString();
     } else {
       u.search = new URLSearchParams({check_in:arr, check_out:dep, adults:'2'}).toString();
