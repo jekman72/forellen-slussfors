@@ -86,7 +86,7 @@ def main():
 
     c_country, c_ref, c_path, c_dev = Counter(), Counter(), Counter(), Counter()
     for g in acc["detail"]:
-        d, v = g["dimensions"], g["sum"]["visits"]
+        d, v = g["dimensions"], g["count"]  # page views, so details show even without "visits"
         c_country[COUNTRY_SV.get(d["countryName"], d["countryName"] or "?")] += v
         ref = (d["refererHost"] or "direkt").replace("www.", "")
         if HOST in ref: continue
@@ -100,7 +100,7 @@ def main():
     def top(c, n=3): return ", ".join(f"{k} {v}" for k, v in c.most_common(n)) or "-"
     trend = "" if avg == 0 else f" (snitt 7 d: {avg:.1f})"
     lines = [f"{day.strftime('%-d/%-m')}: {visits} besök, {views} sidvisningar{trend}"]
-    if visits:
+    if views:
         lines.append("Länder: " + top(c_country))
         lines.append("Från: " + top(c_ref))
         extra = []

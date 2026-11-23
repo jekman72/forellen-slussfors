@@ -71,6 +71,6 @@ på dash.cloudflare.com → Analytics → Web analytics → forellenslussfors.se
 Helt separat från EnergyPilot, i `~/forellen` (klon av repot) med hemligheterna i `~/forellen/private`.
 - Var 30:e minut: `tools/pi_sync.sh` hämtar iCal; bara om bokade datum ändrats görs en tom commit
   som får GitHub att bygga om sidan (deploy-nyckel `~/.ssh/forellen_deploy`, skrivrätt bara till detta repo).
-- 08:00: `tools/daily_stats.py --push` skickar gårdagens besök till ntfy-ämnet i `private/ntfy_topic`.
+- 10:00: `tools/daily_stats.py --push` skickar gårdagens besök till ntfy-ämnet i `private/ntfy_topic`.
 Loggar: `~/forellen/private/pi_sync.log` och `daily_stats.log`. Se `crontab -l` på Pi:n.
 Stoppa: ta bort de två forellen-raderna med `crontab -e` och radera deploy-nyckeln i GitHub.
