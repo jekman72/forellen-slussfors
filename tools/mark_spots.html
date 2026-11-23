@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markera fiskeplatser</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  html,body{margin:0;height:100%;font:15px/1.4 system-ui,sans-serif;background:#0B1E1D;color:#fff}
+  #map{position:absolute;inset:0}
+  #bar{position:fixed;left:12px;top:12px;z-index:1000;width:min(360px,calc(100% - 24px));background:rgba(11,30,29,.94);border-radius:14px;padding:12px 14px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+  #bar b{font-size:16px}
+  #bar p{margin:6px 0 10px;color:#BFD6D3;font-size:13px}
+  label{display:block;font-size:13px;color:#BFD6D3;margin:8px 0 4px}
+  input,select,textarea{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid #2B4A47;background:#12302E;color:#fff;font:inherit}
+  textarea{min-height:52px;resize:vertical}
+  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  button{min-height:36px;padding:0 14px;border:0;border-radius:999px;font:600 14px system-ui;cursor:pointer}
+  .go{background:#E06A2C;color:#fff}.ghost{background:#2B3B39;color:#fff}.del{background:#7A2B2B;color:#fff}
+  #form{display:none;border-top:1px solid #2B4A47;margin-top:10px;padding-top:6px}
+  #list{margin:10px 0 0;padding:0;list-style:none;max-height:28vh;overflow:auto;font-size:13px}
+  #list li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #1E3a37;cursor:pointer}
+  #list li span:last-child{color:#BFD6D3}
+  #status{font-size:12px;color:#8FD3D9;margin-top:8px}
+  .dot{width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="bar">
+  <b>Fiskeplatser</b>
+  <p>Klicka på kartan där platsen är. Fyll i namn och typ och tryck Spara. Klicka på en befintlig markering för att ändra eller ta bort den. Byt till satellit uppe till höger.</p>
+  <div id="form">
+    <label for="fName">Namn</label>
+    <input id="fName" placeholder="t.ex. Udden vid bron">
+    <label for="fType">Typ</label>
+    <select id="fType">
+      <option value="shore">Landfiske</option>
+      <option value="boat">Båtfiske (båt är en fördel)</option>
+      <option value="ice">Isfiske</option>
+      <option value="launch">Båtiläggning / ramp</option>
+      <option value="other">Annat (parkering, stig, rastplats ...)</option>
+    </select>
+    <label for="fNote">Kommentar (valfritt)</label>
+    <textarea id="fNote" placeholder="t.ex. harr i strömmen, bäst kvällstid, parkera vid vägen"></textarea>
+    <div class="row">
+      <button class="go" id="save">Spara</button>
+      <button class="ghost" id="cancel">Avbryt</button>
+      <button class="del" id="remove" style="display:none">Ta bort</button>
+    </div>
+  </div>
+  <ul id="list"></ul>
+  <div class="row"><button class="go" id="done">Klar med alla</button></div>
+  <div id="status">0 platser</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  var H = [65.43064, 16.26415];
+  var COLORS = {shore:'#E06A2C', boat:'#1F7A8C', ice:'#8FD3D9', launch:'#5A4C7A', other:'#C9A227'};
+  var NAMES = {shore:'Landfiske', boat:'Båtfiske', ice:'Isfiske', launch:'Båtiläggning', other:'Annat'};
+  var map = L.map('map', {zoomControl:false}).setView([65.43, 16.2], 12);
+  L.control.zoom({position:'bottomright'}).addTo(map);
+  var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'© OpenStreetMap'});
+  var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:20, maxNativeZoom:18, attribution:'Imagery © Esri'});
+  osm.addTo(map);
+  L.control.layers({'Karta':osm, 'Satellit':sat}, null, {position:'topright'}).addTo(map);
+  function pin(col, k){ return L.divIcon({className:'', html:'<div class="dot" style="background:'+col+'"></div>', iconSize:[20,20], iconAnchor:[10,10]}); }
+  // Reference points from the website (not editable)
+  [['Huset',H,'#ffffff'],['Fiskodlingen',[65.4270,16.1800],'#D9543A'],['Båtramp (sidan)',[65.4260,16.2255],'#999999']].forEach(function(r){
+    L.marker(r[1], {icon:pin(r[2]), interactive:false}).addTo(map).bindTooltip(r[0], {permanent:true, direction:'top', offset:[0,-8]});
+  });
+  var spots = [], editing = null, pending = null, tmp = null;
+  var $ = function(id){ return document.getElementById(id); };
+  function refresh(){
+    $('list').innerHTML = '';
+    spots.forEach(function(s, i){
+      var li = document.createElement('li');
+      li.innerHTML = '<span>' + (i+1) + '. ' + (s.name || '(namnlös)') + '</span><span>' + NAMES[s.type] + '</span>';
+      li.onclick = function(){ map.setView([s.lat, s.lon], Math.max(map.getZoom(), 15)); edit(i); };
+      $('list').appendChild(li);
+    });
+    $('status').textContent = spots.length + (spots.length === 1 ? ' plats' : ' platser');
+    window.SPOTS = spots.map(function(s){ return {name:s.name, type:s.type, note:s.note, lat:+s.lat.toFixed(5), lon:+s.lon.toFixed(5)}; });
+  }
+  function openForm(name, type, note, canRemove){
+    $('form').style.display = 'block'; $('fName').value = name || ''; $('fType').value = type || 'shore'; $('fNote').value = note || '';
+    $('remove').style.display = canRemove ? 'inline-block' : 'none'; $('fName').focus();
+  }
+  function closeForm(){ $('form').style.display = 'none'; editing = null; pending = null; if (tmp){ map.removeLayer(tmp); tmp = null; } }
+  function edit(i){ closeForm(); editing = i; var s = spots[i]; openForm(s.name, s.type, s.note, true); }
+  map.on('click', function(e){
+    closeForm(); pending = e.latlng;
+    tmp = L.marker(e.latlng, {icon:pin('#ffffff')}).addTo(map);
+    openForm('', $('fType').value, '', false);
+  });
+  $('save').onclick = function(){
+    var d = {name:$('fName').value.trim(), type:$('fType').value, note:$('fNote').value.trim()};
+    if (editing !== null){ var s = spots[editing]; s.name = d.name; s.type = d.type; s.note = d.note; s.m.setIcon(pin(COLORS[d.type])); s.m.setTooltipContent(d.name || '(namnlös)'); }
+    else if (pending){
+      var s2 = {lat:pending.lat, lon:pending.lng, name:d.name, type:d.type, note:d.note};
+      s2.m = L.marker(pending, {icon:pin(COLORS[d.type]), draggable:true}).addTo(map).bindTooltip(d.name || '(namnlös)', {permanent:true, direction:'top', offset:[0,-8]});
+      s2.m.on('click', function(){ edit(spots.indexOf(s2)); });
+      s2.m.on('dragend', function(ev){ var p = ev.target.getLatLng(); s2.lat = p.lat; s2.lon = p.lng; refresh(); });
+      spots.push(s2);
+    }
+    closeForm(); refresh();
+  };
+  $('cancel').onclick = closeForm;
+  $('remove').onclick = function(){ if (editing === null) return; map.removeLayer(spots[editing].m); spots.splice(editing, 1); closeForm(); refresh(); };
+  $('done').onclick = function(){ closeForm(); refresh(); window.SPOTS_DONE = true; $('status').textContent = spots.length + ' platser klara. Säg till Claude.'; };
+  refresh();
+</script>
+</body>
+</html>

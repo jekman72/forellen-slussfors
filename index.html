@@ -205,6 +205,9 @@ section{scroll-margin-top:72px}
 .seg button{min-height:42px;border:0;border-radius:999px;background:transparent;font:600 15px var(--body);color:var(--ink-2);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .places{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.spot-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.spot-legend span{display:inline-flex;align-items:center;gap:6px}
+.spot-legend i{width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);display:inline-block}
 .places button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:10px;border:0;background:transparent;border-radius:var(--radius-sm);cursor:pointer;font:inherit;color:inherit}
 .places button:hover{background:#F0F4F2}
 .dot{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700}
@@ -475,6 +478,8 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <p data-i18n="we-do-not-rent-out-a-boat-ourselves-boat" class="note" style="color:var(--on-deep)">We do not rent out a boat ourselves. Boats with or without motor can be rented locally: ask the Slussfors fishing association, contact Daniel Bergfors, <a href="tel:+46730266871" style="color:var(--ice);white-space:nowrap">+46 730 26 68 71</a>, or look for private boats in Storuman municipality on <a href="https://www.hygglo.se/category/9077-roddbat-med-motor/storumans-kommun" target="_blank" rel="noopener" style="color:var(--ice)">Hygglo</a>. You can also ask at the village shop Slussforsboa, <a href="tel:+4695150170" style="color:var(--ice);white-space:nowrap">+46 951 501 70</a>. There is a public boat ramp in the village, and fuel is sold at the village petrol station.</p>
         <span data-i18n="bait-tackle" class="kicker" style="margin-top:6px">Bait &amp; tackle</span>
         <p data-i18n="bait-tackle-p" class="note" style="color:var(--on-deep)">Worms and maggots are usually sold at the village shop Slussforsboa, a few minutes from the house, along with a small range of fishing tackle.</p>
+        <span data-i18n="shore-or-boat" class="kicker" style="margin-top:6px">Shore or boat</span>
+        <p data-i18n="shore-or-boat-p" class="note" style="color:var(--on-deep)">You can fish from shore at the point by the bridge near the char farm, at the river outlet close to the house and along the Kirjesån stream. A boat is an advantage outside the char farm, in the middle of the river, in Rännan and in the deep part of Järvsjön. Boat launches: Slussfors, Järvsjön and Magasjön. The small dots on the map show each spot.</p>
       </div>
       </div>
     </div>
@@ -607,6 +612,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
           <button data-i18n="region" type="button" id="segRegion" aria-pressed="false">Region</button>
         </div>
         <ul class="places" id="places"></ul>
+        <div class="spot-legend" id="spotLegend"></div>
         <a data-i18n="directions-to-the-house" class="btn btn-accent" style="min-height:46px" id="routeLink" href="#" target="_blank" rel="noopener">Directions to the house <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <small data-i18n="distances-are-straight-line-from-the-hou" class="m-hide" style="color:var(--muted)">Distances are straight-line from the house. Drive times are approximate.</small>
       </div>
@@ -826,7 +832,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="i18n/strings.js?v=c937e647"></script>
+<script src="i18n/strings.js?v=7c80325b"></script>
 <script>
 (function(){
   var C = window.FORELLEN;
@@ -1136,6 +1142,24 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     return 2*R*Math.asin(Math.sqrt(x)); }
   $('routeLink').href = 'https://www.google.com/maps/dir/?api=1&destination=' + H[0] + ',' + H[1];
 
+  /* fishing spots marked by the owners (data/fishing_spots.json), shown as small dots in the local view */
+  var SPOTS = [
+    {n:"Point by the bridge", t:"Several spots to fish from.", k:'shore', c:[65.42451,16.17209]},
+    {n:"Outside the char farm", t:"Slussfors KFO licence.", k:'boat', c:[65.42666,16.18385]},
+    {n:"Ice fishing near the main channel", t:"Check the ice carefully: the current keeps it thinner near the channel.", k:'ice', c:[65.42425,16.16612]},
+    {n:"Mid river", t:"", k:'boat', c:[65.42353,16.23153]},
+    {n:"Rännan", t:"", k:'boat', c:[65.42198,16.25105]},
+    {n:"River outlet", t:"Close to the house.", k:'shore', c:[65.42878,16.27228]},
+    {n:"Kirjesån stream", t:"Fast, shallow water. Kirjesåns KFO licence.", k:'shore', c:[65.44771,16.27062]},
+    {n:"Kirjesån stream (upper)", t:"Kirjesåns KFO licence.", k:'shore', c:[65.47182,16.23741]},
+    {n:"Järvsjön boat launch", t:"Boat ramp, fishing licences and shore fishing.", k:'launch', c:[65.52077,16.06587]},
+    {n:"Järvsjön, deep part", t:"", k:'boat', c:[65.54503,15.98906]},
+    {n:"Magasjön boat launch", t:"", k:'launch', c:[65.47472,16.30704]}
+  ];
+  var SPOT_COL = {shore:'#E06A2C', boat:'#1F7A8C', ice:'#7FC4CC', launch:'#5A4C7A'};
+  var SPOT_NAME = {shore:T('sp_shore','Shore fishing'), boat:T('sp_boat','Boat fishing'), ice:T('sp_ice','Ice fishing'), launch:T('sp_launch','Boat launch')};
+  SPOTS.forEach(function(p, i){ if (D['js.sp.'+i+'.n']) p.n = D['js.sp.'+i+'.n']; if (D['js.sp.'+i+'.t'] !== undefined && D['js.sp.'+i+'.t'] !== null) p.t = D['js.sp.'+i+'.t']; });
+  $('spotLegend').innerHTML = ['shore','boat','ice','launch'].map(function(k){ return '<span><i style="background:'+SPOT_COL[k]+'"></i>'+SPOT_NAME[k]+'</span>'; }).join('');
   var map = null, layer = null, markers = [];
   function pinIcon(p){ return L.divIcon({className:'', html:'<div class="pin" style="background:'+p.col+'"><span>'+p.k+'</span></div>', iconSize:[34,34], iconAnchor:[17,34], popupAnchor:[0,-32]}); }
   function render(which){
@@ -1150,6 +1174,8 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       ul.appendChild(li);
       if (map){ var mk = L.marker(p.c, {icon:pinIcon(p), title:p.n, zIndexOffset: p.k === '★' ? 1000 : 0}).bindPopup('<b>'+p.n+'</b><br>'+p.t); layer.addLayer(mk); markers.push(mk); }
     });
+    $('spotLegend').hidden = which !== 'local';
+    if (map && which === 'local') SPOTS.forEach(function(p){ layer.addLayer(L.circleMarker(p.c, {radius:7, color:'#fff', weight:2, fillColor:SPOT_COL[p.k], fillOpacity:1}).bindPopup('<b>'+p.n+'</b><br>'+SPOT_NAME[p.k]+(p.t ? ' · '+p.t : ''))); });
     var near = list.filter(function(p){ return which !== 'local' || km(H, p.c) < 25; });
     if (map) map.flyToBounds(L.latLngBounds(near.map(function(p){ return p.c; })).pad(0.15), {duration:.8});
   }
