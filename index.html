@@ -1069,6 +1069,27 @@ details p{padding:0 0 18px;color:var(--ink-2)}
   var gBtns = Array.prototype.slice.call(document.querySelectorAll('#gallery button')), lb = $('lightbox'), lbImg = $('lbImg'), idx = 0;
   function show(i){ idx = (i + gBtns.length) % gBtns.length; var im = gBtns[idx].querySelector('img'); lbImg.src = im.src; lbImg.alt = im.alt; $('lbCount').textContent = (idx+1) + ' / ' + gBtns.length + ' · ' + im.alt; }
   $('galMore').addEventListener('click', function(){ show(0); if (lb.showModal) lb.showModal(); });
+
+  /* Platform links in the FAQ: add the guest's dates (or the first free stay) and the page language on click */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href*="booking.com/hotel/"], a[href*="airbnb.com/rooms/"]');
+    if (!a) return;
+    var arr = $('arrival').value, dep = $('departure').value;
+    if (!(arr && dep && dep > arr)){
+      var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 12), n = C.minNights, e2;
+      for (var tries = 0; tries < 400; tries++, d.setDate(d.getDate() + 1)){
+        e2 = new Date(d); e2.setDate(e2.getDate() + n);
+        if (!rangeBlocked(d, e2)) break; }
+      arr = iso(d); dep = iso(e2); }
+    var u = new URL(a.href.split('?')[0]);
+    if (u.hostname.indexOf('booking.com') >= 0){
+      u.pathname = u.pathname.replace(/(\.[a-z]{2}(-[a-z]{2})?)?\.html$/, '.' + ({en:'en-gb', lv:'lv', lt:'lt'}[LANG] || 'en-gb') + '.html');
+      u.search = new URLSearchParams({checkin:arr, checkout:dep, group_adults:'2', group_children:'0', no_rooms:'1'}).toString();
+    } else {
+      u.search = new URLSearchParams({check_in:arr, check_out:dep, adults:'2'}).toString();
+    }
+    a.href = u.toString();
+  });
   gBtns.forEach(function(b, i){ b.setAttribute('aria-label', 'Open photo: ' + b.querySelector('img').alt); b.addEventListener('click', function(){ show(i); if (lb.showModal) lb.showModal(); }); });
   $('lbClose').addEventListener('click', function(){ lb.close(); });
   $('lbPrev').addEventListener('click', function(){ show(idx - 1); });
