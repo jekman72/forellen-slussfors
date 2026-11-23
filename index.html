@@ -116,6 +116,8 @@ section{scroll-margin-top:72px}
 .hero h1{font-size:clamp(64px,13vw,168px);font-weight:800;letter-spacing:-.045em;line-height:.88}
 .hero .sub{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,32px);line-height:1.2;max-width:22em;text-wrap:balance}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.hero-price{margin:-6px 0 0;font-size:16px;font-weight:600;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.45)}
+.hero-price:empty{display:none}
 .scroll-cue{position:absolute;right:24px;bottom:28px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;writing-mode:vertical-rl;opacity:.7}
 @media (max-width:700px){.scroll-cue{display:none}}
 
@@ -415,6 +417,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     </div>
     <h1 data-i18n="forellen">Forellen</h1>
     <p data-i18n="an-angler-s-guesthouse-where-the-ume-riv" class="sub">An angler's guesthouse where the Ume River meets Lake Storuman. Char, trout, grayling and whitefish, five minutes from the door.</p>
+    <p class="hero-price" id="heroPrice"></p>
     <div class="hero-actions">
       <a class="btn btn-accent" href="#book" data-i18n="cta-check-dates">Check dates &amp; book direct <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <a class="btn btn-ghost" href="#fishing" data-i18n="cta-explore">Explore the fishing</a>
@@ -427,9 +430,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 <div class="facts" aria-label="Key facts">
   <div class="wrap facts-grid">
     <div data-i18n="6-guests4-beds-2-bedrooms" class="fact"><b>6 guests</b><span>4 beds, 2 bedrooms</span></div>
-    <div data-i18n="80-m-whole-house-own-entrance" class="fact"><b>80 m²</b><span>whole house, own entrance</span></div>
+    <div data-i18n="80-m-whole-house-own-entrance" class="fact"><b>80 m²</b><span>entire home, own entrance</span></div>
     <div data-i18n="5-minwalk-to-lake-storuman" class="fact"><b>5 min</b><span>walk to Lake Storuman</span></div>
-    <div data-i18n="smokergrill-fire-pit-big-lawn" class="fact"><b>Smoker</b><span>grill, fire pit, big lawn</span></div>
+    <div data-i18n="smokergrill-fire-pit-big-lawn" class="fact"><b>Smoker</b><span>barbecue, fire pit, spacious lawn</span></div>
     <div data-i18n="petswelcome" class="fact"><b>Pets</b><span>welcome</span></div>
     <div data-i18n="min-3nights-self-check-in" class="fact"><b>Min 3</b><span>nights · self check-in</span></div>
   </div>
@@ -443,7 +446,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <span data-i18n="the-fishing" class="kicker">The fishing</span>
         <h2 data-i18n="big-char-wild-trout-and-clear-northern-w">Big char, wild trout and clear northern water</h2>
         <p data-i18n="slussfors-sits-where-the-ume-river-runs" class="lead">Slussfors sits where the Ume River runs into Lake Storuman. The Kirjesån stream, known for its trout, joins the river just around the corner from the house, and the lakes Järvsjön, Magasjön and Boksjön are a short drive away.</p>
-        <p data-i18n="the-secret-is-the-char-farm-just-below-t" class="lead">The secret is the <b style="color:#fff">char farm</b> in Sparmanselet, about 4 km upstream from the house (★ on the map). It feeds the water, so many large char and whitefish gather in a small area, summer and winter. It is what brings anglers from far away.</p>
+        <p data-i18n="the-secret-is-the-char-farm-just-below-t" class="lead">One reason for the exceptional fishing is the <b style="color:#fff">char farm</b> in Sparmanselet, about 4 km upstream from the house (★ on the map). It adds nutrients to the water, which helps keep many large char and whitefish in a small area, summer and winter. It is a big part of what brings anglers from far away.</p>
       </div>
       <div class="stack reveal" style="gap:16px">
       <div class="permit">
@@ -493,7 +496,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </svg>
         <span data-i18n="signature-fish" class="tag">Signature fish</span>
         <div><h3 data-i18n="arctic-char">Arctic char</h3><span class="latin">Röding · Salvelinus alpinus</span></div>
-        <p data-i18n="the-star-of-slussfors-troll-or-jig-in-su">The star of Slussfors. Troll or jig in summer, and on the ice in late winter when the days are long and bright.</p>
+        <p data-i18n="the-star-of-slussfors-troll-or-jig-in-su">The star of Slussfors. Best through the ice from February to April, when the days are long and bright, and by boat from June to September. Try trolling or jigging in summer.</p>
         <div class="months" aria-label="Best months: ice fishing February to April, open water June to September"><i></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -515,7 +518,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </svg>
         <span data-i18n="kirjes-n-ume-river" class="tag">Kirjesån &amp; Ume River</span>
         <div><h3 data-i18n="brown-trout">Brown trout</h3><span class="latin">Öring · Salmo trutta</span></div>
-        <p data-i18n="wild-trout-in-the-kirjes-n-stream-own-li">Wild trout in the Kirjesån stream (own licence, see above) and the river. Fly, spinner or a quiet drift at dusk in midsummer.</p>
+        <p data-i18n="wild-trout-in-the-kirjes-n-stream-own-li">Wild trout in the Kirjesån stream (own licence, see above) and the river. Best from June to September: fly, spinner or a quiet drift at dusk in midsummer.</p>
         <div class="months" aria-label="Best months: June to September"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -541,7 +544,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </svg>
         <span data-i18n="fast-water" class="tag">Fast water</span>
         <div><h3 data-i18n="grayling">Grayling</h3><span class="latin">Harr · Thymallus thymallus</span></div>
-        <p data-i18n="the-lady-of-the-stream-with-her-purple-s">The "lady of the stream", with her purple sail fin. Rises to small dry flies in the river currents through summer and autumn.</p>
+        <p data-i18n="the-lady-of-the-stream-with-her-purple-s">The "lady of the stream", with her purple sail fin. Best from June to October, when she rises to small dry flies in the river currents.</p>
         <div class="months" aria-label="Best months: June to October"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -562,7 +565,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         </svg>
         <span data-i18n="winter-jigging" class="tag">Winter jigging</span>
         <div><h3 data-i18n="whitefish">Whitefish</h3><span class="latin">Sik · Coregonus lavaretus</span></div>
-        <p data-i18n="very-large-whitefish-are-caught-through">Very large whitefish are caught through the ice. Small jigs, light line and patience on a sunny March day.</p>
+        <p data-i18n="very-large-whitefish-are-caught-through">Best through the ice from January to April, and in open water from June to August. Very large whitefish take small jigs on light line, so bring patience for a sunny March day.</p>
         <div class="months" aria-label="Best months: ice fishing January to April, open water June to August"><i class="ice"></i><i class="ice"></i><i class="ice"></i><i class="ice"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
         <div class="mlabels" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
       </article>
@@ -623,13 +626,13 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <p data-i18n="the-house-is-one-half-of-a-semi-detached" style="color:var(--ink-2)">The house is one half of a semi-detached building with its own entrance, its own yard and plenty of parking for cars, boats and trailers. A groomed exercise trail of about 2.5 km for walking and skiing starts right behind the house.</p>
       </div>
       <div class="rooms reveal">
-        <div data-i18n="bedroom-1double-bed-180-cm-2-90-wardrobe" class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90), wardrobes</span></div>
-        <div data-i18n="bedroom-2double-bed-2-90-and-a-bunk-bed" class="room"><b>Bedroom 2</b><span>Double bed (2 × 90) and a bunk bed for kids or teens</span></div>
+        <div data-i18n="bedroom-1double-bed-180-cm-2-90-wardrobe" class="room"><b>Bedroom 1</b><span>Double bed 180 cm (2 × 90) and a bunk bed for kids or teens</span></div>
+        <div data-i18n="bedroom-2double-bed-2-90-and-a-bunk-bed" class="room"><b>Bedroom 2</b><span>Double bed (2 × 90), wardrobes</span></div>
         <div data-i18n="kitchendishwasher-fridge-and-freezer-ove" class="room"><b>Kitchen</b><span>Dishwasher, fridge and freezer, oven, table for six</span></div>
         <div data-i18n="living-roomopen-fireplace-sofa-armchairs" class="room"><b>Living room</b><span>Open fireplace, sofa, armchairs, smart TV</span></div>
         <div data-i18n="bathroomshower-toilet-and-washing-machin" class="room"><b>Bathroom</b><span>Shower, toilet and washing machine</span></div>
-        <div data-i18n="outsidelarge-lawn-seating-grill-fire-pit" class="room"><b>Outside</b><span>Large lawn, seating, grill, fire pit, smoker</span></div>
-        <div data-i18n="workwi-fi-and-a-desk-for-the-remote-day" class="room"><b>Work</b><span>Wi-Fi and a desk for the remote day</span></div>
+        <div data-i18n="outsidelarge-lawn-seating-grill-fire-pit" class="room"><b>Outside</b><span>Spacious lawn, seating, barbecue, fire pit, outdoor smoker</span></div>
+        <div data-i18n="workwi-fi-and-a-desk-for-the-remote-day" class="room"><b>Work</b><span>Free Wi-Fi and a dedicated workspace</span></div>
         <div data-i18n="arrivalself-check-in-with-key-box-from-1" class="room"><b>Arrival</b><span>Self check-in with key box, from 14:00</span></div>
       </div>
     </div>
@@ -682,9 +685,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <h2 data-i18n="light-all-night-then-snow-and-northern-l">Light all night, then snow and northern lights</h2>
     </div>
     <div class="seasons">
-      <article class="season reveal"><img src="images/cloudberries-cup.jpg" alt="A mug full of cloudberries held over a mire" loading="lazy"><div><span data-i18n="summer-autumn" class="kicker" style="color:var(--ice)">Summer &amp; autumn</span><h3 data-i18n="midnight-sun-and-cloudberries">Midnight sun and cloudberries</h3><p data-i18n="hike-pick-berries-and-mushrooms-play-dis">Hike, pick berries and mushrooms, play disc golf, and fish late into the bright night.</p></div></article>
+      <article class="season reveal"><img src="images/cloudberries-cup.jpg" alt="A mug full of cloudberries held over a mire" loading="lazy"><div><span data-i18n="summer-autumn" class="kicker" style="color:var(--ice)">Summer &amp; autumn</span><h3 data-i18n="midnight-sun-and-cloudberries">Light summer nights and cloudberries</h3><p data-i18n="hike-pick-berries-and-mushrooms-play-dis">Hike, pick berries and mushrooms, play disc golf, and fish late into the bright night.</p></div></article>
       <article class="season reveal"><img src="images/snowmobile-sunset.jpg" alt="Snowmobile on a frozen lake under a red sunset sky" loading="lazy"><div><span data-i18n="winter" class="kicker" style="color:var(--ice)">Winter</span><h3 data-i18n="ice-snow-and-northern-lights">Ice, snow and northern lights</h3><p data-i18n="ice-fishing-for-char-and-whitefish-ski-t">Ice fishing for char and whitefish, ski the trail behind the house, and watch for aurora on clear nights.</p></div></article>
-      <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span data-i18n="all-year" class="kicker" style="color:var(--ice)">All year</span><h3 data-i18n="mountains-within-reach">Mountains within reach</h3><p data-i18n="hemavan-t-rnaby-and-kittelfj-ll-are-abou">Hemavan, Tärnaby and Kittelfjäll are about an hour away for alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
+      <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span data-i18n="all-year" class="kicker" style="color:var(--ice)">All year</span><h3 data-i18n="mountains-within-reach">Mountains within easy reach</h3><p data-i18n="hemavan-t-rnaby-and-kittelfj-ll-are-abou">Tärnaby (about 50 min), Kittelfjäll (about 1 h) and Hemavan (about 1 h 10 min) offer alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
     </div>
   </div>
 </section>
@@ -714,8 +717,8 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <h3 data-i18n="how-booking-direct-works" style="font-size:28px">How booking direct works</h3>
       <ol class="steps">
         <li data-i18n="send-your-dates-with-the-form-the-price"><span>Send your dates with the form. The price estimate updates as you type.</span></li>
-        <li data-i18n="we-reply-within-24-hours-with-a-confirma"><span>We reply within 24 hours with a confirmation and a secure PayPal payment request.</span></li>
-        <li data-i18n="pay-by-credit-or-debit-card-or-with-your"><span>Pay by credit or debit card, or with your PayPal account. You do not need a PayPal account to pay by card. Your dates are booked when the payment is received. Free cancellation up to 30 days before arrival; later cancellations are not refunded.</span></li>
+        <li data-i18n="we-reply-within-24-hours-with-a-confirma"><span>We reply within 24 hours with a confirmation and a secure PayPal request for a €100 deposit.</span></li>
+        <li data-i18n="pay-by-credit-or-debit-card-or-with-your"><span>Pay by credit or debit card, or with your PayPal account. You do not need a PayPal account to pay by card. Your dates are booked when the deposit is received. The rest is paid 30 days before arrival, or all at once if you book later than that. Free cancellation up to 30 days before arrival with everything refunded, including the deposit. Later cancellations are not refunded.</span></li>
         <li data-i18n="before-arrival-you-get-the-key-box-code"><span>Before arrival you get the key box code and our local fishing tips.</span></li>
       </ol>
     </div>
@@ -735,7 +738,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
         <details><summary data-i18n="what-should-we-bring">What should we bring?</summary><p data-i18n="bed-linen-and-towels-or-add-them-to-your">Bed linen and towels (or add them to your request, 200 SEK per person), and of course your fishing gear. Duvets and pillows are in the house.</p></details>
         <details><summary data-i18n="can-we-bring-our-dog">Can we bring our dog?</summary><p data-i18n="yes-pets-are-welcome-please-keep-them-of">Yes, pets are welcome. Please keep them off the beds and sofas.</p></details>
         <details><summary data-i18n="where-do-we-buy-food">Where do we buy food?</summary><p data-i18n="there-is-a-grocery-shop-slussforsboa-46">There is a grocery shop, Slussforsboa (<a href="tel:+4695150170" style="white-space:nowrap">+46 951 501 70</a>), and a fuel station in the village. Opening hours are limited, so call or check before you arrive. The nearest larger town, Storuman, is about 45 minutes by car.</p></details>
-        <details><summary data-i18n="can-we-cancel">Can we cancel?</summary><p data-i18n="yes-free-of-charge-up-to-30-days-before">Yes, free of charge up to 30 days before arrival, and you get the full amount back. If you cancel later than that, the payment is not refunded.</p></details>
+        <details><summary data-i18n="can-we-cancel">Can we cancel?</summary><p data-i18n="yes-free-of-charge-up-to-30-days-before">Yes, free of charge up to 30 days before arrival, and you get everything back, including the €100 deposit. If you cancel later than that, the payment is not refunded.</p></details>
         <details><summary data-i18n="when-can-we-arrive-and-leave">When can we arrive and leave?</summary><p data-i18n="check-in-from-14-00-and-check-out-by-12">Check-in from 14:00 and check-out by 12:00, with self check-in through a key box.</p></details>
         <details><summary data-i18n="is-there-room-for-our-boat-and-trailer">Is there room for our boat and trailer?</summary><p data-i18n="yes-there-is-plenty-of-free-parking-on-t">Yes. There is plenty of free parking on the property for cars, boats and trailers, and the public boat ramp in Slussfors is about 2 km away.</p></details>
         <details><summary data-i18n="is-there-a-boat">Is there a boat?</summary><p data-i18n="we-do-not-rent-out-a-boat-ourselves-boat-2">We do not rent out a boat ourselves. Boats can be rented locally, see "Boats" under The fishing for where to ask. There is a public boat ramp in Slussfors if you bring your own.</p></details>
@@ -823,7 +826,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="i18n/strings.js?v=d91fe8d7"></script>
+<script src="i18n/strings.js?v=c937e647"></script>
 <script>
 (function(){
   var C = window.FORELLEN;
@@ -894,6 +897,8 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     .catch(function(){});
 
   /* ---------- prices ---------- */
+  (function(){ var lo = Infinity; for (var hm = 1; hm <= 12; hm++) lo = Math.min(lo, C.nightly[hm]);
+    $('heroPrice').textContent = T('hero_price', 'Entire house for up to {g} guests · from {p} SEK/night · book directly with the owners', {g:C.maxGuests, p:fmt(lo)}); })();
   var MN = []; for (var mi = 0; mi < 12; mi++) MN.push(cap(new Date(2027, mi, 1).toLocaleDateString(LOC[LANG], {month:'short'}).replace(/\.$/, '')));
   var groups = {};
   for (var m = 1; m <= 12; m++){ (groups[C.nightly[m]] = groups[C.nightly[m]] || []).push(m); }
@@ -1108,7 +1113,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Gamlavägen 16. Lake Storuman is a 5-minute walk.'},
       {n:'Slussfors village', d:'Shop and fuel', c:[65.4311,16.2397], col:'#0B1E1D', k:'S', t:'Grocery shop and fuel station. Check opening hours.'},
       {n:'Boat ramp', d:'Launch on the Ume River', c:[65.4260,16.2255], col:'#1F7A8C', k:'B', t:'Public slipway in Slussfors.'},
-      {n:'Char farm', d:'Where the big char gather', c:[65.4270,16.1800], col:'#D9543A', k:'★', t:'Slussfors char farm in Sparmanselet, the net pens on the Ume River. Nutrients from the farm keep many large char and whitefish in a small area, which is what draws anglers from far away. Fish here with the Slussfors KFO licence.'},
+      {n:'Char farm', d:'Where the big char gather', c:[65.4270,16.1800], col:'#D9543A', k:'★', t:'Slussfors char farm in Sparmanselet, the net pens on the Ume River. Nutrients from the farm help keep many large char and whitefish in a small area, which is what draws anglers from far away. Fish here with the Slussfors KFO licence.'},
       {n:'Magasjön', d:'Lake', c:[65.5052,16.2988], col:'#1F7A8C', k:'1', t:'Lake north of Slussfors.'},
       {n:'Skansnässjön', d:'Lake', c:[65.3288,16.0653], col:'#1F7A8C', k:'2', t:'Lake south-west of Slussfors.'},
       {n:'Järvsjön', d:'Lake', c:[65.5367,15.9996], col:'#1F7A8C', k:'3', t:'Lake north-west of Slussfors.'},
@@ -1120,9 +1125,9 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       {n:'Forellen', d:'Your house', c:[65.43064,16.26415], col:'#E06A2C', k:'H', t:'Slussfors on the E12, the Blue Highway.'},
       {n:'Storuman', d:'Town · about 45 min', c:[65.0951,17.1180], col:'#0B1E1D', k:'S', t:'Larger shops, pharmacy, train station.'},
       {n:'Kittelfjäll', d:'Ski resort · about 1 h', c:[65.2550,15.5179], col:'#5A4C7A', k:'K', t:'Alpine skiing and fell hiking.'},
-      {n:'Tärnaby', d:'Village · about 1 h', c:[65.7114,15.2765], col:'#5A4C7A', k:'T', t:'Mountain village and ski slopes.'},
-      {n:'Hemavan', d:'Ski resort · about 1 h', c:[65.8153,15.0853], col:'#5A4C7A', k:'Hv', t:'Start of the Kungsleden trail.'},
-      {n:'Hemavan Tärnaby Airport', d:'Airport', c:[65.8061,15.0828], col:'#1F7A8C', k:'✈', t:'Regional airport in the mountains.'}
+      {n:'Tärnaby', d:'Village · about 50 min', c:[65.7114,15.2765], col:'#5A4C7A', k:'T', t:'Mountain village and ski slopes.'},
+      {n:'Hemavan', d:'Ski resort · about 1 h 10 min', c:[65.8153,15.0853], col:'#5A4C7A', k:'Hv', t:'Start of the Kungsleden trail.'},
+      {n:'Hemavan Tärnaby Airport', d:'Airport · about 1 h 10 min', c:[65.8061,15.0828], col:'#1F7A8C', k:'✈', t:'Regional airport in the mountains.'}
     ]
   };
   ['local','region'].forEach(function(w){ PLACES[w].forEach(function(p, i){ var pre = 'js.pl.' + w + '.' + i + '.'; if (D[pre+'n']) p.n = D[pre+'n']; if (D[pre+'d']) p.d = D[pre+'d']; if (D[pre+'t']) p.t = D[pre+'t']; }); });
