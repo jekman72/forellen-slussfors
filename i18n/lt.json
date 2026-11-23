@@ -277,5 +277,7 @@
  "js.sp.10.n": "Magasjön valčių nuleidimas",
  "js.sp.10.t": "",
  "smoker-freezer": "Rūkykla, šaldiklis ir džiovinimas",
- "smoker-freezer-p": "Mūrinę rūkyklą kieme galima naudoti laisvai, tik atsiveskite savo malkų. Laimikiui viduje yra šaldiklis, o žiemą žuvys puikiai išsilaiko lauke dėžėse, nes būna gerokai žemiau nulio. Atskiros džiovyklos nėra, tačiau plūdrumo kombinezonus ir kitą įrangą galima išdžiovinti prieškambaryje prie radiatorių ir vonios kambaryje."
+ "smoker-freezer-p": "Mūrinę rūkyklą kieme galima naudoti laisvai, tik atsiveskite savo malkų. Laimikiui viduje yra šaldiklis, o žiemą žuvys puikiai išsilaiko lauke dėžėse, nes būna gerokai žemiau nulio. Atskiros džiovyklos nėra, tačiau plūdrumo kombinezonus ir kitą įrangą galima išdžiovinti prieškambaryje prie radiatorių ir vonios kambaryje.",
+ "js.ex_lbl": "Pavyzdys",
+ "js.ex_box": "{guests} · {nights} · daugiausia {sek} SEK (≈ {eur} €)"
 }

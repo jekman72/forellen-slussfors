@@ -30,6 +30,9 @@ window.FORELLEN = {
   // Direct price is this much below the list price (0.05 = 5 %, 0 = same price).
   // The page rounds the result to the nearest 5 SEK.
   directDiscount: 0.10,
+  // Example box in the hero: highest price over the year for this stay, also shown in euro
+  example: { guests: 4, nights: 6 },
+  eurRate: 11.2,   // SEK per EUR if the live rate (api.frankfurter.dev) cannot be fetched
   includedGuests: 2,
   maxGuests: 6,
   minNights: 3,
@@ -118,6 +121,8 @@ section{scroll-margin-top:72px}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
 .hero-price{margin:-6px 0 0;font-size:16px;font-weight:600;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.45)}
 .hero-price:empty{display:none}
+.hero-ex{justify-self:start;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-top:-8px;padding:10px 16px;border-radius:14px;background:rgba(11,30,29,.55);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);color:#fff;font-size:15px;font-weight:600}
+.hero-ex small{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8FD3D9}
 .scroll-cue{position:absolute;right:24px;bottom:28px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;writing-mode:vertical-rl;opacity:.7}
 @media (max-width:700px){.scroll-cue{display:none}}
 
@@ -421,6 +426,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     <h1 data-i18n="forellen">Forellen</h1>
     <p data-i18n="an-angler-s-guesthouse-where-the-ume-riv" class="sub">An angler's guesthouse where the Ume River meets Lake Storuman. Char, trout, grayling and whitefish, five minutes from the door.</p>
     <p class="hero-price" id="heroPrice"></p>
+    <div class="hero-ex" id="heroEx" hidden></div>
     <div class="hero-actions">
       <a class="btn btn-accent" href="#book" data-i18n="cta-check-dates">Check dates &amp; book direct <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <a class="btn btn-ghost" href="#fishing" data-i18n="cta-explore">Explore the fishing</a>
@@ -834,7 +840,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="i18n/strings.js?v=e2ff7a34"></script>
+<script src="i18n/strings.js?v=4199c2bc"></script>
 <script>
 (function(){
   var C = window.FORELLEN;
@@ -905,6 +911,17 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     .catch(function(){});
 
   /* ---------- prices ---------- */
+  (function(){ var ex = C.example; if (!ex) return;
+    var extra = Math.max(0, ex.guests - C.includedGuests) * C.extraGuest, sek = 0;
+    for (var em = 1; em <= 12; em++) sek = Math.max(sek, (C.nightly[em] + extra) * ex.nights);
+    if (ex.nights >= 7 && C.weeklyDiscount) sek = Math.round(sek * (1 - C.weeklyDiscount));
+    function draw(rate){ var eur = Math.ceil(sek / rate / 10) * 10;
+      $('heroEx').innerHTML = '<small>' + T('ex_lbl', 'Example') + '</small><span>' + T('ex_box', '{guests} · {nights} · max {sek} SEK (≈ €{eur})', {guests:W('guest', ex.guests), nights:W('night', ex.nights), sek:fmt(sek), eur:fmt(eur)}).replace(/\(≈ ([^)]*)\)/, '<span style="white-space:nowrap">(≈ $1)</span>') + '</span>';
+      $('heroEx').hidden = false; }
+    draw(C.eurRate);
+    fetch('https://api.frankfurter.dev/v1/latest?from=EUR&to=SEK').then(function(r){ return r.json(); })
+      .then(function(j){ if (j && j.rates && j.rates.SEK > 5) draw(j.rates.SEK); }).catch(function(){});
+  })();
   (function(){ var lo = Infinity; for (var hm = 1; hm <= 12; hm++) lo = Math.min(lo, C.nightly[hm]);
     $('heroPrice').textContent = T('hero_price', 'Entire house for up to {g} guests · from {p} SEK/night · book directly with the owners', {g:C.maxGuests, p:fmt(lo)}); })();
   var MN = []; for (var mi = 0; mi < 12; mi++) MN.push(cap(new Date(2027, mi, 1).toLocaleDateString(LOC[LANG], {month:'short'}).replace(/\.$/, '')));
