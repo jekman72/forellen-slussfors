@@ -716,7 +716,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     </div>
     <div class="now reveal" id="nowBox">
       <figure class="now-cam" id="camFig">
-        <img id="camImg" src="https://www.storuman.se/webcams/tarnaby/tarnaby.jpg" alt="Live webcam view over Tärnaby and the lake" loading="lazy" width="1280" height="720">
+        <img id="camImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://www.storuman.se/webcams/tarnaby/tarnaby.jpg" alt="Live webcam view over Tärnaby and the lake" width="1280" height="720">
         <figcaption><span class="live-dot" aria-hidden="true"></span><span data-i18n="now-cam-cap">Live webcam over Tärnaby, 50 min from the house. Camera: Storuman Municipality.</span></figcaption>
       </figure>
       <div class="now-wx">
@@ -935,7 +935,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     if (/rain/.test(b)) return lvl + 'rain';
     return {clearsky:'clear', fair:'fair', partlycloudy:'partly', cloudy:'cloudy', fog:'fog'}[b] || ''; }
   function wxWord(code){ var k = wxKey(code); return k ? T('wx.' + k, WXEN[k]) : ''; }
-  function deg(t){ t = Math.round(t); return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + ' °C'; }
+  function deg(t){ t = Math.round(t); return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + ' °C'; }
   fetch('https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=' + C.house.lat.toFixed(3) + '&lon=' + C.house.lon.toFixed(3))
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){ var ts = d && d.properties && d.properties.timeseries; if (!ts || !ts.length) return;
@@ -953,11 +953,18 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       var up = new Date(d.properties.meta.updated_at).toLocaleTimeString(LOC[LANG], {hour:'2-digit', minute:'2-digit'});
       $('nowSrc').innerHTML = T('now_src', 'Weather data: {src}, updated {t}', {src:'<a href="https://www.yr.no/" rel="noopener" target="_blank" style="color:inherit">MET Norway (yr.no)</a>', t: up}); })
     .catch(function(){});
-  (function(){ var img = $('camImg'), base = img.getAttribute('src'), timer = null;
-    function load(){ img.src = base + '?t=' + Math.floor(Date.now() / 60000); }
-    img.addEventListener('error', function(){ $('camFig').hidden = true; });
-    function tick(){ clearInterval(timer); timer = null; if (document.visibilityState === 'visible') timer = setInterval(load, 60000); }
-    load(); tick(); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') load(); tick(); });
+  /* The camera rewrites its file every minute, so a fetch can catch a half-written image.
+     Load each new frame off-screen and swap it in only when complete; retry a few times before hiding. */
+  (function(){ var img = $('camImg'), fig = $('camFig'), base = img.getAttribute('data-src'), timer = null, good = false, fails = 0, started = false;
+    function load(){ var p = new Image();
+      p.onload = function(){ img.src = p.src; good = true; fails = 0; fig.hidden = false; };
+      p.onerror = function(){ fails++; if (fails <= 3) setTimeout(load, 8000); else if (!good) fig.hidden = true; };
+      p.src = base + '?t=' + Date.now(); }
+    function tick(){ clearInterval(timer); timer = null; if (started && document.visibilityState === 'visible') timer = setInterval(load, 60000); }
+    function start(){ if (started) return; started = true; load(); tick(); }
+    document.addEventListener('visibilitychange', function(){ if (started && document.visibilityState === 'visible') load(); tick(); });
+    if ('IntersectionObserver' in window){ var o = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ o.disconnect(); start(); } }, {rootMargin:'600px'}); o.observe(fig); }
+    else start();
   })();
 
   /* ---------- prices ---------- */
