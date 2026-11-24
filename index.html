@@ -254,6 +254,17 @@ section{scroll-margin-top:72px}
 .season div{padding:24px;display:grid;gap:8px}
 .season h3{font-size:28px}
 .season p{font-size:15.5px;color:#E3EBE9}
+.now{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.now{grid-template-columns:1fr}}
+.now-cam{margin:0;border-radius:var(--radius);overflow:hidden;background:var(--deep-2);position:relative}
+.now-cam img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.now-cam figcaption{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13.5px;color:var(--on-deep-2)}
+.live-dot{flex:none;width:9px;height:9px;border-radius:50%;background:#E5484D;box-shadow:0 0 0 3px rgba(229,72,77,.25)}
+.now-wx{background:var(--deep-2);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:8px}
+.now-wx h3{font-size:24px}
+.now-temp{font-family:var(--display);font-size:64px;line-height:1;font-weight:600;letter-spacing:-.02em;margin:6px 0}
+.now-wx p{font-size:15.5px;color:var(--on-deep)}
+.now-wx small{margin-top:auto;padding-top:10px;font-size:12.5px;color:var(--on-deep-2)}
 
 /* ---------- reviews ---------- */
 .reviews{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -703,6 +714,20 @@ details p{padding:0 0 18px;color:var(--ink-2)}
       <article class="season reveal"><img src="images/snowmobile-sunset.jpg" alt="Snowmobile on a frozen lake under a red sunset sky" loading="lazy"><div><span data-i18n="winter" class="kicker" style="color:var(--ice)">Winter</span><h3 data-i18n="ice-snow-and-northern-lights">Ice, snow and northern lights</h3><p data-i18n="ice-fishing-for-char-and-whitefish-ski-t">Ice fishing for char and whitefish, ski the trail behind the house, and watch for aurora on clear nights.</p></div></article>
       <article class="season reveal"><img src="images/reindeer-yard.jpg" alt="Two reindeer walking past a red barn in spring snow" loading="lazy"><div><span data-i18n="all-year" class="kicker" style="color:var(--ice)">All year</span><h3 data-i18n="mountains-within-reach">Mountains within easy reach</h3><p data-i18n="hemavan-t-rnaby-and-kittelfj-ll-are-abou">Tärnaby (about 50 min), Kittelfjäll (about 1 h) and Hemavan (about 1 h 10 min) offer alpine skiing and high-fell hiking. Reindeer may pass the house.</p></div></article>
     </div>
+    <div class="now reveal" id="nowBox">
+      <figure class="now-cam" id="camFig">
+        <img id="camImg" src="https://www.storuman.se/webcams/tarnaby/tarnaby.jpg" alt="Live webcam view over Tärnaby and the lake" loading="lazy" width="1280" height="720">
+        <figcaption><span class="live-dot" aria-hidden="true"></span><span data-i18n="now-cam-cap">Live webcam over Tärnaby, 50 min from the house. Camera: Storuman Municipality.</span></figcaption>
+      </figure>
+      <div class="now-wx">
+        <span data-i18n="now-kicker" class="kicker">Right now</span>
+        <h3 data-i18n="now-wx-h">Weather in Slussfors</h3>
+        <div class="now-temp" id="nowTemp">–</div>
+        <p id="nowDesc"></p>
+        <p id="nowRange"></p>
+        <small id="nowSrc"></small>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -840,7 +865,7 @@ details p{padding:0 0 18px;color:var(--ink-2)}
 </dialog>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="i18n/strings.js?v=49eac782"></script>
+<script src="i18n/strings.js?v=377d74bf"></script>
 <script>
 (function(){
   var C = window.FORELLEN;
@@ -900,15 +925,40 @@ details p{padding:0 0 18px;color:var(--ink-2)}
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   } else { document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); }); }
 
-  /* ---------- live weather (Open-Meteo, no key) ---------- */
-  var WMO = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Freezing fog',51:'Drizzle',53:'Drizzle',55:'Drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',66:'Freezing rain',67:'Freezing rain',71:'Light snow',73:'Snow',75:'Heavy snow',77:'Snow grains',80:'Showers',81:'Showers',82:'Heavy showers',85:'Snow showers',86:'Snow showers',95:'Thunder'};
-  fetch('https://api.open-meteo.com/v1/forecast?latitude='+C.house.lat+'&longitude='+C.house.lon+'&current=temperature_2m,weather_code&timezone=Europe%2FStockholm')
+  /* ---------- live weather (MET Norway / yr.no, CC BY 4.0) + Tärnaby webcam ---------- */
+  var WXEN = {clear:'Clear', fair:'Mostly clear', partly:'Partly cloudy', cloudy:'Cloudy', fog:'Fog', lightrain:'Light rain', rain:'Rain', heavyrain:'Heavy rain', sleet:'Sleet', lightsnow:'Light snow', snow:'Snow', heavysnow:'Heavy snow', thunder:'Thunder'};
+  function wxKey(code){ var b = (code || '').split('_')[0];
+    if (/thunder/.test(b)) return 'thunder';
+    var lvl = /^light/.test(b) ? 'light' : /^heavy/.test(b) ? 'heavy' : '';
+    if (/snow/.test(b)) return lvl + 'snow';
+    if (/sleet/.test(b)) return 'sleet';
+    if (/rain/.test(b)) return lvl + 'rain';
+    return {clearsky:'clear', fair:'fair', partlycloudy:'partly', cloudy:'cloudy', fog:'fog'}[b] || ''; }
+  function wxWord(code){ var k = wxKey(code); return k ? T('wx.' + k, WXEN[k]) : ''; }
+  function deg(t){ t = Math.round(t); return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + ' °C'; }
+  fetch('https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=' + C.house.lat.toFixed(3) + '&lon=' + C.house.lon.toFixed(3))
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(d){ if (!d || !d.current) return;
-      var t = Math.round(d.current.temperature_2m);
-      $('wxText').textContent = T('wx', 'Now in Slussfors: ') + (t > 0 ? '+' : '') + t + ' °C' + (LANG === 'en' ? ', ' + (WMO[d.current.weather_code] || '').toLowerCase() : '');
-      $('wxChip').hidden = false; })
+    .then(function(d){ var ts = d && d.properties && d.properties.timeseries; if (!ts || !ts.length) return;
+      var now = Date.now(), i0 = 0;
+      while (i0 < ts.length - 1 && new Date(ts[i0 + 1].time).getTime() <= now) i0++;
+      var cur = ts[i0].data, t = cur.instant.details.air_temperature, w = cur.instant.details.wind_speed;
+      var sum = (cur.next_1_hours || cur.next_6_hours || {}).summary || {}, word = wxWord(sum.symbol_code);
+      $('wxText').textContent = T('wx', 'Now in Slussfors: ') + deg(t) + (word ? ', ' + word.toLowerCase() : '');
+      $('wxChip').hidden = false;
+      var lo = Infinity, hi = -Infinity;
+      for (var j = i0; j < ts.length && new Date(ts[j].time).getTime() < now + 24 * 3600e3; j++){ var x = ts[j].data.instant.details.air_temperature; lo = Math.min(lo, x); hi = Math.max(hi, x); }
+      $('nowTemp').textContent = deg(t);
+      $('nowDesc').textContent = (word ? word + ' · ' : '') + T('now_wind', 'Wind {w} m/s', {w: Math.round(w)});
+      if (hi > -Infinity) $('nowRange').textContent = T('now_range', 'Next 24 h: {lo} to {hi}', {lo: deg(lo), hi: deg(hi)});
+      var up = new Date(d.properties.meta.updated_at).toLocaleTimeString(LOC[LANG], {hour:'2-digit', minute:'2-digit'});
+      $('nowSrc').innerHTML = T('now_src', 'Weather data: {src}, updated {t}', {src:'<a href="https://www.yr.no/" rel="noopener" target="_blank" style="color:inherit">MET Norway (yr.no)</a>', t: up}); })
     .catch(function(){});
+  (function(){ var img = $('camImg'), base = img.getAttribute('src'), timer = null;
+    function load(){ img.src = base + '?t=' + Math.floor(Date.now() / 60000); }
+    img.addEventListener('error', function(){ $('camFig').hidden = true; });
+    function tick(){ clearInterval(timer); timer = null; if (document.visibilityState === 'visible') timer = setInterval(load, 60000); }
+    load(); tick(); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') load(); tick(); });
+  })();
 
   /* ---------- prices ---------- */
   (function(){ var ex = C.example; if (!ex) return;
